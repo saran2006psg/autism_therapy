@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "569573804437",
+    "project_id": "ablnew-9f930",
+    "storage_bucket": "ablnew-9f930.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:569573804437:android:1ad0940dbe6b26c6880e9c",
+        "android_client_info": {
+          "package_name": "com.example.thriveers"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvVD_pTd2_OOUcJtmvL8bsTdd26qX5lNM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
