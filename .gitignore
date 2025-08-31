@@ -43,3 +43,26 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Additional exclusions
+*.md.bak
+*.tmp
+.env
+*.env
+firebase_options_dev.dart
+google-services-dev.json
+
+# Documentation files (keeping only README.md)
+DASHBOARD_IMPROVEMENTS.md
+COMPLETE_UI_IMPROVEMENTS.md
+LINT_FIXES_SUMMARY.md
+PERFORMANCE_OPTIMIZATION.md
+
+# IDE specific files
+*.iml
+.vscode/settings.json
+.vscode/launch.json
+
+# OS generated files
+Thumbs.db
+Desktop.ini
