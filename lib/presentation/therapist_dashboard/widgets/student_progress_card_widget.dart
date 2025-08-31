@@ -23,6 +23,7 @@ class StudentProgressCardWidget extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: 75.w,
+        height: 35.h, // Add fixed height to prevent overflow
         margin: EdgeInsets.only(right: 4.w),
         decoration: BoxDecoration(
           color: AppTheme.lightTheme.colorScheme.surface,
@@ -37,9 +38,10 @@ class StudentProgressCardWidget extends StatelessWidget {
         ),
         child: Padding(
           padding: EdgeInsets.all(4.w),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
               Row(
                 children: [
                   CircleAvatar(
@@ -79,7 +81,7 @@ class StudentProgressCardWidget extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 3.h),
+              SizedBox(height: 2.h),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -98,7 +100,7 @@ class StudentProgressCardWidget extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 1.h),
+              SizedBox(height: 0.5.h),
               LinearProgressIndicator(
                 value: student['progress'] as double,
                 backgroundColor: AppTheme.lightTheme.colorScheme.outline
@@ -108,14 +110,14 @@ class StudentProgressCardWidget extends StatelessWidget {
                 ),
                 minHeight: 6,
               ),
-              SizedBox(height: 3.h),
+              SizedBox(height: 2.h),
               Text(
                 'Active Goals',
                 style: AppTheme.lightTheme.textTheme.labelLarge?.copyWith(
                   color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
                 ),
               ),
-              SizedBox(height: 1.h),
+              SizedBox(height: 0.5.h),
               goals.isEmpty
                   ? Text(
                       'No active goals',
@@ -128,7 +130,7 @@ class StudentProgressCardWidget extends StatelessWidget {
                       children:
                           (goals.take(2).toList()).map((goal) {
                         return Padding(
-                          padding: EdgeInsets.only(bottom: 1.h),
+                          padding: EdgeInsets.only(bottom: 0.5.h),
                           child: Row(
                             children: [
                               Container(
@@ -166,14 +168,14 @@ class StudentProgressCardWidget extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-              SizedBox(height: 2.h),
+              SizedBox(height: 1.5.h),
               Text(
                 'Recent Achievements',
                 style: AppTheme.lightTheme.textTheme.labelLarge?.copyWith(
                   color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
                 ),
               ),
-              SizedBox(height: 1.h),
+              SizedBox(height: 0.5.h),
               recentAchievements.isEmpty
                   ? Text(
                       'No recent achievements',
@@ -187,7 +189,7 @@ class StudentProgressCardWidget extends StatelessWidget {
                           (recentAchievements.take(2).toList())
                               .map((achievement) {
                         return Padding(
-                          padding: EdgeInsets.only(bottom: 1.h),
+                          padding: EdgeInsets.only(bottom: 0.5.h),
                           child: Row(
                             children: [
                               CustomIconWidget(
@@ -215,6 +217,7 @@ class StudentProgressCardWidget extends StatelessWidget {
                     ),
             ],
           ),
+        ),
         ),
       ),
     );

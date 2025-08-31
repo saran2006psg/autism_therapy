@@ -29,6 +29,12 @@ class EmptyStateWidget extends StatelessWidget {
           Container(
             width: 30.w,
             height: 30.w,
+            constraints: BoxConstraints(
+              maxWidth: 120,
+              maxHeight: 120,
+              minWidth: 80,
+              minHeight: 80,
+            ),
             decoration: BoxDecoration(
               color: AppTheme.lightTheme.primaryColor.transparent10,
               shape: BoxShape.circle,
@@ -37,7 +43,7 @@ class EmptyStateWidget extends StatelessWidget {
               child: CustomIconWidget(
                 iconName: iconName,
                 color: AppTheme.lightTheme.primaryColor.transparent60,
-                size: 15.w,
+                size: (15.w).clamp(40.0, 60.0),
               ),
             ),
           ),

@@ -1045,14 +1045,14 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
             Column(
               children: [
                 SizedBox(
-                  height: 20.h, // Fixed height with scroll
+                  height: 22.h, // Increased height to accommodate content
                   child: GridView.builder(
                     scrollDirection: Axis.horizontal,
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2, // Two rows
                       mainAxisSpacing: 2.w,
                       crossAxisSpacing: 1.h,
-                      childAspectRatio: 0.7, // Adjust for better proportions
+                      childAspectRatio: 0.9, // Increased to give more space
                     ),
                     itemCount: _availableStudents.length,
                     itemBuilder: (context, index) {
@@ -1064,7 +1064,7 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
                       return GestureDetector(
                         onTap: () => _onStudentSelected(student),
                         child: Container(
-                          padding: EdgeInsets.all(2.w),
+                          padding: EdgeInsets.all(1.5.w), // Reduced padding
                           decoration: BoxDecoration(
                             gradient: isSelected
                                 ? LinearGradient(
@@ -1094,12 +1094,13 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
                           ),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min, // Added to prevent overflow
                             children: [
                               Stack(
                                 children: [
                                   Container(
-                                    width: 10.w,
-                                    height: 10.w,
+                                    width: 8.w, // Reduced size
+                                    height: 8.w, // Reduced size
                                     decoration: BoxDecoration(
                                       gradient: isSelected
                                           ? LinearGradient(
@@ -1127,8 +1128,8 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
                                       top: -2,
                                       right: -2,
                                       child: Container(
-                                        width: 4.w,
-                                        height: 4.w,
+                                        width: 3.5.w, // Reduced size
+                                        height: 3.5.w, // Reduced size
                                         decoration: BoxDecoration(
                                           color: AppTheme.lightTheme.colorScheme.secondary,
                                           shape: BoxShape.circle,
@@ -1139,7 +1140,7 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
                                             '${_studentActivitiesMap[student.id]?.length ?? 0}',
                                             style: TextStyle(
                                               color: Colors.white,
-                                              fontSize: 8.sp,
+                                              fontSize: 7.sp, // Reduced font size
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
@@ -1148,18 +1149,21 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
                                     ),
                                 ],
                               ),
-                              SizedBox(height: 1.h),
-                              Text(
-                                student.firstName.isNotEmpty ? student.firstName : 'Student',
-                                style: AppTheme.lightTheme.textTheme.bodySmall?.copyWith(
-                                  color: isSelected
-                                      ? AppTheme.lightTheme.colorScheme.primary
-                                      : AppTheme.lightTheme.colorScheme.onSurface,
-                                  fontWeight: FontWeight.w500,
+                              SizedBox(height: 0.8.h), // Reduced spacing
+                              Flexible( // Wrap text in Flexible
+                                child: Text(
+                                  student.firstName.isNotEmpty ? student.firstName : 'Student',
+                                  style: AppTheme.lightTheme.textTheme.bodySmall?.copyWith(
+                                    color: isSelected
+                                        ? AppTheme.lightTheme.colorScheme.primary
+                                        : AppTheme.lightTheme.colorScheme.onSurface,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 10, // Reduced font size
+                                  ),
+                                  textAlign: TextAlign.center,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                                textAlign: TextAlign.center,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
                               ),
                             ],
                           ),

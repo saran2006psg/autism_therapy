@@ -18,8 +18,8 @@ class RegisterLinkWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 2.h),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+      child: Wrap(
+        alignment: WrapAlignment.center,
         children: [
           Text(
             isSignUpMode ? 'Already have an account? ' : 'New user? ',

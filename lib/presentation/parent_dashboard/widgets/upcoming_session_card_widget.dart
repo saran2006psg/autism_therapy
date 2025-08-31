@@ -98,10 +98,13 @@ class UpcomingSessionCardWidget extends StatelessWidget {
                 size: 18,
               ),
               SizedBox(width: 2.w),
-              Text(
-                "with ${sessionData["therapist"] as String}",
-                style: AppTheme.lightTheme.textTheme.bodyMedium?.copyWith(
-                  fontWeight: FontWeight.w500,
+              Expanded(
+                child: Text(
+                  "with ${sessionData["therapist"] as String}",
+                  style: AppTheme.lightTheme.textTheme.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.w500,
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ],
@@ -115,11 +118,14 @@ class UpcomingSessionCardWidget extends StatelessWidget {
                 size: 18,
               ),
               SizedBox(width: 2.w),
-              Text(
-                "${sessionData["date"]} at ${sessionData["time"]}",
-                style: AppTheme.lightTheme.textTheme.bodyMedium?.copyWith(
-                  color: AppTheme.lightTheme.colorScheme.secondary,
-                  fontWeight: FontWeight.w500,
+              Expanded(
+                child: Text(
+                  "${sessionData["date"]} at ${sessionData["time"]}",
+                  style: AppTheme.lightTheme.textTheme.bodyMedium?.copyWith(
+                    color: AppTheme.lightTheme.colorScheme.secondary,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ],

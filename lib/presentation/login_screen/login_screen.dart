@@ -356,30 +356,27 @@ class _LoginScreenState extends State<LoginScreen> {
             onTap: () => FocusScope.of(context).unfocus(),
             child: SingleChildScrollView(
               physics: const ClampingScrollPhysics(),
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minHeight: MediaQuery.of(context).size.height -
-                      MediaQuery.of(context).padding.top -
-                      MediaQuery.of(context).padding.bottom,
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width < 400 ? 4.w : 6.w,
                 ),
-                child: IntrinsicHeight(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 6.w),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SizedBox(height: 8.h),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                        SizedBox(height: MediaQuery.of(context).size.height < 700 ? 4.h : 8.h),
 
                         // App Logo Section
                         const AppLogoWidget(),
 
-                        SizedBox(height: 6.h),
+                        SizedBox(height: MediaQuery.of(context).size.height < 700 ? 3.h : 6.h),
 
                         // Main Content Card
                         Container(
                           width: double.infinity,
-                          constraints: BoxConstraints(maxWidth: 90.w),
-                          padding: EdgeInsets.all(6.w),
+                          constraints: BoxConstraints(
+                            maxWidth: MediaQuery.of(context).size.width * 0.9,
+                          ),
+                          padding: EdgeInsets.all(MediaQuery.of(context).size.width < 400 ? 4.w : 6.w),
                           decoration: BoxDecoration(
                             color: AppTheme.lightTheme.colorScheme.surface,
                             borderRadius: BorderRadius.circular(20),
@@ -542,8 +539,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
                         SizedBox(height: 4.h),
                       ],
-                    ),
-                  ),
                 ),
               ),
             ),
@@ -597,6 +592,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
                     fontSize: 10,
                   ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ],
             ),

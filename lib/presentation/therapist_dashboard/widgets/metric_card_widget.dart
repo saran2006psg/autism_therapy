@@ -27,9 +27,8 @@ class MetricCardWidget extends StatelessWidget {
       onTap: onTap,
       onLongPress: onLongPress,
       child: Container(
-        width: 42.w,
-        height: 20.h,
-        margin: EdgeInsets.symmetric(horizontal: 2.w, vertical: 1.h),
+        height: 19.h, // Slightly increased to accommodate content
+        margin: EdgeInsets.symmetric(horizontal: 1.w, vertical: 0.5.h),
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
@@ -58,7 +57,7 @@ class MetricCardWidget extends StatelessWidget {
           ],
         ),
         child: Padding(
-          padding: EdgeInsets.all(4.w),
+          padding: EdgeInsets.all(2.5.w), // Reduced padding
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -72,7 +71,7 @@ class MetricCardWidget extends StatelessWidget {
                       title,
                       style: AppTheme.lightTheme.textTheme.titleSmall?.copyWith(
                         color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
-                        fontSize: 13,
+                        fontSize: 12, // Reduced font size
                         fontWeight: FontWeight.w500,
                       ),
                       maxLines: 2,
@@ -80,8 +79,8 @@ class MetricCardWidget extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    width: 10.w,
-                    height: 10.w,
+                    width: 9.w, // Reduced size
+                    height: 9.w, // Reduced size
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
@@ -103,12 +102,12 @@ class MetricCardWidget extends StatelessWidget {
                     child: Icon(
                       _getIconForTitle(title),
                       color: Colors.white,
-                      size: 5.w,
+                      size: 4.5.w, // Reduced icon size
                     ),
                   ),
                 ],
               ),
-              SizedBox(height: 2.h),
+              SizedBox(height: 0.8.h), // Reduced spacing
               Flexible(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -120,16 +119,17 @@ class MetricCardWidget extends StatelessWidget {
                           AppTheme.lightTheme.textTheme.headlineMedium?.copyWith(
                         fontWeight: FontWeight.w700,
                         color: color,
-                        fontSize: 24,
+                        fontSize: 22, // Reduced font size
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
+                    SizedBox(height: 0.3.h), // Reduced spacing
                     Text(
                       subtitle,
                       style: AppTheme.lightTheme.textTheme.bodySmall?.copyWith(
                         color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
-                        fontSize: 10,
+                        fontSize: 9, // Reduced font size
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
