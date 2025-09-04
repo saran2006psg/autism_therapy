@@ -29,7 +29,7 @@ class EmptyStateWidget extends StatelessWidget {
           Container(
             width: 30.w,
             height: 30.w,
-            constraints: BoxConstraints(
+            constraints: const BoxConstraints(
               maxWidth: 120,
               maxHeight: 120,
               minWidth: 80,

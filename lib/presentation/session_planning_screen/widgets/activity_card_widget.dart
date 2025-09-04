@@ -22,12 +22,12 @@ class ActivityCardWidget extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 2.w, vertical: 1.h),
       decoration: BoxDecoration(
         color: isDragging
-            ? AppTheme.lightTheme.colorScheme.primary.withOpacity(0.1)
+            ? AppTheme.lightTheme.colorScheme.primary.withValues(alpha: 0.1)
             : AppTheme.lightTheme.colorScheme.surface,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: isDragging ? 15 : 10,
             offset: Offset(0, isDragging ? 8 : 4),
           ),
@@ -35,7 +35,7 @@ class ActivityCardWidget extends StatelessWidget {
         border: isDragging
             ? Border.all(
                 color: AppTheme.lightTheme.colorScheme.primary
-                    .withOpacity(0.3),
+                    .withValues(alpha: 0.3),
                 width: 2,
               )
             : null,
@@ -53,7 +53,7 @@ class ActivityCardWidget extends StatelessWidget {
                   width: 12.w,
                   height: 12.w,
                   decoration: BoxDecoration(
-                    color: _getDifficultyColor().withOpacity(0.1),
+                    color: _getDifficultyColor().withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Center(
@@ -98,7 +98,7 @@ class ActivityCardWidget extends StatelessWidget {
                                 horizontal: 2.w, vertical: 0.5.h),
                             decoration: BoxDecoration(
                               color: AppTheme.lightTheme.colorScheme.secondary
-                                  .withOpacity(0.1),
+                                  .withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(6),
                             ),
                             child: Row(
@@ -130,7 +130,7 @@ class ActivityCardWidget extends StatelessWidget {
                                 horizontal: 2.w, vertical: 0.5.h),
                             decoration: BoxDecoration(
                               color:
-                                  _getDifficultyColor().withOpacity(0.1),
+                                  _getDifficultyColor().withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(6),
                             ),
                             child: Text(
@@ -150,7 +150,7 @@ class ActivityCardWidget extends StatelessWidget {
                 CustomIconWidget(
                   iconName: 'drag_handle',
                   color: AppTheme.lightTheme.colorScheme.onSurfaceVariant
-                      .withOpacity(0.5),
+                      .withValues(alpha: 0.5),
                   size: 5.w,
                 ),
               ],

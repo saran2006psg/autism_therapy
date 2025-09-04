@@ -33,7 +33,7 @@ class SessionNavigationWidget extends StatelessWidget {
         color: AppTheme.lightTheme.colorScheme.surface,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 4,
             offset: const Offset(0, -2),
           ),
@@ -50,7 +50,7 @@ class SessionNavigationWidget extends StatelessWidget {
                   color: canGoBack
                       ? AppTheme.lightTheme.colorScheme.primary
                       : AppTheme.lightTheme.colorScheme.onSurface
-                          .withOpacity(0.4),
+                          .withValues(alpha: 0.4),
                   size: 20,
                 ),
                 label: Text(
@@ -59,7 +59,7 @@ class SessionNavigationWidget extends StatelessWidget {
                     color: canGoBack
                         ? AppTheme.lightTheme.colorScheme.primary
                         : AppTheme.lightTheme.colorScheme.onSurface
-                            .withOpacity(0.4),
+                            .withValues(alpha: 0.4),
                   ),
                 ),
                 style: OutlinedButton.styleFrom(
@@ -68,7 +68,7 @@ class SessionNavigationWidget extends StatelessWidget {
                     color: canGoBack
                         ? AppTheme.lightTheme.colorScheme.primary
                         : AppTheme.lightTheme.colorScheme.onSurface
-                            .withOpacity(0.4),
+                            .withValues(alpha: 0.4),
                   ),
                 ),
               ),
@@ -78,7 +78,7 @@ class SessionNavigationWidget extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
               decoration: BoxDecoration(
                 color: AppTheme.lightTheme.colorScheme.primary
-                    .withOpacity(0.1),
+                    .withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(

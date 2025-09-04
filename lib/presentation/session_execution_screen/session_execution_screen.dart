@@ -225,6 +225,7 @@ class _SessionExecutionScreenState extends State<SessionExecutionScreen>
       _collectSessionData('photo', photo.path);
       HapticFeedback.selectionClick();
 
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Photo captured successfully')),
       );
@@ -289,6 +290,7 @@ class _SessionExecutionScreenState extends State<SessionExecutionScreen>
         _collectSessionData('audio', path);
         HapticFeedback.lightImpact();
 
+        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Voice note recorded')),
         );

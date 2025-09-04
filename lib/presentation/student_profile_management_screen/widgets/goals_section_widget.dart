@@ -286,7 +286,7 @@ class _GoalsSectionWidgetState extends State<GoalsSectionWidget> {
                             borderRadius: BorderRadius.circular(12),
                             border: Border.all(
                               color: AppTheme.lightTheme.colorScheme.outline
-                                  .withOpacity(0.2),
+                                  .withValues(alpha: 0.2),
                             ),
                           ),
                           child: Column(
@@ -309,7 +309,7 @@ class _GoalsSectionWidgetState extends State<GoalsSectionWidget> {
                                     decoration: BoxDecoration(
                                       color: _getPriorityColor(
                                               goal['priority'] ?? 'Medium')
-                                          .withOpacity(0.1),
+                                          .withValues(alpha: 0.1),
                                       borderRadius: BorderRadius.circular(8),
                                     ),
                                     child: Text(
@@ -373,7 +373,7 @@ class _GoalsSectionWidgetState extends State<GoalsSectionWidget> {
                                           value: progress,
                                           backgroundColor: AppTheme
                                               .lightTheme.colorScheme.outline
-                                              .withOpacity(0.2),
+                                              .withValues(alpha: 0.2),
                                           valueColor:
                                               AlwaysStoppedAnimation<Color>(
                                             AppTheme

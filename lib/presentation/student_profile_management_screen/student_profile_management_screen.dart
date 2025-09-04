@@ -452,6 +452,7 @@ class _StudentProfileManagementScreenState
           ElevatedButton(
             onPressed: () async {
               await _saveProfile();
+              // ignore: use_build_context_synchronously
               Navigator.of(context).pop(true);
             },
             child: const Text('Save'),
@@ -487,6 +488,7 @@ class _StudentProfileManagementScreenState
         _isLoading = false;
       });
 
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Row(
@@ -518,6 +520,7 @@ class _StudentProfileManagementScreenState
         _isLoading = false;
       });
 
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: const Text('Error saving profile. Please try again.'),
@@ -612,6 +615,7 @@ class _StudentProfileManagementScreenState
   Widget build(BuildContext context) {
     return PopScope(
       canPop: !_hasUnsavedChanges,
+      // ignore: deprecated_member_use
       onPopInvoked: (didPop) async {
         if (!didPop && _hasUnsavedChanges) {
           final result = await _onWillPop();

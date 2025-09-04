@@ -50,6 +50,7 @@ dependencies:
   fluttertoast: ^8.2.8
   path_provider: ^2.1.5
   record: ^6.0.0
+  logger: ^2.4.0
 
 dev_dependencies:
   flutter_test:

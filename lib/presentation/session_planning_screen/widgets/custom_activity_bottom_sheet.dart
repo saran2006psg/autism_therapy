@@ -79,7 +79,7 @@ class _CustomActivityBottomSheetState extends State<CustomActivityBottomSheet> {
             margin: EdgeInsets.symmetric(vertical: 2.h),
             decoration: BoxDecoration(
               color: AppTheme.lightTheme.colorScheme.outline
-                  .withOpacity(0.3),
+                  .withValues(alpha: 0.3),
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -177,7 +177,7 @@ class _CustomActivityBottomSheetState extends State<CustomActivityBottomSheet> {
               border: Border(
                 top: BorderSide(
                   color: AppTheme.lightTheme.colorScheme.outline
-                      .withOpacity(0.2),
+                      .withValues(alpha: 0.2),
                 ),
               ),
             ),
@@ -301,7 +301,7 @@ class _CustomActivityBottomSheetState extends State<CustomActivityBottomSheet> {
                       color: isSelected
                           ? AppTheme.lightTheme.colorScheme.primary
                           : AppTheme.lightTheme.colorScheme.outline
-                              .withOpacity(0.2),
+                              .withValues(alpha: 0.2),
                     ),
                   ),
                   child: Text(
@@ -359,14 +359,14 @@ class _CustomActivityBottomSheetState extends State<CustomActivityBottomSheet> {
                   decoration: BoxDecoration(
                     color: isSelected
                         ? AppTheme.lightTheme.colorScheme.primary
-                            .withOpacity(0.1)
+                            .withValues(alpha: 0.1)
                         : AppTheme.lightTheme.colorScheme.surface,
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(
                       color: isSelected
                           ? AppTheme.lightTheme.colorScheme.primary
                           : AppTheme.lightTheme.colorScheme.outline
-                              .withOpacity(0.2),
+                              .withValues(alpha: 0.2),
                     ),
                   ),
                   child: Center(

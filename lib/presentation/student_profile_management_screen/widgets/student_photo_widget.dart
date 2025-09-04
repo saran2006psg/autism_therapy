@@ -67,12 +67,18 @@ class _StudentPhotoWidgetState extends State<StudentPhotoWidget> {
 
       try {
         await _cameraController!.setFocusMode(FocusMode.auto);
-      } catch (e) {}
+      } catch (e) {
+        // Focus mode might not be supported on some devices
+        debugPrint('Failed to set focus mode: $e');
+      }
 
       if (!kIsWeb) {
         try {
           await _cameraController!.setFlashMode(FlashMode.auto);
-        } catch (e) {}
+        } catch (e) {
+          // Flash mode might not be supported on some devices
+          debugPrint('Failed to set flash mode: $e');
+        }
       }
 
       setState(() {
@@ -96,6 +102,7 @@ class _StudentPhotoWidgetState extends State<StudentPhotoWidget> {
         _selectedImagePath = photo.path;
       });
       widget.onImageSelected(photo.path);
+      // ignore: use_build_context_synchronously
       Navigator.of(context).pop();
     } catch (e) {
       // Handle error silently
@@ -286,7 +293,7 @@ class _StudentPhotoWidgetState extends State<StudentPhotoWidget> {
             borderRadius: BorderRadius.circular(15.w),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: Colors.black.withValues(alpha: 0.1),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),

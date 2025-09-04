@@ -85,7 +85,7 @@ class _DataCollectionWidgetState extends State<DataCollectionWidget> {
         borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, -2),
           ),
@@ -132,13 +132,13 @@ class _DataCollectionWidgetState extends State<DataCollectionWidget> {
                       EdgeInsets.symmetric(horizontal: 3.w, vertical: 1.5.h),
                   decoration: BoxDecoration(
                     color: isSelected
-                        ? (marker['color'] as Color).withOpacity(0.2)
+                        ? (marker['color'] as Color).withValues(alpha: 0.2)
                         : AppTheme.lightTheme.colorScheme.surface,
                     border: Border.all(
                       color: isSelected
                           ? (marker['color'] as Color)
                           : AppTheme.lightTheme.colorScheme.outline
-                              .withOpacity(0.5),
+                              .withValues(alpha: 0.5),
                       width: isSelected ? 2 : 1,
                     ),
                     borderRadius: BorderRadius.circular(20),

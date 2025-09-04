@@ -20,10 +20,10 @@ class ConnectivityStatusWidget extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 1.h),
       decoration: BoxDecoration(
-        color: _getStatusColor().withOpacity(0.1),
+        color: _getStatusColor().withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
-          color: _getStatusColor().withOpacity(0.3),
+          color: _getStatusColor().withValues(alpha: 0.3),
           width: 1,
         ),
       ),

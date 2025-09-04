@@ -25,7 +25,7 @@ class RoleIndicatorWidget extends StatelessWidget {
       margin: EdgeInsets.only(top: 2.h),
       padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
       decoration: BoxDecoration(
-        color: _getRoleColor().withOpacity(0.1),
+        color: _getRoleColor().withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: _getRoleColor(),

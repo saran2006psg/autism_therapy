@@ -641,6 +641,7 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
 
     return PopScope(
       canPop: !_hasUnsavedChanges,
+      // ignore: deprecated_member_use
       onPopInvoked: (didPop) async {
         if (!didPop && _hasUnsavedChanges) {
           final result = await _onWillPop();
@@ -656,6 +657,7 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
           leading: IconButton(
             onPressed: () async {
               if (await _onWillPop()) {
+                // ignore: use_build_context_synchronously
                 Navigator.pop(context);
               }
             },
@@ -2023,6 +2025,7 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
       _clearCreateStudentForm();
 
       // Close the sheet
+      // ignore: use_build_context_synchronously
       Navigator.pop(context);
 
       // Set as selected student and refresh data
@@ -2036,6 +2039,7 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
       _studentActivitiesMap[studentId] = [];
 
       // Show success message
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Student created and session scheduled for ${_getDateTimeString(sessionDate)}!'),
@@ -2056,6 +2060,7 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
         _isCreatingStudent = false;
       });
       
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Error creating student: ${e.toString()}'),

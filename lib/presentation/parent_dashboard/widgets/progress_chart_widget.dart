@@ -36,7 +36,7 @@ class _ProgressChartWidgetState extends State<ProgressChartWidget> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -118,7 +118,7 @@ class _ProgressChartWidgetState extends State<ProgressChartWidget> {
                   getDrawingHorizontalLine: (value) {
                     return FlLine(
                       color: AppTheme.lightTheme.colorScheme.outline
-                          .withOpacity(0.3),
+                          .withValues(alpha: 0.3),
                       strokeWidth: 1,
                     );
                   },
@@ -247,9 +247,9 @@ class _ProgressChartWidgetState extends State<ProgressChartWidget> {
                       gradient: LinearGradient(
                         colors: [
                           AppTheme.lightTheme.primaryColor
-                              .withOpacity(0.3),
+                              .withValues(alpha: 0.3),
                           AppTheme.lightTheme.primaryColor
-                              .withOpacity(0.1),
+                              .withValues(alpha: 0.1),
                         ],
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,

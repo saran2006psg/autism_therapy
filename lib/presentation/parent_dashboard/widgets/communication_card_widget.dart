@@ -26,7 +26,7 @@ class CommunicationCardWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 10,
               offset: const Offset(0, 2),
             ),
@@ -192,7 +192,7 @@ class CommunicationCardWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppTheme.lightTheme.colorScheme.surface,
         border: Border.all(
-          color: AppTheme.lightTheme.colorScheme.outline.withOpacity(0.3),
+          color: AppTheme.lightTheme.colorScheme.outline.withValues(alpha: 0.3),
         ),
         borderRadius: BorderRadius.circular(8),
       ),

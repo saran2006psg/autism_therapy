@@ -24,7 +24,7 @@ class ActivityProgressIndicatorWidget extends StatelessWidget {
         color: AppTheme.lightTheme.colorScheme.surface,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -55,7 +55,7 @@ class ActivityProgressIndicatorWidget extends StatelessWidget {
           LinearProgressIndicator(
             value: (currentActivity + 1) / totalActivities,
             backgroundColor:
-                AppTheme.lightTheme.colorScheme.outline.withOpacity(0.3),
+                AppTheme.lightTheme.colorScheme.outline.withValues(alpha: 0.3),
             valueColor: AlwaysStoppedAnimation<Color>(
               AppTheme.lightTheme.colorScheme.primary,
             ),

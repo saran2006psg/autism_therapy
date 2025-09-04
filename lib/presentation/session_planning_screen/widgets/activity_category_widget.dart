@@ -32,7 +32,7 @@ class _ActivityCategoryWidgetState extends State<ActivityCategoryWidget> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -57,7 +57,7 @@ class _ActivityCategoryWidgetState extends State<ActivityCategoryWidget> {
                       width: 10.w,
                       height: 10.w,
                       decoration: BoxDecoration(
-                        color: _getCategoryColor().withOpacity(0.1),
+                        color: _getCategoryColor().withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Center(
@@ -115,7 +115,7 @@ class _ActivityCategoryWidgetState extends State<ActivityCategoryWidget> {
                       Divider(
                         height: 1,
                         color: AppTheme.lightTheme.colorScheme.outline
-                            .withOpacity(0.2),
+                            .withValues(alpha: 0.2),
                       ),
                       ...widget.activities.map((activity) {
                         return ActivityCardWidget(

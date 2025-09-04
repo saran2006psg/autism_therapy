@@ -23,7 +23,7 @@ class SessionTimelineWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -51,7 +51,7 @@ class SessionTimelineWidget extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 1.h),
                 decoration: BoxDecoration(
                   color: AppTheme.lightTheme.colorScheme.primary
-                      .withOpacity(0.1),
+                      .withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
@@ -74,7 +74,7 @@ class SessionTimelineWidget extends StatelessWidget {
                   CustomIconWidget(
                     iconName: 'schedule',
                     color: AppTheme.lightTheme.colorScheme.onSurfaceVariant
-                        .withOpacity(0.5),
+                        .withValues(alpha: 0.5),
                     size: 8.w,
                   ),
                   SizedBox(height: 2.h),
@@ -89,7 +89,7 @@ class SessionTimelineWidget extends StatelessWidget {
                     'Drag activities from above to build your session',
                     style: AppTheme.lightTheme.textTheme.bodySmall?.copyWith(
                       color: AppTheme.lightTheme.colorScheme.onSurfaceVariant
-                          .withOpacity(0.7),
+                          .withValues(alpha: 0.7),
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -102,7 +102,7 @@ class SessionTimelineWidget extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(4),
                 color: AppTheme.lightTheme.colorScheme.outline
-                    .withOpacity(0.2),
+                    .withValues(alpha: 0.2),
               ),
               child: Row(
                 children: _buildTimelineSegments(),

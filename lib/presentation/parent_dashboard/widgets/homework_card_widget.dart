@@ -32,7 +32,7 @@ class _HomeworkCardWidgetState extends State<HomeworkCardWidget> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -47,7 +47,7 @@ class _HomeworkCardWidgetState extends State<HomeworkCardWidget> {
                 padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 1.h),
                 decoration: BoxDecoration(
                   color: AppTheme.lightTheme.colorScheme.secondary
-                      .withOpacity(0.1),
+                      .withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
@@ -101,7 +101,7 @@ class _HomeworkCardWidgetState extends State<HomeworkCardWidget> {
                 child: LinearProgressIndicator(
                   value: _getCompletionPercentage(activities),
                   backgroundColor: AppTheme.lightTheme.colorScheme.outline
-                      .withOpacity(0.3),
+                      .withValues(alpha: 0.3),
                   valueColor: AlwaysStoppedAnimation<Color>(
                     AppTheme.lightTheme.colorScheme.secondary,
                   ),

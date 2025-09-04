@@ -76,7 +76,7 @@ class _SessionHistoryWidgetState extends State<SessionHistoryWidget> {
                 padding: EdgeInsets.all(3.w),
                 decoration: BoxDecoration(
                   color: AppTheme.lightTheme.colorScheme.primary
-                      .withOpacity(0.1),
+                      .withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Row(
@@ -258,7 +258,7 @@ class _SessionHistoryWidgetState extends State<SessionHistoryWidget> {
                               borderRadius: BorderRadius.circular(12),
                               border: Border.all(
                                 color: AppTheme.lightTheme.colorScheme.outline
-                                    .withOpacity(0.2),
+                                    .withValues(alpha: 0.2),
                               ),
                             ),
                             child: Column(
@@ -281,7 +281,7 @@ class _SessionHistoryWidgetState extends State<SessionHistoryWidget> {
                                       decoration: BoxDecoration(
                                         color: _getSessionTypeColor(
                                                 session['type'] ?? 'Individual')
-                                            .withOpacity(0.1),
+                                            .withValues(alpha: 0.1),
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       child: Text(

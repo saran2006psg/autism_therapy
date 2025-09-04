@@ -119,7 +119,7 @@ class AsyncUtils {
     double backoffFactor = 2.0,
   }) async {
     var delay = initialDelay;
-    var lastError;
+    Object? lastError;
     
     for (int i = 0; i <= maxRetries; i++) {
       try {
@@ -133,6 +133,6 @@ class AsyncUtils {
       }
     }
     
-    throw lastError;
+    throw lastError ?? Exception('Async operation failed after $maxRetries retries.');
   }
 }

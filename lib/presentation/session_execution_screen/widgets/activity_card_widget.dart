@@ -29,7 +29,7 @@ class ActivityCardWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -44,7 +44,7 @@ class ActivityCardWidget extends StatelessWidget {
                 padding: EdgeInsets.all(3.w),
                 decoration: BoxDecoration(
                   color: AppTheme.lightTheme.colorScheme.primary
-                      .withOpacity(0.1),
+                      .withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: CustomIconWidget(
@@ -72,7 +72,7 @@ class ActivityCardWidget extends StatelessWidget {
                           EdgeInsets.symmetric(horizontal: 3.w, vertical: 1.h),
                       decoration: BoxDecoration(
                         color: AppTheme.lightTheme.colorScheme.secondary
-                            .withOpacity(0.1),
+                            .withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
@@ -96,7 +96,7 @@ class ActivityCardWidget extends StatelessWidget {
               color: AppTheme.lightTheme.colorScheme.surface,
               border: Border.all(
                 color: AppTheme.lightTheme.colorScheme.outline
-                    .withOpacity(0.3),
+                    .withValues(alpha: 0.3),
               ),
               borderRadius: BorderRadius.circular(12),
             ),
@@ -155,7 +155,7 @@ class ActivityCardWidget extends StatelessWidget {
             padding: EdgeInsets.all(4.w),
             decoration: BoxDecoration(
               color: AppTheme.lightTheme.colorScheme.tertiary
-                  .withOpacity(0.1),
+                  .withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Row(

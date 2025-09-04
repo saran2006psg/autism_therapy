@@ -23,7 +23,7 @@ class UpcomingSessionCardWidget extends StatelessWidget {
         gradient: LinearGradient(
           colors: [
             AppTheme.lightTheme.primaryColor.transparent10,
-            AppTheme.lightTheme.colorScheme.secondary.withOpacity(0.05),
+            AppTheme.lightTheme.colorScheme.secondary.withValues(alpha: 0.05),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -157,7 +157,7 @@ class UpcomingSessionCardWidget extends StatelessWidget {
               padding: EdgeInsets.all(3.w),
               decoration: BoxDecoration(
                 color: AppTheme.lightTheme.colorScheme.surface
-                    .withOpacity(0.7),
+                    .withValues(alpha: 0.7),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Column(

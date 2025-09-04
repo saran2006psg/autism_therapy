@@ -76,11 +76,11 @@ class _EmergencyContactWidgetState extends State<EmergencyContactWidget> {
                     padding: EdgeInsets.all(3.w),
                     decoration: BoxDecoration(
                       color: AppTheme.lightTheme.colorScheme.error
-                          .withOpacity(0.1),
+                          .withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
                         color: AppTheme.lightTheme.colorScheme.error
-                            .withOpacity(0.3),
+                            .withValues(alpha: 0.3),
                       ),
                     ),
                     child: Column(
@@ -116,14 +116,14 @@ class _EmergencyContactWidgetState extends State<EmergencyContactWidget> {
                               borderRadius: BorderRadius.circular(12),
                               borderSide: BorderSide(
                                 color: AppTheme.lightTheme.colorScheme.error
-                                    .withOpacity(0.5),
+                                    .withValues(alpha: 0.5),
                               ),
                             ),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
                               borderSide: BorderSide(
                                 color: AppTheme.lightTheme.colorScheme.error
-                                    .withOpacity(0.3),
+                                    .withValues(alpha: 0.3),
                               ),
                             ),
                           ),
@@ -251,7 +251,7 @@ class _EmergencyContactWidgetState extends State<EmergencyContactWidget> {
                                   .isNotEmpty
                               ? AppTheme.lightTheme.colorScheme.primary
                               : AppTheme.lightTheme.colorScheme.outline
-                                  .withOpacity(0.3),
+                                  .withValues(alpha: 0.3),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: IconButton(

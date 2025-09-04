@@ -33,7 +33,7 @@ class SessionHeaderWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -49,7 +49,7 @@ class SessionHeaderWidget extends StatelessWidget {
                 height: 12.w,
                 decoration: BoxDecoration(
                   color: AppTheme.lightTheme.colorScheme.primary
-                      .withOpacity(0.1),
+                      .withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Center(
@@ -130,7 +130,7 @@ class SessionHeaderWidget extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
               color: AppTheme.lightTheme.colorScheme.outline
-                  .withOpacity(0.2),
+                  .withValues(alpha: 0.2),
             ),
           ),
           child: Column(
@@ -211,7 +211,7 @@ class SessionHeaderWidget extends StatelessWidget {
                       color: isSelected
                           ? AppTheme.lightTheme.colorScheme.primary
                           : AppTheme.lightTheme.colorScheme.outline
-                              .withOpacity(0.2),
+                              .withValues(alpha: 0.2),
                     ),
                   ),
                   child: Text(

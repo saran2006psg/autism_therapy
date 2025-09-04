@@ -99,7 +99,7 @@ class _SessionTimerWidgetState extends State<SessionTimerWidget> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -118,7 +118,7 @@ class _SessionTimerWidgetState extends State<SessionTimerWidget> {
                   value: progress,
                   strokeWidth: 6,
                   backgroundColor: AppTheme.lightTheme.colorScheme.outline
-                      .withOpacity(0.3),
+                      .withValues(alpha: 0.3),
                   valueColor: AlwaysStoppedAnimation<Color>(
                     _remainingTime.inSeconds <= 60
                         ? AppTheme.lightTheme.colorScheme.error

@@ -268,11 +268,11 @@ class _ParentCollaborationWidgetState extends State<ParentCollaborationWidget> {
                     padding: EdgeInsets.all(3.w),
                     decoration: BoxDecoration(
                       color: AppTheme.lightTheme.colorScheme.primary
-                          .withOpacity(0.05),
+                          .withValues(alpha: 0.05),
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
                         color: AppTheme.lightTheme.colorScheme.primary
-                            .withOpacity(0.2),
+                            .withValues(alpha: 0.2),
                       ),
                     ),
                     child: Column(
@@ -406,7 +406,7 @@ class _ParentCollaborationWidgetState extends State<ParentCollaborationWidget> {
                                 borderRadius: BorderRadius.circular(12),
                                 border: Border.all(
                                   color: AppTheme.lightTheme.colorScheme.outline
-                                      .withOpacity(0.2),
+                                      .withValues(alpha: 0.2),
                                 ),
                               ),
                               child: Column(
@@ -418,7 +418,7 @@ class _ParentCollaborationWidgetState extends State<ParentCollaborationWidget> {
                                         radius: 6.w,
                                         backgroundColor: AppTheme
                                             .lightTheme.colorScheme.primary
-                                            .withOpacity(0.1),
+                                            .withValues(alpha: 0.1),
                                         child: CustomIconWidget(
                                           iconName: 'person',
                                           color: AppTheme
@@ -459,7 +459,7 @@ class _ParentCollaborationWidgetState extends State<ParentCollaborationWidget> {
                                         decoration: BoxDecoration(
                                           color: _getStatusColor(
                                                   parent['status'] ?? '')
-                                              .withOpacity(0.1),
+                                              .withValues(alpha: 0.1),
                                           borderRadius:
                                               BorderRadius.circular(8),
                                         ),
@@ -542,7 +542,7 @@ class _ParentCollaborationWidgetState extends State<ParentCollaborationWidget> {
                                           decoration: BoxDecoration(
                                             color: AppTheme
                                                 .lightTheme.colorScheme.tertiary
-                                                .withOpacity(0.1),
+                                                .withValues(alpha: 0.1),
                                             borderRadius:
                                                 BorderRadius.circular(6),
                                           ),

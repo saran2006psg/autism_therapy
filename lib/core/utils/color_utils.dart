@@ -8,7 +8,7 @@ extension ColorMigration on Color {
   /// Usage:
   /// ```dart
   /// // Old way (deprecated)
-  /// color.withOpacity(0.5)
+  /// color.withValues(alpha: 0.5)
   /// 
   /// // New way
   /// color.withAlpha(0.5)
