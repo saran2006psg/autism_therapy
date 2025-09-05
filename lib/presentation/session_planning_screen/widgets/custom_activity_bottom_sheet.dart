@@ -68,7 +68,7 @@ class _CustomActivityBottomSheetState extends State<CustomActivityBottomSheet> {
     return Container(
       height: 85.h,
       decoration: BoxDecoration(
-        color: AppTheme.lightTheme.colorScheme.surface,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
       ),
       child: Column(
@@ -78,7 +78,7 @@ class _CustomActivityBottomSheetState extends State<CustomActivityBottomSheet> {
             height: 0.5.h,
             margin: EdgeInsets.symmetric(vertical: 2.h),
             decoration: BoxDecoration(
-              color: AppTheme.lightTheme.colorScheme.outline
+              color: Theme.of(context).colorScheme.outline
                   .withValues(alpha: 0.3),
               borderRadius: BorderRadius.circular(2),
             ),
@@ -89,7 +89,7 @@ class _CustomActivityBottomSheetState extends State<CustomActivityBottomSheet> {
               children: [
                 Text(
                   'Create Custom Activity',
-                  style: AppTheme.lightTheme.textTheme.headlineSmall?.copyWith(
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -98,7 +98,7 @@ class _CustomActivityBottomSheetState extends State<CustomActivityBottomSheet> {
                   onPressed: () => Navigator.pop(context),
                   icon: CustomIconWidget(
                     iconName: 'close',
-                    color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
                     size: 6.w,
                   ),
                 ),
@@ -173,10 +173,10 @@ class _CustomActivityBottomSheetState extends State<CustomActivityBottomSheet> {
           Container(
             padding: EdgeInsets.all(4.w),
             decoration: BoxDecoration(
-              color: AppTheme.lightTheme.colorScheme.surface,
+              color: Theme.of(context).colorScheme.surface,
               border: Border(
                 top: BorderSide(
-                  color: AppTheme.lightTheme.colorScheme.outline
+                  color: Theme.of(context).colorScheme.outline
                       .withValues(alpha: 0.2),
                 ),
               ),
@@ -216,7 +216,7 @@ class _CustomActivityBottomSheetState extends State<CustomActivityBottomSheet> {
       children: [
         Text(
           label,
-          style: AppTheme.lightTheme.textTheme.labelMedium?.copyWith(
+          style: Theme.of(context).textTheme.labelMedium?.copyWith(
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -244,7 +244,7 @@ class _CustomActivityBottomSheetState extends State<CustomActivityBottomSheet> {
       children: [
         Text(
           label,
-          style: AppTheme.lightTheme.textTheme.labelMedium?.copyWith(
+          style: Theme.of(context).textTheme.labelMedium?.copyWith(
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -270,7 +270,7 @@ class _CustomActivityBottomSheetState extends State<CustomActivityBottomSheet> {
       children: [
         Text(
           'Duration (minutes)',
-          style: AppTheme.lightTheme.textTheme.labelMedium?.copyWith(
+          style: Theme.of(context).textTheme.labelMedium?.copyWith(
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -294,22 +294,22 @@ class _CustomActivityBottomSheetState extends State<CustomActivityBottomSheet> {
                       EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.5.h),
                   decoration: BoxDecoration(
                     color: isSelected
-                        ? AppTheme.lightTheme.colorScheme.primary
-                        : AppTheme.lightTheme.colorScheme.surface,
+                        ? Theme.of(context).colorScheme.primary
+                        : Theme.of(context).colorScheme.surface,
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(
                       color: isSelected
-                          ? AppTheme.lightTheme.colorScheme.primary
-                          : AppTheme.lightTheme.colorScheme.outline
+                          ? Theme.of(context).colorScheme.primary
+                          : Theme.of(context).colorScheme.outline
                               .withValues(alpha: 0.2),
                     ),
                   ),
                   child: Text(
                     '$duration min',
-                    style: AppTheme.lightTheme.textTheme.labelMedium?.copyWith(
+                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
                       color: isSelected
-                          ? AppTheme.lightTheme.colorScheme.onPrimary
-                          : AppTheme.lightTheme.colorScheme.onSurface,
+                          ? Theme.of(context).colorScheme.onPrimary
+                          : Theme.of(context).colorScheme.onSurface,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -328,7 +328,7 @@ class _CustomActivityBottomSheetState extends State<CustomActivityBottomSheet> {
       children: [
         Text(
           'Select Icon',
-          style: AppTheme.lightTheme.textTheme.labelMedium?.copyWith(
+          style: Theme.of(context).textTheme.labelMedium?.copyWith(
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -358,14 +358,14 @@ class _CustomActivityBottomSheetState extends State<CustomActivityBottomSheet> {
                 child: Container(
                   decoration: BoxDecoration(
                     color: isSelected
-                        ? AppTheme.lightTheme.colorScheme.primary
+                        ? Theme.of(context).colorScheme.primary
                             .withValues(alpha: 0.1)
-                        : AppTheme.lightTheme.colorScheme.surface,
+                        : Theme.of(context).colorScheme.surface,
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(
                       color: isSelected
-                          ? AppTheme.lightTheme.colorScheme.primary
-                          : AppTheme.lightTheme.colorScheme.outline
+                          ? Theme.of(context).colorScheme.primary
+                          : Theme.of(context).colorScheme.outline
                               .withValues(alpha: 0.2),
                     ),
                   ),
@@ -373,8 +373,8 @@ class _CustomActivityBottomSheetState extends State<CustomActivityBottomSheet> {
                     child: CustomIconWidget(
                       iconName: icon,
                       color: isSelected
-                          ? AppTheme.lightTheme.colorScheme.primary
-                          : AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                          ? Theme.of(context).colorScheme.primary
+                          : Theme.of(context).colorScheme.onSurfaceVariant,
                       size: 6.w,
                     ),
                   ),

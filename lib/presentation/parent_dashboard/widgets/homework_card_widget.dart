@@ -28,7 +28,7 @@ class _HomeworkCardWidgetState extends State<HomeworkCardWidget> {
       margin: EdgeInsets.only(bottom: 2.h),
       padding: EdgeInsets.all(4.w),
       decoration: BoxDecoration(
-        color: AppTheme.lightTheme.colorScheme.surface,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
@@ -46,14 +46,14 @@ class _HomeworkCardWidgetState extends State<HomeworkCardWidget> {
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 1.h),
                 decoration: BoxDecoration(
-                  color: AppTheme.lightTheme.colorScheme.secondary
+                  color: Theme.of(context).colorScheme.secondary
                       .withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
                   "Homework",
-                  style: AppTheme.lightTheme.textTheme.labelMedium?.copyWith(
-                    color: AppTheme.lightTheme.colorScheme.secondary,
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.secondary,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -61,8 +61,8 @@ class _HomeworkCardWidgetState extends State<HomeworkCardWidget> {
               const Spacer(),
               Text(
                 "Due: ${widget.homeworkData["dueDate"] as String}",
-                style: AppTheme.lightTheme.textTheme.bodySmall?.copyWith(
-                  color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
               ),
             ],
@@ -70,21 +70,21 @@ class _HomeworkCardWidgetState extends State<HomeworkCardWidget> {
           SizedBox(height: 2.h),
           Text(
             widget.homeworkData["title"] as String,
-            style: AppTheme.lightTheme.textTheme.titleMedium?.copyWith(
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.w600,
             ),
           ),
           SizedBox(height: 1.h),
           Text(
             widget.homeworkData["description"] as String,
-            style: AppTheme.lightTheme.textTheme.bodyMedium,
+            style: Theme.of(context).textTheme.bodyMedium,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
           SizedBox(height: 2.h),
           Text(
             "Activities (${_getCompletedCount(activities)}/${activities.length} completed)",
-            style: AppTheme.lightTheme.textTheme.titleSmall?.copyWith(
+            style: Theme.of(context).textTheme.titleSmall?.copyWith(
               fontWeight: FontWeight.w600,
               color: AppTheme.lightTheme.primaryColor,
             ),
@@ -100,10 +100,10 @@ class _HomeworkCardWidgetState extends State<HomeworkCardWidget> {
               Expanded(
                 child: LinearProgressIndicator(
                   value: _getCompletionPercentage(activities),
-                  backgroundColor: AppTheme.lightTheme.colorScheme.outline
+                  backgroundColor: Theme.of(context).colorScheme.outline
                       .withValues(alpha: 0.3),
                   valueColor: AlwaysStoppedAnimation<Color>(
-                    AppTheme.lightTheme.colorScheme.secondary,
+                    Theme.of(context).colorScheme.secondary,
                   ),
                   minHeight: 6,
                 ),
@@ -111,9 +111,9 @@ class _HomeworkCardWidgetState extends State<HomeworkCardWidget> {
               SizedBox(width: 3.w),
               Text(
                 "${(_getCompletionPercentage(activities) * 100).toInt()}%",
-                style: AppTheme.lightTheme.textTheme.labelMedium?.copyWith(
+                style: Theme.of(context).textTheme.labelMedium?.copyWith(
                   fontWeight: FontWeight.w600,
-                  color: AppTheme.lightTheme.colorScheme.secondary,
+                  color: Theme.of(context).colorScheme.secondary,
                 ),
               ),
             ],
@@ -123,14 +123,14 @@ class _HomeworkCardWidgetState extends State<HomeworkCardWidget> {
             children: [
               CustomIconWidget(
                 iconName: 'person',
-                color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
                 size: 16,
               ),
               SizedBox(width: 1.w),
               Text(
                 "Assigned by ${widget.homeworkData["assignedBy"] as String}",
-                style: AppTheme.lightTheme.textTheme.bodySmall?.copyWith(
-                  color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
               ),
               const Spacer(),
@@ -145,7 +145,7 @@ class _HomeworkCardWidgetState extends State<HomeworkCardWidget> {
                   ),
                   label: Text(
                     "Add Photo",
-                    style: AppTheme.lightTheme.textTheme.labelMedium?.copyWith(
+                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
                       color: AppTheme.lightTheme.primaryColor,
                       fontWeight: FontWeight.w500,
                     ),
@@ -173,7 +173,7 @@ class _HomeworkCardWidgetState extends State<HomeworkCardWidget> {
         },
         title: Text(
           activityData["title"] as String,
-          style: AppTheme.lightTheme.textTheme.bodyMedium?.copyWith(
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
             decoration: (activityData["completed"] as bool)
                 ? TextDecoration.lineThrough
                 : TextDecoration.none,
@@ -182,8 +182,8 @@ class _HomeworkCardWidgetState extends State<HomeworkCardWidget> {
         subtitle: activityData["description"] != null
             ? Text(
                 activityData["description"] as String,
-                style: AppTheme.lightTheme.textTheme.bodySmall?.copyWith(
-                  color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
                   decoration: (activityData["completed"] as bool)
                       ? TextDecoration.lineThrough
                       : TextDecoration.none,
@@ -193,8 +193,8 @@ class _HomeworkCardWidgetState extends State<HomeworkCardWidget> {
         controlAffinity: ListTileControlAffinity.leading,
         contentPadding: EdgeInsets.zero,
         dense: true,
-        activeColor: AppTheme.lightTheme.colorScheme.secondary,
-        checkColor: AppTheme.lightTheme.colorScheme.surface,
+        activeColor: Theme.of(context).colorScheme.secondary,
+        checkColor: Theme.of(context).colorScheme.surface,
       ),
     );
   }
@@ -211,3 +211,5 @@ class _HomeworkCardWidgetState extends State<HomeworkCardWidget> {
     return _getCompletedCount(activities) / activities.length;
   }
 }
+
+

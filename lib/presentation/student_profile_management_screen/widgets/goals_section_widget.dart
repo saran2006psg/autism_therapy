@@ -33,7 +33,7 @@ class _GoalsSectionWidgetState extends State<GoalsSectionWidget> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: AppTheme.lightTheme.colorScheme.surface,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -56,7 +56,7 @@ class _GoalsSectionWidgetState extends State<GoalsSectionWidget> {
                       width: 12.w,
                       height: 0.5.h,
                       decoration: BoxDecoration(
-                        color: AppTheme.lightTheme.colorScheme.outline,
+                        color: Theme.of(context).colorScheme.outline,
                         borderRadius: BorderRadius.circular(2),
                       ),
                     ),
@@ -64,7 +64,7 @@ class _GoalsSectionWidgetState extends State<GoalsSectionWidget> {
                   SizedBox(height: 3.h),
                   Text(
                     'Add New Goal',
-                    style: AppTheme.lightTheme.textTheme.titleLarge,
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
                   SizedBox(height: 3.h),
                   TextFormField(
@@ -184,13 +184,13 @@ class _GoalsSectionWidgetState extends State<GoalsSectionWidget> {
   Color _getPriorityColor(String priority) {
     switch (priority) {
       case 'High':
-        return AppTheme.lightTheme.colorScheme.error;
+        return Theme.of(context).colorScheme.error;
       case 'Medium':
-        return AppTheme.lightTheme.colorScheme.secondary;
+        return Theme.of(context).colorScheme.secondary;
       case 'Low':
-        return AppTheme.lightTheme.colorScheme.tertiary;
+        return Theme.of(context).colorScheme.tertiary;
       default:
-        return AppTheme.lightTheme.colorScheme.secondary;
+        return Theme.of(context).colorScheme.secondary;
     }
   }
 
@@ -209,12 +209,12 @@ class _GoalsSectionWidgetState extends State<GoalsSectionWidget> {
           },
           leading: CustomIconWidget(
             iconName: 'flag',
-            color: AppTheme.lightTheme.colorScheme.primary,
+            color: Theme.of(context).colorScheme.primary,
             size: 24,
           ),
           title: Text(
             'Therapy Goals (${widget.goals.length})',
-            style: AppTheme.lightTheme.textTheme.titleLarge,
+            style: Theme.of(context).textTheme.titleLarge,
           ),
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
@@ -223,13 +223,13 @@ class _GoalsSectionWidgetState extends State<GoalsSectionWidget> {
                 onPressed: _showAddGoalDialog,
                 icon: CustomIconWidget(
                   iconName: 'add',
-                  color: AppTheme.lightTheme.colorScheme.primary,
+                  color: Theme.of(context).colorScheme.primary,
                   size: 24,
                 ),
               ),
               CustomIconWidget(
                 iconName: _isExpanded ? 'expand_less' : 'expand_more',
-                color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
                 size: 24,
               ),
             ],
@@ -251,7 +251,7 @@ class _GoalsSectionWidgetState extends State<GoalsSectionWidget> {
                           SizedBox(height: 2.h),
                           Text(
                             'No goals added yet',
-                            style: AppTheme.lightTheme.textTheme.titleMedium
+                            style: Theme.of(context).textTheme.titleMedium
                                 ?.copyWith(
                               color: AppTheme
                                   .lightTheme.colorScheme.onSurfaceVariant,
@@ -260,7 +260,7 @@ class _GoalsSectionWidgetState extends State<GoalsSectionWidget> {
                           SizedBox(height: 1.h),
                           Text(
                             'Tap the + button to add therapy goals',
-                            style: AppTheme.lightTheme.textTheme.bodyMedium
+                            style: Theme.of(context).textTheme.bodyMedium
                                 ?.copyWith(
                               color: AppTheme
                                   .lightTheme.colorScheme.onSurfaceVariant,
@@ -282,10 +282,10 @@ class _GoalsSectionWidgetState extends State<GoalsSectionWidget> {
                         return Container(
                           padding: EdgeInsets.all(3.w),
                           decoration: BoxDecoration(
-                            color: AppTheme.lightTheme.colorScheme.surface,
+                            color: Theme.of(context).colorScheme.surface,
                             borderRadius: BorderRadius.circular(12),
                             border: Border.all(
-                              color: AppTheme.lightTheme.colorScheme.outline
+                              color: Theme.of(context).colorScheme.outline
                                   .withValues(alpha: 0.2),
                             ),
                           ),
@@ -334,7 +334,7 @@ class _GoalsSectionWidgetState extends State<GoalsSectionWidget> {
                                   style: AppTheme
                                       .lightTheme.textTheme.bodyMedium
                                       ?.copyWith(
-                                    color: AppTheme.lightTheme.colorScheme
+                                    color: Theme.of(context).colorScheme
                                         .onSurfaceVariant,
                                   ),
                                   maxLines: 2,
@@ -408,3 +408,5 @@ class _GoalsSectionWidgetState extends State<GoalsSectionWidget> {
     );
   }
 }
+
+

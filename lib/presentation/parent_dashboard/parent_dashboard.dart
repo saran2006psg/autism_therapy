@@ -3,6 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../core/app_export.dart';
+import '../../widgets/theme_toggle_widget.dart';
 import './widgets/child_header_widget.dart';
 import './widgets/communication_card_widget.dart';
 import './widgets/empty_state_widget.dart';
@@ -257,7 +258,7 @@ class _ParentDashboardState extends State<ParentDashboard>
       msg: "Data refreshed successfully",
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
-      backgroundColor: AppTheme.lightTheme.colorScheme.tertiary,
+      backgroundColor: Theme.of(context).colorScheme.tertiary,
       textColor: Colors.white,
     );
   }
@@ -283,8 +284,8 @@ class _ParentDashboardState extends State<ParentDashboard>
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
       backgroundColor: completed
-          ? AppTheme.lightTheme.colorScheme.tertiary
-          : AppTheme.lightTheme.colorScheme.secondary,
+          ? Theme.of(context).colorScheme.tertiary
+          : Theme.of(context).colorScheme.secondary,
       textColor: Colors.white,
     );
   }
@@ -294,7 +295,7 @@ class _ParentDashboardState extends State<ParentDashboard>
       msg: "Photo upload feature coming soon",
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
-      backgroundColor: AppTheme.lightTheme.primaryColor,
+      backgroundColor: Theme.of(context).colorScheme.primary,
       textColor: Colors.white,
     );
   }
@@ -304,7 +305,7 @@ class _ParentDashboardState extends State<ParentDashboard>
       msg: "Opening secure messaging...",
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
-      backgroundColor: AppTheme.lightTheme.primaryColor,
+      backgroundColor: Theme.of(context).colorScheme.primary,
       textColor: Colors.white,
     );
   }
@@ -314,7 +315,7 @@ class _ParentDashboardState extends State<ParentDashboard>
       msg: "Adding to calendar...",
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
-      backgroundColor: AppTheme.lightTheme.colorScheme.secondary,
+      backgroundColor: Theme.of(context).colorScheme.secondary,
       textColor: Colors.white,
     );
   }
@@ -324,7 +325,7 @@ class _ParentDashboardState extends State<ParentDashboard>
       msg: "Reminder set successfully",
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
-      backgroundColor: AppTheme.lightTheme.colorScheme.tertiary,
+      backgroundColor: Theme.of(context).colorScheme.tertiary,
       textColor: Colors.white,
     );
   }
@@ -334,7 +335,7 @@ class _ParentDashboardState extends State<ParentDashboard>
       msg: "Sharing session summary...",
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
-      backgroundColor: AppTheme.lightTheme.primaryColor,
+      backgroundColor: Theme.of(context).colorScheme.primary,
       textColor: Colors.white,
     );
   }
@@ -342,20 +343,21 @@ class _ParentDashboardState extends State<ParentDashboard>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.lightTheme.scaffoldBackgroundColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: Text(
           "ThrivePath",
-          style: AppTheme.lightTheme.textTheme.titleLarge?.copyWith(
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
             fontWeight: FontWeight.w700,
-            color: AppTheme.lightTheme.primaryColor,
+            color: Theme.of(context).colorScheme.primary,
           ),
         ),
         centerTitle: false,
         elevation: 0,
         backgroundColor: Colors.transparent,
         actions: [
+          const ThemeToggleWidget(),
           Container(
             margin: EdgeInsets.only(right: 2.w),
             child: Stack(
@@ -364,8 +366,8 @@ class _ParentDashboardState extends State<ParentDashboard>
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        AppTheme.lightTheme.primaryColor.transparent10,
-                        AppTheme.lightTheme.primaryColor.transparent05,
+                        Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                        Theme.of(context).colorScheme.primary.withOpacity(0.05),
                       ],
                     ),
                     borderRadius: BorderRadius.circular(12),
@@ -374,7 +376,7 @@ class _ParentDashboardState extends State<ParentDashboard>
                     onPressed: _handleMessageTap,
                     icon: CustomIconWidget(
                       iconName: 'notifications',
-                      color: AppTheme.lightTheme.primaryColor,
+                      color: Theme.of(context).colorScheme.primary,
                       size: 24,
                     ),
                   ),
@@ -388,14 +390,14 @@ class _ParentDashboardState extends State<ParentDashboard>
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
-                            AppTheme.lightTheme.colorScheme.error,
-                            AppTheme.lightTheme.colorScheme.error.transparent80,
+                            Theme.of(context).colorScheme.error,
+                            Theme.of(context).colorScheme.error.transparent80,
                           ],
                         ),
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
-                            color: AppTheme.lightTheme.colorScheme.error.transparent30,
+                            color: Theme.of(context).colorScheme.error.transparent30,
                             blurRadius: 6,
                             offset: const Offset(0, 2),
                           ),
@@ -407,7 +409,7 @@ class _ParentDashboardState extends State<ParentDashboard>
                       ),
                       child: Text(
                         _unreadMessages.toString(),
-                        style: AppTheme.lightTheme.textTheme.labelSmall?.copyWith(
+                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
                           color: Colors.white,
                           fontWeight: FontWeight.w600,
                         ),
@@ -423,8 +425,8 @@ class _ParentDashboardState extends State<ParentDashboard>
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  AppTheme.lightTheme.colorScheme.onSurfaceVariant.transparent10,
-                  AppTheme.lightTheme.colorScheme.onSurfaceVariant.transparent05,
+                  Theme.of(context).colorScheme.onSurfaceVariant.transparent10,
+                  Theme.of(context).colorScheme.onSurfaceVariant.transparent05,
                 ],
               ),
               borderRadius: BorderRadius.circular(12),
@@ -435,7 +437,7 @@ class _ParentDashboardState extends State<ParentDashboard>
               },
               icon: CustomIconWidget(
                 iconName: 'logout',
-                color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
                 size: 24,
               ),
             ),
@@ -448,8 +450,8 @@ class _ParentDashboardState extends State<ParentDashboard>
               icon: CustomIconWidget(
                 iconName: 'trending_up',
                 color: _tabController.index == 0
-                    ? AppTheme.lightTheme.primaryColor
-                    : AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                    ? Theme.of(context).colorScheme.primary
+                    : Theme.of(context).colorScheme.onSurfaceVariant,
                 size: 20,
               ),
               text: "Progress",
@@ -458,8 +460,8 @@ class _ParentDashboardState extends State<ParentDashboard>
               icon: CustomIconWidget(
                 iconName: 'assignment',
                 color: _tabController.index == 1
-                    ? AppTheme.lightTheme.primaryColor
-                    : AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                    ? Theme.of(context).colorScheme.primary
+                    : Theme.of(context).colorScheme.onSurfaceVariant,
                 size: 20,
               ),
               text: "Homework",
@@ -470,8 +472,8 @@ class _ParentDashboardState extends State<ParentDashboard>
                   CustomIconWidget(
                     iconName: 'chat',
                     color: _tabController.index == 2
-                        ? AppTheme.lightTheme.primaryColor
-                        : AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                        ? Theme.of(context).colorScheme.primary
+                        : Theme.of(context).colorScheme.onSurfaceVariant,
                     size: 20,
                   ),
                   if (_unreadMessages > 0)
@@ -482,7 +484,7 @@ class _ParentDashboardState extends State<ParentDashboard>
                         width: 8,
                         height: 8,
                         decoration: BoxDecoration(
-                          color: AppTheme.lightTheme.colorScheme.error,
+                          color: Theme.of(context).colorScheme.error,
                           shape: BoxShape.circle,
                         ),
                       ),
@@ -495,22 +497,22 @@ class _ParentDashboardState extends State<ParentDashboard>
               icon: CustomIconWidget(
                 iconName: 'person',
                 color: _tabController.index == 3
-                    ? AppTheme.lightTheme.primaryColor
-                    : AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                    ? Theme.of(context).colorScheme.primary
+                    : Theme.of(context).colorScheme.onSurfaceVariant,
                 size: 20,
               ),
               text: "Profile",
             ),
           ],
-          labelColor: AppTheme.lightTheme.primaryColor,
+          labelColor: Theme.of(context).colorScheme.primary,
           unselectedLabelColor:
-              AppTheme.lightTheme.colorScheme.onSurfaceVariant,
-          indicatorColor: AppTheme.lightTheme.primaryColor,
-          labelStyle: AppTheme.lightTheme.textTheme.labelMedium?.copyWith(
+              Theme.of(context).colorScheme.onSurfaceVariant,
+          indicatorColor: Theme.of(context).colorScheme.primary,
+          labelStyle: Theme.of(context).textTheme.labelMedium?.copyWith(
             fontWeight: FontWeight.w600,
           ),
           unselectedLabelStyle:
-              AppTheme.lightTheme.textTheme.labelMedium?.copyWith(
+              Theme.of(context).textTheme.labelMedium?.copyWith(
             fontWeight: FontWeight.w400,
           ),
         ),
@@ -521,9 +523,9 @@ class _ParentDashboardState extends State<ParentDashboard>
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              AppTheme.lightTheme.scaffoldBackgroundColor,
-              AppTheme.lightTheme.colorScheme.surface.transparent30,
-              AppTheme.lightTheme.scaffoldBackgroundColor,
+              Theme.of(context).scaffoldBackgroundColor,
+              Theme.of(context).colorScheme.surface.withOpacity(0.3),
+              Theme.of(context).scaffoldBackgroundColor,
             ],
             stops: const [0.0, 0.3, 1.0],
           ),
@@ -544,7 +546,7 @@ class _ParentDashboardState extends State<ParentDashboard>
   Widget _buildProgressTab() {
     return RefreshIndicator(
       onRefresh: _refreshData,
-      color: AppTheme.lightTheme.primaryColor,
+      color: Theme.of(context).colorScheme.primary,
       child: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
         padding: EdgeInsets.all(4.w),
@@ -565,7 +567,7 @@ class _ParentDashboardState extends State<ParentDashboard>
             if (_upcomingSessions.isNotEmpty) ...[
               Text(
                 "Upcoming Sessions",
-                style: AppTheme.lightTheme.textTheme.titleMedium?.copyWith(
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -584,7 +586,7 @@ class _ParentDashboardState extends State<ParentDashboard>
             ],
             Text(
               "Recent Session Summaries",
-              style: AppTheme.lightTheme.textTheme.titleMedium?.copyWith(
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -615,7 +617,7 @@ class _ParentDashboardState extends State<ParentDashboard>
   Widget _buildHomeworkTab() {
     return RefreshIndicator(
       onRefresh: _refreshData,
-      color: AppTheme.lightTheme.primaryColor,
+      color: Theme.of(context).colorScheme.primary,
       child: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
         padding: EdgeInsets.all(4.w),
@@ -626,7 +628,7 @@ class _ParentDashboardState extends State<ParentDashboard>
               children: [
                 Text(
                   "Homework Assignments",
-                  style: AppTheme.lightTheme.textTheme.titleMedium?.copyWith(
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -634,14 +636,14 @@ class _ParentDashboardState extends State<ParentDashboard>
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 1.h),
                   decoration: BoxDecoration(
-                    color: AppTheme.lightTheme.colorScheme.secondary
+                    color: Theme.of(context).colorScheme.secondary
                         .transparent10,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
                     "${_homeworkData.length} Active",
-                    style: AppTheme.lightTheme.textTheme.labelMedium?.copyWith(
-                      color: AppTheme.lightTheme.colorScheme.secondary,
+                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.secondary,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -675,7 +677,7 @@ class _ParentDashboardState extends State<ParentDashboard>
   Widget _buildMessagesTab() {
     return RefreshIndicator(
       onRefresh: _refreshData,
-      color: AppTheme.lightTheme.primaryColor,
+      color: Theme.of(context).colorScheme.primary,
       child: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
         padding: EdgeInsets.all(4.w),
@@ -690,7 +692,7 @@ class _ParentDashboardState extends State<ParentDashboard>
             SizedBox(height: 3.h),
             Text(
               "Communication Features",
-              style: AppTheme.lightTheme.textTheme.titleMedium?.copyWith(
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -699,7 +701,7 @@ class _ParentDashboardState extends State<ParentDashboard>
               "Secure Messaging",
               "Direct communication with therapy team",
               "chat",
-              AppTheme.lightTheme.primaryColor,
+              Theme.of(context).colorScheme.primary,
               _handleMessageTap,
             ),
             SizedBox(height: 2.h),
@@ -707,7 +709,7 @@ class _ParentDashboardState extends State<ParentDashboard>
               "Progress Sharing",
               "Share session summaries with family",
               "share",
-              AppTheme.lightTheme.colorScheme.secondary,
+              Theme.of(context).colorScheme.secondary,
               () => _handleSessionShare("general"),
             ),
             SizedBox(height: 2.h),
@@ -715,7 +717,7 @@ class _ParentDashboardState extends State<ParentDashboard>
               "Appointment Scheduling",
               "Request or reschedule therapy sessions",
               "schedule",
-              AppTheme.lightTheme.colorScheme.tertiary,
+              Theme.of(context).colorScheme.tertiary,
               _handleCalendarIntegration,
             ),
           ],
@@ -727,7 +729,7 @@ class _ParentDashboardState extends State<ParentDashboard>
   Widget _buildProfileTab() {
     return RefreshIndicator(
       onRefresh: _refreshData,
-      color: AppTheme.lightTheme.primaryColor,
+      color: Theme.of(context).colorScheme.primary,
       child: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
         padding: EdgeInsets.all(4.w),
@@ -737,7 +739,7 @@ class _ParentDashboardState extends State<ParentDashboard>
             Container(
               padding: EdgeInsets.all(4.w),
               decoration: BoxDecoration(
-                color: AppTheme.lightTheme.colorScheme.surface,
+                color: Theme.of(context).colorScheme.surface,
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
@@ -755,7 +757,7 @@ class _ParentDashboardState extends State<ParentDashboard>
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
-                        color: AppTheme.lightTheme.primaryColor
+                        color: Theme.of(context).colorScheme.primary
                             .transparent30,
                         width: 3,
                       ),
@@ -774,15 +776,15 @@ class _ParentDashboardState extends State<ParentDashboard>
                   Text(
                     _childData["name"] as String,
                     style:
-                        AppTheme.lightTheme.textTheme.headlineSmall?.copyWith(
+                        Theme.of(context).textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.w700,
                     ),
                   ),
                   SizedBox(height: 1.h),
                   Text(
                     "Age ${_childData["age"]} • ${_childData["diagnosis"]}",
-                    style: AppTheme.lightTheme.textTheme.bodyMedium?.copyWith(
-                      color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
                   ),
                 ],
@@ -791,7 +793,7 @@ class _ParentDashboardState extends State<ParentDashboard>
             SizedBox(height: 3.h),
             Text(
               "Account Settings",
-              style: AppTheme.lightTheme.textTheme.titleMedium?.copyWith(
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -804,7 +806,7 @@ class _ParentDashboardState extends State<ParentDashboard>
             SizedBox(height: 3.h),
             Text(
               "Support",
-              style: AppTheme.lightTheme.textTheme.titleMedium?.copyWith(
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -817,29 +819,29 @@ class _ParentDashboardState extends State<ParentDashboard>
               width: double.infinity,
               padding: EdgeInsets.all(4.w),
               decoration: BoxDecoration(
-                color: AppTheme.lightTheme.primaryColor.transparent10,
+                color: Theme.of(context).colorScheme.primary.transparent10,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Column(
                 children: [
                   CustomIconWidget(
                     iconName: 'security',
-                    color: AppTheme.lightTheme.primaryColor,
+                    color: Theme.of(context).colorScheme.primary,
                     size: 32,
                   ),
                   SizedBox(height: 2.h),
                   Text(
                     "HIPAA Compliant",
-                    style: AppTheme.lightTheme.textTheme.titleMedium?.copyWith(
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: AppTheme.lightTheme.primaryColor,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
                   SizedBox(height: 1.h),
                   Text(
                     "Your child's therapy data is protected with enterprise-grade security and healthcare compliance standards.",
-                    style: AppTheme.lightTheme.textTheme.bodySmall?.copyWith(
-                      color: AppTheme.lightTheme.primaryColor,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -859,7 +861,7 @@ class _ParentDashboardState extends State<ParentDashboard>
       child: Container(
         padding: EdgeInsets.all(4.w),
         decoration: BoxDecoration(
-          color: AppTheme.lightTheme.colorScheme.surface,
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
@@ -890,15 +892,15 @@ class _ParentDashboardState extends State<ParentDashboard>
                 children: [
                   Text(
                     title,
-                    style: AppTheme.lightTheme.textTheme.titleSmall?.copyWith(
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
                   ),
                   SizedBox(height: 0.5.h),
                   Text(
                     description,
-                    style: AppTheme.lightTheme.textTheme.bodySmall?.copyWith(
-                      color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
                   ),
                 ],
@@ -906,7 +908,7 @@ class _ParentDashboardState extends State<ParentDashboard>
             ),
             CustomIconWidget(
               iconName: 'chevron_right',
-              color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
               size: 20,
             ),
           ],
@@ -922,7 +924,7 @@ class _ParentDashboardState extends State<ParentDashboard>
         margin: EdgeInsets.only(bottom: 1.h),
         padding: EdgeInsets.all(4.w),
         decoration: BoxDecoration(
-          color: AppTheme.lightTheme.colorScheme.surface,
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
@@ -936,21 +938,21 @@ class _ParentDashboardState extends State<ParentDashboard>
           children: [
             CustomIconWidget(
               iconName: iconName,
-              color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
               size: 20,
             ),
             SizedBox(width: 4.w),
             Expanded(
               child: Text(
                 title,
-                style: AppTheme.lightTheme.textTheme.bodyMedium?.copyWith(
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   fontWeight: FontWeight.w500,
                 ),
               ),
             ),
             CustomIconWidget(
               iconName: 'chevron_right',
-              color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
               size: 20,
             ),
           ],
@@ -959,3 +961,6 @@ class _ParentDashboardState extends State<ParentDashboard>
     );
   }
 }
+
+
+

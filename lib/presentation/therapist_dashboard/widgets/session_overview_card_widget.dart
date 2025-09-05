@@ -27,15 +27,15 @@ class SessionOverviewCardWidget extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            AppTheme.lightTheme.colorScheme.surface,
-            AppTheme.lightTheme.colorScheme.surface.withValues(alpha: 0.8),
+            Theme.of(context).colorScheme.surface,
+            Theme.of(context).colorScheme.surface.withValues(alpha: 0.8),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: AppTheme.lightTheme.colorScheme.outline.withValues(alpha: 0.1),
+          color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.1),
           width: 1,
         ),
         boxShadow: [
@@ -59,8 +59,8 @@ class SessionOverviewCardWidget extends StatelessWidget {
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  AppTheme.lightTheme.colorScheme.primary.withValues(alpha: 0.1),
-                  AppTheme.lightTheme.colorScheme.primary.withValues(alpha: 0.05),
+                  Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+                  Theme.of(context).colorScheme.primary.withValues(alpha: 0.05),
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -79,8 +79,8 @@ class SessionOverviewCardWidget extends StatelessWidget {
                       padding: EdgeInsets.all(2.w),
                       decoration: BoxDecoration(
                         color: isCompletedSection 
-                          ? AppTheme.lightTheme.colorScheme.tertiary
-                          : AppTheme.lightTheme.colorScheme.primary,
+                          ? Theme.of(context).colorScheme.tertiary
+                          : Theme.of(context).colorScheme.primary,
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: CustomIconWidget(
@@ -92,9 +92,9 @@ class SessionOverviewCardWidget extends StatelessWidget {
                     SizedBox(width: 3.w),
                     Text(
                       title ?? (isCompletedSection ? 'Completed Sessions' : 'Upcoming Sessions'),
-                      style: AppTheme.lightTheme.textTheme.titleLarge?.copyWith(
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.w600,
-                        color: AppTheme.lightTheme.colorScheme.onSurface,
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                     ),
                   ],
@@ -102,13 +102,13 @@ class SessionOverviewCardWidget extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 1.h),
                   decoration: BoxDecoration(
-                    color: AppTheme.lightTheme.colorScheme.primary.withValues(alpha: 0.1),
+                    color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
                     '${upcomingSessions.length}',
-                    style: AppTheme.lightTheme.textTheme.labelMedium?.copyWith(
-                      color: AppTheme.lightTheme.colorScheme.primary,
+                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -127,8 +127,8 @@ class SessionOverviewCardWidget extends StatelessWidget {
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             colors: [
-                              AppTheme.lightTheme.colorScheme.primary.withValues(alpha: 0.1),
-                              AppTheme.lightTheme.colorScheme.primary.withValues(alpha: 0.05),
+                              Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+                              Theme.of(context).colorScheme.primary.withValues(alpha: 0.05),
                             ],
                           ),
                           borderRadius: BorderRadius.circular(40),
@@ -136,7 +136,7 @@ class SessionOverviewCardWidget extends StatelessWidget {
                         child: Center(
                           child: CustomIconWidget(
                             iconName: 'event_available',
-                            color: AppTheme.lightTheme.colorScheme.primary,
+                            color: Theme.of(context).colorScheme.primary,
                             size: 8.w,
                           ),
                         ),
@@ -145,8 +145,8 @@ class SessionOverviewCardWidget extends StatelessWidget {
                       Text(
                         'No upcoming sessions',
                         style:
-                            AppTheme.lightTheme.textTheme.titleMedium?.copyWith(
-                          color: AppTheme.lightTheme.colorScheme.onSurface,
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurface,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -154,9 +154,9 @@ class SessionOverviewCardWidget extends StatelessWidget {
                       Text(
                         'Schedule your first session to get started with your students',
                         style:
-                            AppTheme.lightTheme.textTheme.bodyMedium?.copyWith(
+                            Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color:
-                              AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                              Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
                         textAlign: TextAlign.center,
                       ),
@@ -168,7 +168,7 @@ class SessionOverviewCardWidget extends StatelessWidget {
                         icon: const Icon(Icons.add),
                         label: const Text('Schedule Session'),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: AppTheme.lightTheme.colorScheme.primary,
+                          backgroundColor: Theme.of(context).colorScheme.primary,
                           foregroundColor: Colors.white,
                           padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 1.5.h),
                           shape: RoundedRectangleBorder(
@@ -186,7 +186,7 @@ class SessionOverviewCardWidget extends StatelessWidget {
                       upcomingSessions.length > 3 ? 3 : upcomingSessions.length,
                   separatorBuilder: (context, index) => Divider(
                     height: 1,
-                    color: AppTheme.lightTheme.colorScheme.outline
+                    color: Theme.of(context).colorScheme.outline
                         .withValues(alpha: 0.3),
                   ),
                   itemBuilder: (context, index) {
@@ -198,13 +198,13 @@ class SessionOverviewCardWidget extends StatelessWidget {
                         alignment: Alignment.centerRight,
                         padding: EdgeInsets.only(right: 4.w),
                         color: isCompletedSection 
-                            ? AppTheme.lightTheme.colorScheme.tertiary.withValues(alpha: 0.1)
-                            : AppTheme.lightTheme.colorScheme.secondary.withValues(alpha: 0.1),
+                            ? Theme.of(context).colorScheme.tertiary.withValues(alpha: 0.1)
+                            : Theme.of(context).colorScheme.secondary.withValues(alpha: 0.1),
                         child: CustomIconWidget(
                           iconName: isCompletedSection ? 'description' : 'schedule',
                           color: isCompletedSection 
-                              ? AppTheme.lightTheme.colorScheme.tertiary
-                              : AppTheme.lightTheme.colorScheme.secondary,
+                              ? Theme.of(context).colorScheme.tertiary
+                              : Theme.of(context).colorScheme.secondary,
                           size: 24,
                         ),
                       ),
@@ -212,10 +212,10 @@ class SessionOverviewCardWidget extends StatelessWidget {
                       child: Container(
                         margin: EdgeInsets.symmetric(horizontal: 2.w, vertical: 1.h),
                         decoration: BoxDecoration(
-                          color: AppTheme.lightTheme.colorScheme.surface,
+                          color: Theme.of(context).colorScheme.surface,
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
-                            color: AppTheme.lightTheme.colorScheme.outline.withValues(alpha: 0.1),
+                            color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.1),
                             width: 1,
                           ),
                         ),
@@ -229,8 +229,8 @@ class SessionOverviewCardWidget extends StatelessWidget {
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
                                 colors: [
-                                  AppTheme.lightTheme.colorScheme.primary,
-                                  AppTheme.lightTheme.colorScheme.primary.withValues(alpha: 0.8),
+                                  Theme.of(context).colorScheme.primary,
+                                  Theme.of(context).colorScheme.primary.withValues(alpha: 0.8),
                                 ],
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
@@ -238,7 +238,7 @@ class SessionOverviewCardWidget extends StatelessWidget {
                               borderRadius: BorderRadius.circular(12),
                               boxShadow: [
                                 BoxShadow(
-                                  color: AppTheme.lightTheme.colorScheme.primary.withValues(alpha: 0.3),
+                                  color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.3),
                                   blurRadius: 8,
                                   offset: const Offset(0, 4),
                                 ),
@@ -249,7 +249,7 @@ class SessionOverviewCardWidget extends StatelessWidget {
                                 (session['studentName'] as String)
                                     .substring(0, 1)
                                     .toUpperCase(),
-                                style: AppTheme.lightTheme.textTheme.titleMedium
+                                style: Theme.of(context).textTheme.titleMedium
                                     ?.copyWith(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w600,
@@ -262,10 +262,10 @@ class SessionOverviewCardWidget extends StatelessWidget {
                             Expanded(
                               child: Text(
                                 session['studentName'] as String,
-                                style: AppTheme.lightTheme.textTheme.titleMedium
+                                style: Theme.of(context).textTheme.titleMedium
                                     ?.copyWith(
                                   fontWeight: FontWeight.w500,
-                                  color: AppTheme.lightTheme.colorScheme.onSurface,
+                                  color: Theme.of(context).colorScheme.onSurface,
                                 ),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
@@ -304,7 +304,7 @@ class SessionOverviewCardWidget extends StatelessWidget {
                                 ],
                                 icon: Icon(
                                   Icons.more_vert,
-                                  color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                                  color: Theme.of(context).colorScheme.onSurfaceVariant,
                                   size: 20,
                                 ),
                               ),
@@ -316,7 +316,7 @@ class SessionOverviewCardWidget extends StatelessWidget {
                             SizedBox(height: 0.5.h),
                             Text(
                               session['sessionType'] as String,
-                              style: AppTheme.lightTheme.textTheme.bodySmall
+                              style: Theme.of(context).textTheme.bodySmall
                                   ?.copyWith(
                                 color: AppTheme
                                     .lightTheme.colorScheme.onSurfaceVariant,
@@ -336,9 +336,9 @@ class SessionOverviewCardWidget extends StatelessWidget {
                                 SizedBox(width: 1.w),
                                 Text(
                                   session['time'] as String,
-                                  style: AppTheme.lightTheme.textTheme.bodySmall
+                                  style: Theme.of(context).textTheme.bodySmall
                                       ?.copyWith(
-                                    color: AppTheme.lightTheme.colorScheme
+                                    color: Theme.of(context).colorScheme
                                         .onSurfaceVariant,
                                   ),
                                 ),
@@ -350,16 +350,16 @@ class SessionOverviewCardWidget extends StatelessWidget {
                           padding: EdgeInsets.symmetric(
                               horizontal: 3.w, vertical: 1.h),
                           decoration: BoxDecoration(
-                            color: _getStatusColor(session['status'] as String)
+                            color: _getStatusColor(context, session['status'] as String)
                                 .withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
                             session['status'] as String,
-                            style: AppTheme.lightTheme.textTheme.labelSmall
+                            style: Theme.of(context).textTheme.labelSmall
                                 ?.copyWith(
                               color:
-                                  _getStatusColor(session['status'] as String),
+                                  _getStatusColor(context, session['status'] as String),
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -377,8 +377,8 @@ class SessionOverviewCardWidget extends StatelessWidget {
                   onPressed: () => _showAllSessions(context),
                   child: Text(
                     'View All Sessions (${upcomingSessions.length})',
-                    style: AppTheme.lightTheme.textTheme.labelLarge?.copyWith(
-                      color: AppTheme.lightTheme.colorScheme.primary,
+                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
                 ),
@@ -389,18 +389,18 @@ class SessionOverviewCardWidget extends StatelessWidget {
     );
   }
 
-  Color _getStatusColor(String status) {
+  Color _getStatusColor(BuildContext context, String status) {
     switch (status.toLowerCase()) {
       case 'confirmed':
-        return AppTheme.lightTheme.colorScheme.tertiary;
+        return Theme.of(context).colorScheme.tertiary;
       case 'pending':
-        return AppTheme.lightTheme.colorScheme.secondary;
+        return Theme.of(context).colorScheme.secondary;
       case 'cancelled':
-        return AppTheme.lightTheme.colorScheme.error;
+        return Theme.of(context).colorScheme.error;
       case 'completed':
         return Colors.green;
       default:
-        return AppTheme.lightTheme.colorScheme.onSurfaceVariant;
+        return Theme.of(context).colorScheme.onSurfaceVariant;
     }
   }
 
@@ -438,7 +438,7 @@ class SessionOverviewCardWidget extends StatelessWidget {
         maxChildSize: 0.95,
         builder: (context, scrollController) => Container(
           decoration: BoxDecoration(
-            color: AppTheme.lightTheme.colorScheme.surface,
+            color: Theme.of(context).colorScheme.surface,
             borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
           ),
           child: Column(
@@ -462,7 +462,7 @@ class SessionOverviewCardWidget extends StatelessWidget {
                     Expanded(
                       child: Text(
                         '${title ?? "Sessions"} (${upcomingSessions.length})',
-                        style: AppTheme.lightTheme.textTheme.titleLarge?.copyWith(
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -486,10 +486,10 @@ class SessionOverviewCardWidget extends StatelessWidget {
                     final session = upcomingSessions[index];
                     return Container(
                       decoration: BoxDecoration(
-                        color: AppTheme.lightTheme.colorScheme.surface,
+                        color: Theme.of(context).colorScheme.surface,
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
-                          color: AppTheme.lightTheme.colorScheme.outline.withValues(alpha: 0.2),
+                          color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
                         ),
                         boxShadow: [
                           BoxShadow(
@@ -506,18 +506,18 @@ class SessionOverviewCardWidget extends StatelessWidget {
                           onSessionTap(session);
                         },
                         leading: CircleAvatar(
-                          backgroundColor: AppTheme.lightTheme.colorScheme.primary.withValues(alpha: 0.1),
+                          backgroundColor: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
                           child: Text(
                             (session['studentName'] as String).substring(0, 1).toUpperCase(),
-                            style: AppTheme.lightTheme.textTheme.titleMedium?.copyWith(
-                              color: AppTheme.lightTheme.colorScheme.primary,
+                            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                              color: Theme.of(context).colorScheme.primary,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
                         title: Text(
                           session['studentName'] as String,
-                          style: AppTheme.lightTheme.textTheme.titleMedium?.copyWith(
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -526,12 +526,12 @@ class SessionOverviewCardWidget extends StatelessWidget {
                           children: [
                             Text(
                               session['sessionType'] as String,
-                              style: AppTheme.lightTheme.textTheme.bodyMedium,
+                              style: Theme.of(context).textTheme.bodyMedium,
                             ),
                             Text(
                               '${session['date']} • ${session['time']}',
-                              style: AppTheme.lightTheme.textTheme.bodySmall?.copyWith(
-                                color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                color: Theme.of(context).colorScheme.onSurfaceVariant,
                               ),
                             ),
                           ],
@@ -542,13 +542,13 @@ class SessionOverviewCardWidget extends StatelessWidget {
                             Container(
                               padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 0.5.h),
                               decoration: BoxDecoration(
-                                color: _getStatusColor(session['status'] as String).withValues(alpha: 0.1),
+                                color: _getStatusColor(context, session['status'] as String).withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(6),
                               ),
                               child: Text(
                                 session['status'] as String,
-                                style: AppTheme.lightTheme.textTheme.labelSmall?.copyWith(
-                                  color: _getStatusColor(session['status'] as String),
+                                style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                                  color: _getStatusColor(context, session['status'] as String),
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
@@ -607,3 +607,5 @@ class SessionOverviewCardWidget extends StatelessWidget {
     }
   }
 }
+
+

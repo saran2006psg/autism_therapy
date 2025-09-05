@@ -23,15 +23,15 @@ class _TherapistProfileScreenState extends State<TherapistProfileScreen> {
     final currentUser = AuthService.currentUser;
     
     return Scaffold(
-      backgroundColor: AppTheme.lightTheme.scaffoldBackgroundColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: AppTheme.lightTheme.scaffoldBackgroundColor,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         title: Text(
           'My Profile',
-          style: AppTheme.lightTheme.textTheme.headlineSmall?.copyWith(
+          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
             fontWeight: FontWeight.w600,
-            color: AppTheme.lightTheme.colorScheme.onSurface,
+            color: Theme.of(context).colorScheme.onSurface,
           ),
         ),
         actions: [
@@ -41,7 +41,7 @@ class _TherapistProfileScreenState extends State<TherapistProfileScreen> {
             },
             icon: CustomIconWidget(
               iconName: 'edit',
-              color: AppTheme.lightTheme.colorScheme.primary,
+              color: Theme.of(context).colorScheme.primary,
               size: 24,
             ),
           ),
@@ -58,8 +58,8 @@ class _TherapistProfileScreenState extends State<TherapistProfileScreen> {
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    AppTheme.lightTheme.colorScheme.primary,
-                    AppTheme.lightTheme.colorScheme.primary.transparent80,
+                    Theme.of(context).colorScheme.primary,
+                    Theme.of(context).colorScheme.primary.transparent80,
                   ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
@@ -67,7 +67,7 @@ class _TherapistProfileScreenState extends State<TherapistProfileScreen> {
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
-                    color: AppTheme.lightTheme.colorScheme.primary.transparent30,
+                    color: Theme.of(context).colorScheme.primary.transparent30,
                     blurRadius: 20,
                     offset: const Offset(0, 8),
                   ),
@@ -97,7 +97,7 @@ class _TherapistProfileScreenState extends State<TherapistProfileScreen> {
                   SizedBox(height: 2.h),
                   Text(
                     currentUser?.displayName ?? 'Dr. Therapist',
-                    style: AppTheme.lightTheme.textTheme.headlineSmall?.copyWith(
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                     ),
@@ -105,7 +105,7 @@ class _TherapistProfileScreenState extends State<TherapistProfileScreen> {
                   SizedBox(height: 1.h),
                   Text(
                     currentUser?.email ?? 'therapist@example.com',
-                    style: AppTheme.lightTheme.textTheme.bodyLarge?.copyWith(
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       color: Colors.white.transparent90,
                     ),
                   ),
@@ -121,7 +121,7 @@ class _TherapistProfileScreenState extends State<TherapistProfileScreen> {
                     ),
                     child: Text(
                       'Autism Spectrum Therapist',
-                      style: AppTheme.lightTheme.textTheme.bodyMedium?.copyWith(
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.w500,
                       ),
@@ -209,7 +209,7 @@ class _TherapistProfileScreenState extends State<TherapistProfileScreen> {
                           SizedBox(width: 2.w),
                           Text(
                             'Logout',
-                            style: AppTheme.lightTheme.textTheme.titleMedium?.copyWith(
+                            style: Theme.of(context).textTheme.titleMedium?.copyWith(
                               color: Colors.white,
                               fontWeight: FontWeight.w600,
                             ),
@@ -233,10 +233,10 @@ class _TherapistProfileScreenState extends State<TherapistProfileScreen> {
     return Container(
       margin: EdgeInsets.only(bottom: 2.h),
       decoration: BoxDecoration(
-        color: AppTheme.lightTheme.colorScheme.surface,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: AppTheme.lightTheme.colorScheme.outline.transparent10,
+          color: Theme.of(context).colorScheme.outline.transparent10,
         ),
         boxShadow: [
           BoxShadow(
@@ -251,31 +251,31 @@ class _TherapistProfileScreenState extends State<TherapistProfileScreen> {
         leading: Container(
           padding: EdgeInsets.all(3.w),
           decoration: BoxDecoration(
-            color: AppTheme.lightTheme.colorScheme.primaryContainer,
+            color: Theme.of(context).colorScheme.primaryContainer,
             borderRadius: BorderRadius.circular(12),
           ),
           child: CustomIconWidget(
             iconName: icon,
-            color: AppTheme.lightTheme.colorScheme.onPrimaryContainer,
+            color: Theme.of(context).colorScheme.onPrimaryContainer,
             size: 24,
           ),
         ),
         title: Text(
           title,
-          style: AppTheme.lightTheme.textTheme.titleMedium?.copyWith(
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.w600,
-            color: AppTheme.lightTheme.colorScheme.onSurface,
+            color: Theme.of(context).colorScheme.onSurface,
           ),
         ),
         subtitle: Text(
           subtitle,
-          style: AppTheme.lightTheme.textTheme.bodyMedium?.copyWith(
-            color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
           ),
         ),
         trailing: CustomIconWidget(
           iconName: 'arrow_forward_ios',
-          color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+          color: Theme.of(context).colorScheme.onSurfaceVariant,
           size: 16,
         ),
         onTap: onTap,
@@ -359,3 +359,5 @@ class _TherapistProfileScreenState extends State<TherapistProfileScreen> {
     }
   }
 }
+
+

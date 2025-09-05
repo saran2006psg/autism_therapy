@@ -8,6 +8,7 @@ export '../theme/app_theme.dart';
 export 'utils/app_logger.dart';
 export 'utils/color_utils.dart';
 export 'utils/async_utils.dart';
+export 'utils/theme_manager.dart';
 
 // Services
 export 'services/auth_service.dart';

@@ -69,8 +69,8 @@ class MetricCardWidget extends StatelessWidget {
                   Expanded(
                     child: Text(
                       title,
-                      style: AppTheme.lightTheme.textTheme.titleSmall?.copyWith(
-                        color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                         fontSize: 12, // Reduced font size
                         fontWeight: FontWeight.w500,
                       ),
@@ -116,7 +116,7 @@ class MetricCardWidget extends StatelessWidget {
                     Text(
                       value,
                       style:
-                          AppTheme.lightTheme.textTheme.headlineMedium?.copyWith(
+                          Theme.of(context).textTheme.headlineMedium?.copyWith(
                         fontWeight: FontWeight.w700,
                         color: color,
                         fontSize: 22, // Reduced font size
@@ -127,8 +127,8 @@ class MetricCardWidget extends StatelessWidget {
                     SizedBox(height: 0.3.h), // Reduced spacing
                     Text(
                       subtitle,
-                      style: AppTheme.lightTheme.textTheme.bodySmall?.copyWith(
-                        color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                         fontSize: 9, // Reduced font size
                       ),
                       maxLines: 1,
@@ -159,3 +159,5 @@ class MetricCardWidget extends StatelessWidget {
     }
   }
 }
+
+

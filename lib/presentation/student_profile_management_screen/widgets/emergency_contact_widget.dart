@@ -36,7 +36,7 @@ class _EmergencyContactWidgetState extends State<EmergencyContactWidget> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Calling $phoneNumber...'),
-          backgroundColor: AppTheme.lightTheme.colorScheme.primary,
+          backgroundColor: Theme.of(context).colorScheme.primary,
         ),
       );
     }
@@ -57,12 +57,12 @@ class _EmergencyContactWidgetState extends State<EmergencyContactWidget> {
           },
           leading: CustomIconWidget(
             iconName: 'emergency',
-            color: AppTheme.lightTheme.colorScheme.error,
+            color: Theme.of(context).colorScheme.error,
             size: 24,
           ),
           title: Text(
             'Emergency Contacts',
-            style: AppTheme.lightTheme.textTheme.titleLarge,
+            style: Theme.of(context).textTheme.titleLarge,
           ),
           children: [
             Padding(
@@ -75,11 +75,11 @@ class _EmergencyContactWidgetState extends State<EmergencyContactWidget> {
                     width: double.infinity,
                     padding: EdgeInsets.all(3.w),
                     decoration: BoxDecoration(
-                      color: AppTheme.lightTheme.colorScheme.error
+                      color: Theme.of(context).colorScheme.error
                           .withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
-                        color: AppTheme.lightTheme.colorScheme.error
+                        color: Theme.of(context).colorScheme.error
                             .withValues(alpha: 0.3),
                       ),
                     ),
@@ -90,15 +90,15 @@ class _EmergencyContactWidgetState extends State<EmergencyContactWidget> {
                           children: [
                             CustomIconWidget(
                               iconName: 'medical_services',
-                              color: AppTheme.lightTheme.colorScheme.error,
+                              color: Theme.of(context).colorScheme.error,
                               size: 20,
                             ),
                             SizedBox(width: 2.w),
                             Text(
                               'Medical Alerts',
-                              style: AppTheme.lightTheme.textTheme.titleMedium
+                              style: Theme.of(context).textTheme.titleMedium
                                   ?.copyWith(
-                                color: AppTheme.lightTheme.colorScheme.error,
+                                color: Theme.of(context).colorScheme.error,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -111,18 +111,18 @@ class _EmergencyContactWidgetState extends State<EmergencyContactWidget> {
                             labelText: 'Medical Alerts & Allergies',
                             hintText:
                                 'List any medical conditions, allergies, or medications',
-                            fillColor: AppTheme.lightTheme.colorScheme.surface,
+                            fillColor: Theme.of(context).colorScheme.surface,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
                               borderSide: BorderSide(
-                                color: AppTheme.lightTheme.colorScheme.error
+                                color: Theme.of(context).colorScheme.error
                                     .withValues(alpha: 0.5),
                               ),
                             ),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
                               borderSide: BorderSide(
-                                color: AppTheme.lightTheme.colorScheme.error
+                                color: Theme.of(context).colorScheme.error
                                     .withValues(alpha: 0.3),
                               ),
                             ),
@@ -138,7 +138,7 @@ class _EmergencyContactWidgetState extends State<EmergencyContactWidget> {
                   // Primary Contact
                   Text(
                     'Primary Contact',
-                    style: AppTheme.lightTheme.textTheme.titleMedium?.copyWith(
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -180,7 +180,7 @@ class _EmergencyContactWidgetState extends State<EmergencyContactWidget> {
                       SizedBox(width: 2.w),
                       Container(
                         decoration: BoxDecoration(
-                          color: AppTheme.lightTheme.colorScheme.primary,
+                          color: Theme.of(context).colorScheme.primary,
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: IconButton(
@@ -188,7 +188,7 @@ class _EmergencyContactWidgetState extends State<EmergencyContactWidget> {
                               widget.primaryPhoneController.text),
                           icon: CustomIconWidget(
                             iconName: 'phone',
-                            color: AppTheme.lightTheme.colorScheme.onPrimary,
+                            color: Theme.of(context).colorScheme.onPrimary,
                             size: 20,
                           ),
                           tooltip: 'Call Primary Contact',
@@ -216,7 +216,7 @@ class _EmergencyContactWidgetState extends State<EmergencyContactWidget> {
                   // Secondary Contact
                   Text(
                     'Secondary Contact (Optional)',
-                    style: AppTheme.lightTheme.textTheme.titleMedium?.copyWith(
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -249,8 +249,8 @@ class _EmergencyContactWidgetState extends State<EmergencyContactWidget> {
                           color: widget.secondaryPhoneController.text
                                   .trim()
                                   .isNotEmpty
-                              ? AppTheme.lightTheme.colorScheme.primary
-                              : AppTheme.lightTheme.colorScheme.outline
+                              ? Theme.of(context).colorScheme.primary
+                              : Theme.of(context).colorScheme.outline
                                   .withValues(alpha: 0.3),
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -266,7 +266,7 @@ class _EmergencyContactWidgetState extends State<EmergencyContactWidget> {
                             color: widget.secondaryPhoneController.text
                                     .trim()
                                     .isNotEmpty
-                                ? AppTheme.lightTheme.colorScheme.onPrimary
+                                ? Theme.of(context).colorScheme.onPrimary
                                 : AppTheme
                                     .lightTheme.colorScheme.onSurfaceVariant,
                             size: 20,
@@ -294,3 +294,5 @@ class _EmergencyContactWidgetState extends State<EmergencyContactWidget> {
     );
   }
 }
+
+

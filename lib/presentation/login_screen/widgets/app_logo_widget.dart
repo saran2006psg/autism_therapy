@@ -18,14 +18,14 @@ class AppLogoWidget extends StatelessWidget {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                AppTheme.lightTheme.colorScheme.primary,
-                AppTheme.lightTheme.colorScheme.primaryContainer,
+                Theme.of(context).colorScheme.primary,
+                Theme.of(context).colorScheme.primaryContainer,
               ],
             ),
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                color: AppTheme.lightTheme.colorScheme.primary
+                color: Theme.of(context).colorScheme.primary
                     .transparent30,
                 blurRadius: 12,
                 offset: const Offset(0, 4),
@@ -35,7 +35,7 @@ class AppLogoWidget extends StatelessWidget {
           child: Center(
             child: CustomIconWidget(
               iconName: 'psychology',
-              color: AppTheme.lightTheme.colorScheme.onPrimary,
+              color: Theme.of(context).colorScheme.onPrimary,
               size: 10.w,
             ),
           ),
@@ -46,8 +46,8 @@ class AppLogoWidget extends StatelessWidget {
         // App Name
         Text(
           'ThrivePath',
-          style: AppTheme.lightTheme.textTheme.headlineMedium?.copyWith(
-            color: AppTheme.lightTheme.colorScheme.primary,
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+            color: Theme.of(context).colorScheme.primary,
             fontWeight: FontWeight.w700,
             letterSpacing: -0.5,
           ),
@@ -58,8 +58,8 @@ class AppLogoWidget extends StatelessWidget {
         // App Tagline
         Text(
           'Collaborative ASD Therapy Management',
-          style: AppTheme.lightTheme.textTheme.bodyMedium?.copyWith(
-            color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
             fontWeight: FontWeight.w400,
           ),
           textAlign: TextAlign.center,
@@ -68,3 +68,5 @@ class AppLogoWidget extends StatelessWidget {
     );
   }
 }
+
+

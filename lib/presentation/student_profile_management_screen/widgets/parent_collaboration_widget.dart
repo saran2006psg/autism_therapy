@@ -35,7 +35,7 @@ class _ParentCollaborationWidgetState extends State<ParentCollaborationWidget> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: AppTheme.lightTheme.colorScheme.surface,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -58,7 +58,7 @@ class _ParentCollaborationWidgetState extends State<ParentCollaborationWidget> {
                       width: 12.w,
                       height: 0.5.h,
                       decoration: BoxDecoration(
-                        color: AppTheme.lightTheme.colorScheme.outline,
+                        color: Theme.of(context).colorScheme.outline,
                         borderRadius: BorderRadius.circular(2),
                       ),
                     ),
@@ -66,7 +66,7 @@ class _ParentCollaborationWidgetState extends State<ParentCollaborationWidget> {
                   SizedBox(height: 3.h),
                   Text(
                     'Add Parent/Guardian Access',
-                    style: AppTheme.lightTheme.textTheme.titleLarge,
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
                   SizedBox(height: 3.h),
                   TextFormField(
@@ -125,7 +125,7 @@ class _ParentCollaborationWidgetState extends State<ParentCollaborationWidget> {
                   SizedBox(height: 3.h),
                   Text(
                     'Access Permissions',
-                    style: AppTheme.lightTheme.textTheme.titleMedium,
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                   SizedBox(height: 1.h),
                   ...[
@@ -139,7 +139,7 @@ class _ParentCollaborationWidgetState extends State<ParentCollaborationWidget> {
                     return CheckboxListTile(
                       title: Text(
                         permission,
-                        style: AppTheme.lightTheme.textTheme.bodyMedium,
+                        style: Theme.of(context).textTheme.bodyMedium,
                       ),
                       value: isSelected,
                       onChanged: (value) {
@@ -200,13 +200,13 @@ class _ParentCollaborationWidgetState extends State<ParentCollaborationWidget> {
   Color _getStatusColor(String status) {
     switch (status.toLowerCase()) {
       case 'active':
-        return AppTheme.lightTheme.colorScheme.tertiary;
+        return Theme.of(context).colorScheme.tertiary;
       case 'pending invitation':
-        return AppTheme.lightTheme.colorScheme.secondary;
+        return Theme.of(context).colorScheme.secondary;
       case 'inactive':
-        return AppTheme.lightTheme.colorScheme.onSurfaceVariant;
+        return Theme.of(context).colorScheme.onSurfaceVariant;
       default:
-        return AppTheme.lightTheme.colorScheme.onSurfaceVariant;
+        return Theme.of(context).colorScheme.onSurfaceVariant;
     }
   }
 
@@ -225,12 +225,12 @@ class _ParentCollaborationWidgetState extends State<ParentCollaborationWidget> {
           },
           leading: CustomIconWidget(
             iconName: 'family_restroom',
-            color: AppTheme.lightTheme.colorScheme.primary,
+            color: Theme.of(context).colorScheme.primary,
             size: 24,
           ),
           title: Text(
             'Parent Collaboration',
-            style: AppTheme.lightTheme.textTheme.titleLarge,
+            style: Theme.of(context).textTheme.titleLarge,
           ),
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
@@ -239,13 +239,13 @@ class _ParentCollaborationWidgetState extends State<ParentCollaborationWidget> {
                 onPressed: _showAddParentDialog,
                 icon: CustomIconWidget(
                   iconName: 'person_add',
-                  color: AppTheme.lightTheme.colorScheme.primary,
+                  color: Theme.of(context).colorScheme.primary,
                   size: 24,
                 ),
               ),
               CustomIconWidget(
                 iconName: _isExpanded ? 'expand_less' : 'expand_more',
-                color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
                 size: 24,
               ),
             ],
@@ -259,7 +259,7 @@ class _ParentCollaborationWidgetState extends State<ParentCollaborationWidget> {
                   // Communication Preferences
                   Text(
                     'Communication Preferences',
-                    style: AppTheme.lightTheme.textTheme.titleMedium?.copyWith(
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -267,11 +267,11 @@ class _ParentCollaborationWidgetState extends State<ParentCollaborationWidget> {
                   Container(
                     padding: EdgeInsets.all(3.w),
                     decoration: BoxDecoration(
-                      color: AppTheme.lightTheme.colorScheme.primary
+                      color: Theme.of(context).colorScheme.primary
                           .withValues(alpha: 0.05),
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
-                        color: AppTheme.lightTheme.colorScheme.primary
+                        color: Theme.of(context).colorScheme.primary
                             .withValues(alpha: 0.2),
                       ),
                     ),
@@ -280,11 +280,11 @@ class _ParentCollaborationWidgetState extends State<ParentCollaborationWidget> {
                         SwitchListTile(
                           title: Text(
                             'Email Notifications',
-                            style: AppTheme.lightTheme.textTheme.bodyMedium,
+                            style: Theme.of(context).textTheme.bodyMedium,
                           ),
                           subtitle: Text(
                             'Send progress updates via email',
-                            style: AppTheme.lightTheme.textTheme.bodySmall
+                            style: Theme.of(context).textTheme.bodySmall
                                 ?.copyWith(
                               color: AppTheme
                                   .lightTheme.colorScheme.onSurfaceVariant,
@@ -300,11 +300,11 @@ class _ParentCollaborationWidgetState extends State<ParentCollaborationWidget> {
                         SwitchListTile(
                           title: Text(
                             'Weekly Reports',
-                            style: AppTheme.lightTheme.textTheme.bodyMedium,
+                            style: Theme.of(context).textTheme.bodyMedium,
                           ),
                           subtitle: Text(
                             'Automatic weekly progress reports',
-                            style: AppTheme.lightTheme.textTheme.bodySmall
+                            style: Theme.of(context).textTheme.bodySmall
                                 ?.copyWith(
                               color: AppTheme
                                   .lightTheme.colorScheme.onSurfaceVariant,
@@ -320,11 +320,11 @@ class _ParentCollaborationWidgetState extends State<ParentCollaborationWidget> {
                         SwitchListTile(
                           title: Text(
                             'Session Reminders',
-                            style: AppTheme.lightTheme.textTheme.bodyMedium,
+                            style: Theme.of(context).textTheme.bodyMedium,
                           ),
                           subtitle: Text(
                             'Remind parents about upcoming sessions',
-                            style: AppTheme.lightTheme.textTheme.bodySmall
+                            style: Theme.of(context).textTheme.bodySmall
                                 ?.copyWith(
                               color: AppTheme
                                   .lightTheme.colorScheme.onSurfaceVariant,
@@ -349,7 +349,7 @@ class _ParentCollaborationWidgetState extends State<ParentCollaborationWidget> {
                       Text(
                         'Shared Access (${widget.parentAccess.length})',
                         style:
-                            AppTheme.lightTheme.textTheme.titleMedium?.copyWith(
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -371,7 +371,7 @@ class _ParentCollaborationWidgetState extends State<ParentCollaborationWidget> {
                               SizedBox(height: 2.h),
                               Text(
                                 'No parent access granted yet',
-                                style: AppTheme.lightTheme.textTheme.titleMedium
+                                style: Theme.of(context).textTheme.titleMedium
                                     ?.copyWith(
                                   color: AppTheme
                                       .lightTheme.colorScheme.onSurfaceVariant,
@@ -380,7 +380,7 @@ class _ParentCollaborationWidgetState extends State<ParentCollaborationWidget> {
                               SizedBox(height: 1.h),
                               Text(
                                 'Tap the + button to invite parents/guardians',
-                                style: AppTheme.lightTheme.textTheme.bodyMedium
+                                style: Theme.of(context).textTheme.bodyMedium
                                     ?.copyWith(
                                   color: AppTheme
                                       .lightTheme.colorScheme.onSurfaceVariant,
@@ -402,10 +402,10 @@ class _ParentCollaborationWidgetState extends State<ParentCollaborationWidget> {
                             return Container(
                               padding: EdgeInsets.all(3.w),
                               decoration: BoxDecoration(
-                                color: AppTheme.lightTheme.colorScheme.surface,
+                                color: Theme.of(context).colorScheme.surface,
                                 borderRadius: BorderRadius.circular(12),
                                 border: Border.all(
-                                  color: AppTheme.lightTheme.colorScheme.outline
+                                  color: Theme.of(context).colorScheme.outline
                                       .withValues(alpha: 0.2),
                                 ),
                               ),
@@ -481,7 +481,7 @@ class _ParentCollaborationWidgetState extends State<ParentCollaborationWidget> {
                                     children: [
                                       CustomIconWidget(
                                         iconName: 'email',
-                                        color: AppTheme.lightTheme.colorScheme
+                                        color: Theme.of(context).colorScheme
                                             .onSurfaceVariant,
                                         size: 16,
                                       ),
@@ -509,7 +509,7 @@ class _ParentCollaborationWidgetState extends State<ParentCollaborationWidget> {
                                       children: [
                                         CustomIconWidget(
                                           iconName: 'phone',
-                                          color: AppTheme.lightTheme.colorScheme
+                                          color: Theme.of(context).colorScheme
                                               .onSurfaceVariant,
                                           size: 16,
                                         ),
@@ -574,3 +574,5 @@ class _ParentCollaborationWidgetState extends State<ParentCollaborationWidget> {
     );
   }
 }
+
+

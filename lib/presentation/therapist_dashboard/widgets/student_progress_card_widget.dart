@@ -26,7 +26,7 @@ class StudentProgressCardWidget extends StatelessWidget {
         height: 35.h, // Add fixed height to prevent overflow
         margin: EdgeInsets.only(right: 4.w),
         decoration: BoxDecoration(
-          color: AppTheme.lightTheme.colorScheme.surface,
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
@@ -47,7 +47,7 @@ class StudentProgressCardWidget extends StatelessWidget {
                   CircleAvatar(
                     radius: 6.w,
                     backgroundImage: NetworkImage(student['avatar'] as String),
-                    backgroundColor: AppTheme.lightTheme.colorScheme.primary
+                    backgroundColor: Theme.of(context).colorScheme.primary
                         .transparent10,
                   ),
                   SizedBox(width: 3.w),
@@ -57,10 +57,10 @@ class StudentProgressCardWidget extends StatelessWidget {
                       children: [
                         Text(
                           student['name'] as String,
-                          style: AppTheme.lightTheme.textTheme.titleMedium
+                          style: Theme.of(context).textTheme.titleMedium
                               ?.copyWith(
                             fontWeight: FontWeight.w600,
-                            color: AppTheme.lightTheme.colorScheme.onSurface,
+                            color: Theme.of(context).colorScheme.onSurface,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -69,7 +69,7 @@ class StudentProgressCardWidget extends StatelessWidget {
                         Text(
                           'Age ${student['age']} • ${student['diagnosis']}',
                           style:
-                              AppTheme.lightTheme.textTheme.bodySmall?.copyWith(
+                              Theme.of(context).textTheme.bodySmall?.copyWith(
                             color: AppTheme
                                 .lightTheme.colorScheme.onSurfaceVariant,
                           ),
@@ -87,15 +87,15 @@ class StudentProgressCardWidget extends StatelessWidget {
                 children: [
                   Text(
                     'Overall Progress',
-                    style: AppTheme.lightTheme.textTheme.labelLarge?.copyWith(
-                      color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
                   ),
                   Text(
                     '${progress.toInt()}%',
-                    style: AppTheme.lightTheme.textTheme.labelLarge?.copyWith(
+                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: AppTheme.lightTheme.colorScheme.primary,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
                 ],
@@ -103,26 +103,26 @@ class StudentProgressCardWidget extends StatelessWidget {
               SizedBox(height: 0.5.h),
               LinearProgressIndicator(
                 value: student['progress'] as double,
-                backgroundColor: AppTheme.lightTheme.colorScheme.outline
+                backgroundColor: Theme.of(context).colorScheme.outline
                     .transparent20,
                 valueColor: AlwaysStoppedAnimation<Color>(
-                  AppTheme.lightTheme.colorScheme.primary,
+                  Theme.of(context).colorScheme.primary,
                 ),
                 minHeight: 6,
               ),
               SizedBox(height: 2.h),
               Text(
                 'Active Goals',
-                style: AppTheme.lightTheme.textTheme.labelLarge?.copyWith(
-                  color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
               ),
               SizedBox(height: 0.5.h),
               goals.isEmpty
                   ? Text(
                       'No active goals',
-                      style: AppTheme.lightTheme.textTheme.bodySmall?.copyWith(
-                        color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                         fontStyle: FontStyle.italic,
                       ),
                     )
@@ -138,7 +138,7 @@ class StudentProgressCardWidget extends StatelessWidget {
                                 height: 2.w,
                                 decoration: BoxDecoration(
                                   color:
-                                      AppTheme.lightTheme.colorScheme.secondary,
+                                      Theme.of(context).colorScheme.secondary,
                                   borderRadius: BorderRadius.circular(1.w),
                                 ),
                               ),
@@ -146,7 +146,7 @@ class StudentProgressCardWidget extends StatelessWidget {
                               Expanded(
                                 child: Text(
                                   goal as String,
-                                  style: AppTheme.lightTheme.textTheme.bodySmall
+                                  style: Theme.of(context).textTheme.bodySmall
                                       ?.copyWith(
                                     color: AppTheme
                                         .lightTheme.colorScheme.onSurface,
@@ -163,24 +163,24 @@ class StudentProgressCardWidget extends StatelessWidget {
               if (goals.length > 2)
                 Text(
                   '+${goals.length - 2} more goals',
-                  style: AppTheme.lightTheme.textTheme.bodySmall?.copyWith(
-                    color: AppTheme.lightTheme.colorScheme.primary,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Theme.of(context).colorScheme.primary,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
               SizedBox(height: 1.5.h),
               Text(
                 'Recent Achievements',
-                style: AppTheme.lightTheme.textTheme.labelLarge?.copyWith(
-                  color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
               ),
               SizedBox(height: 0.5.h),
               recentAchievements.isEmpty
                   ? Text(
                       'No recent achievements',
-                      style: AppTheme.lightTheme.textTheme.bodySmall?.copyWith(
-                        color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                         fontStyle: FontStyle.italic,
                       ),
                     )
@@ -194,14 +194,14 @@ class StudentProgressCardWidget extends StatelessWidget {
                             children: [
                               CustomIconWidget(
                                 iconName: 'star',
-                                color: AppTheme.lightTheme.colorScheme.tertiary,
+                                color: Theme.of(context).colorScheme.tertiary,
                                 size: 16,
                               ),
                               SizedBox(width: 2.w),
                               Expanded(
                                 child: Text(
                                   achievement as String,
-                                  style: AppTheme.lightTheme.textTheme.bodySmall
+                                  style: Theme.of(context).textTheme.bodySmall
                                       ?.copyWith(
                                     color: AppTheme
                                         .lightTheme.colorScheme.onSurface,
@@ -223,3 +223,5 @@ class StudentProgressCardWidget extends StatelessWidget {
     );
   }
 }
+
+

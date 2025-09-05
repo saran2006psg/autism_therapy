@@ -61,7 +61,7 @@ class _ProfileBuddyScreenState extends State<ProfileBuddyScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Error loading student data: $e'),
-            backgroundColor: AppTheme.lightTheme.colorScheme.error,
+            backgroundColor: Theme.of(context).colorScheme.error,
           ),
         );
       }
@@ -71,16 +71,16 @@ class _ProfileBuddyScreenState extends State<ProfileBuddyScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.lightTheme.colorScheme.surface,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
         title: Text(
           'Profile Buddy',
-          style: AppTheme.lightTheme.textTheme.headlineSmall?.copyWith(
+          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
             fontWeight: FontWeight.w600,
             color: Colors.white,
           ),
         ),
-        backgroundColor: AppTheme.lightTheme.colorScheme.primary,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Colors.white,
         elevation: 0,
         actions: [
@@ -99,7 +99,7 @@ class _ProfileBuddyScreenState extends State<ProfileBuddyScreen> {
       body: _isLoading
           ? Center(
               child: CircularProgressIndicator(
-                color: AppTheme.lightTheme.colorScheme.primary,
+                color: Theme.of(context).colorScheme.primary,
               ),
             )
           : _student == null
@@ -117,22 +117,22 @@ class _ProfileBuddyScreenState extends State<ProfileBuddyScreen> {
           children: [
             CustomIconWidget(
               iconName: 'person_add',
-              color: AppTheme.lightTheme.colorScheme.primary.transparent50,
+              color: Theme.of(context).colorScheme.primary.transparent50,
               size: 64,
             ),
             SizedBox(height: 3.h),
             Text(
               'No Students Found',
-              style: AppTheme.lightTheme.textTheme.headlineSmall?.copyWith(
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.w600,
-                color: AppTheme.lightTheme.colorScheme.onSurface,
+                color: Theme.of(context).colorScheme.onSurface,
               ),
             ),
             SizedBox(height: 2.h),
             Text(
               'Add students to your account to start viewing their profiles',
-              style: AppTheme.lightTheme.textTheme.bodyLarge?.copyWith(
-                color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
               ),
               textAlign: TextAlign.center,
             ),
@@ -148,7 +148,7 @@ class _ProfileBuddyScreenState extends State<ProfileBuddyScreen> {
               ),
               label: const Text('Add Student'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.lightTheme.colorScheme.primary,
+                backgroundColor: Theme.of(context).colorScheme.primary,
                 foregroundColor: Colors.white,
                 padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
               ),
@@ -186,8 +186,8 @@ class _ProfileBuddyScreenState extends State<ProfileBuddyScreen> {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            AppTheme.lightTheme.colorScheme.primary,
-            AppTheme.lightTheme.colorScheme.primary.transparent80,
+            Theme.of(context).colorScheme.primary,
+            Theme.of(context).colorScheme.primary.transparent80,
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -195,7 +195,7 @@ class _ProfileBuddyScreenState extends State<ProfileBuddyScreen> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: AppTheme.lightTheme.colorScheme.primary.transparent30,
+            color: Theme.of(context).colorScheme.primary.transparent30,
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -214,7 +214,7 @@ class _ProfileBuddyScreenState extends State<ProfileBuddyScreen> {
             child: Center(
               child: Text(
                 _student!.firstName.isNotEmpty ? _student!.firstName[0].toUpperCase() : 'S',
-                style: AppTheme.lightTheme.textTheme.headlineMedium?.copyWith(
+                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
@@ -228,7 +228,7 @@ class _ProfileBuddyScreenState extends State<ProfileBuddyScreen> {
               children: [
                 Text(
                   _student!.fullName,
-                  style: AppTheme.lightTheme.textTheme.headlineSmall?.copyWith(
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.w600,
                   ),
@@ -236,14 +236,14 @@ class _ProfileBuddyScreenState extends State<ProfileBuddyScreen> {
                 SizedBox(height: 1.h),
                 Text(
                   'Age: ${_student!.age} • ${_student!.gender}',
-                  style: AppTheme.lightTheme.textTheme.bodyLarge?.copyWith(
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     color: Colors.white.transparent90,
                   ),
                 ),
                 SizedBox(height: 0.5.h),
                 Text(
                   _student!.diagnosis,
-                  style: AppTheme.lightTheme.textTheme.bodyMedium?.copyWith(
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: Colors.white.transparent80,
                   ),
                 ),
@@ -263,7 +263,7 @@ class _ProfileBuddyScreenState extends State<ProfileBuddyScreen> {
             'Active Goals',
             '${_activeGoals.length}',
             'flag',
-            AppTheme.lightTheme.colorScheme.secondary,
+            Theme.of(context).colorScheme.secondary,
           ),
         ),
         SizedBox(width: 3.w),
@@ -272,7 +272,7 @@ class _ProfileBuddyScreenState extends State<ProfileBuddyScreen> {
             'Sessions',
             '${_recentSessions.length}',
             'event',
-            AppTheme.lightTheme.colorScheme.tertiary,
+            Theme.of(context).colorScheme.tertiary,
           ),
         ),
         SizedBox(width: 3.w),
@@ -281,7 +281,7 @@ class _ProfileBuddyScreenState extends State<ProfileBuddyScreen> {
             'Progress',
             '${_recentProgress.length}',
             'trending_up',
-            AppTheme.lightTheme.colorScheme.primary,
+            Theme.of(context).colorScheme.primary,
           ),
         ),
       ],
@@ -306,15 +306,15 @@ class _ProfileBuddyScreenState extends State<ProfileBuddyScreen> {
           SizedBox(height: 1.h),
           Text(
             value,
-            style: AppTheme.lightTheme.textTheme.headlineMedium?.copyWith(
+            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
               color: color,
               fontWeight: FontWeight.bold,
             ),
           ),
           Text(
             title,
-            style: AppTheme.lightTheme.textTheme.bodySmall?.copyWith(
-              color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
             textAlign: TextAlign.center,
           ),
@@ -332,9 +332,9 @@ class _ProfileBuddyScreenState extends State<ProfileBuddyScreen> {
           children: [
             Text(
               'Active Goals',
-              style: AppTheme.lightTheme.textTheme.titleLarge?.copyWith(
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.w600,
-                color: AppTheme.lightTheme.colorScheme.onSurface,
+                color: Theme.of(context).colorScheme.onSurface,
               ),
             ),
             TextButton(
@@ -343,8 +343,8 @@ class _ProfileBuddyScreenState extends State<ProfileBuddyScreen> {
               },
               child: Text(
                 'View All',
-                style: AppTheme.lightTheme.textTheme.labelLarge?.copyWith(
-                  color: AppTheme.lightTheme.colorScheme.primary,
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
                 ),
               ),
             ),
@@ -355,21 +355,21 @@ class _ProfileBuddyScreenState extends State<ProfileBuddyScreen> {
           Container(
             padding: EdgeInsets.all(4.w),
             decoration: BoxDecoration(
-              color: AppTheme.lightTheme.colorScheme.surfaceContainerHighest.transparent30,
+              color: Theme.of(context).colorScheme.surfaceContainerHighest.transparent30,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Row(
               children: [
                 CustomIconWidget(
                   iconName: 'info',
-                  color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
                   size: 24,
                 ),
                 SizedBox(width: 3.w),
                 Text(
                   'No active goals yet',
-                  style: AppTheme.lightTheme.textTheme.bodyMedium?.copyWith(
-                    color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
                 ),
               ],
@@ -380,10 +380,10 @@ class _ProfileBuddyScreenState extends State<ProfileBuddyScreen> {
                 margin: EdgeInsets.only(bottom: 2.h),
                 padding: EdgeInsets.all(3.w),
                 decoration: BoxDecoration(
-                  color: AppTheme.lightTheme.colorScheme.surface,
+                  color: Theme.of(context).colorScheme.surface,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: AppTheme.lightTheme.colorScheme.outline.transparent20,
+                    color: Theme.of(context).colorScheme.outline.transparent20,
                   ),
                 ),
                 child: Row(
@@ -391,12 +391,12 @@ class _ProfileBuddyScreenState extends State<ProfileBuddyScreen> {
                     Container(
                       padding: EdgeInsets.all(2.w),
                       decoration: BoxDecoration(
-                        color: AppTheme.lightTheme.colorScheme.primary.transparent10,
+                        color: Theme.of(context).colorScheme.primary.transparent10,
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: CustomIconWidget(
                         iconName: 'flag',
-                        color: AppTheme.lightTheme.colorScheme.primary,
+                        color: Theme.of(context).colorScheme.primary,
                         size: 20,
                       ),
                     ),
@@ -407,7 +407,7 @@ class _ProfileBuddyScreenState extends State<ProfileBuddyScreen> {
                         children: [
                           Text(
                             goal.title,
-                            style: AppTheme.lightTheme.textTheme.bodyLarge?.copyWith(
+                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                               fontWeight: FontWeight.w500,
                             ),
                             maxLines: 1,
@@ -416,8 +416,8 @@ class _ProfileBuddyScreenState extends State<ProfileBuddyScreen> {
                           if (goal.description.isNotEmpty)
                             Text(
                               goal.description,
-                              style: AppTheme.lightTheme.textTheme.bodySmall?.copyWith(
-                                color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                color: Theme.of(context).colorScheme.onSurfaceVariant,
                               ),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
@@ -441,9 +441,9 @@ class _ProfileBuddyScreenState extends State<ProfileBuddyScreen> {
           children: [
             Text(
               'Recent Sessions',
-              style: AppTheme.lightTheme.textTheme.titleLarge?.copyWith(
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.w600,
-                color: AppTheme.lightTheme.colorScheme.onSurface,
+                color: Theme.of(context).colorScheme.onSurface,
               ),
             ),
             TextButton(
@@ -452,8 +452,8 @@ class _ProfileBuddyScreenState extends State<ProfileBuddyScreen> {
               },
               child: Text(
                 'View All',
-                style: AppTheme.lightTheme.textTheme.labelLarge?.copyWith(
-                  color: AppTheme.lightTheme.colorScheme.primary,
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
                 ),
               ),
             ),
@@ -464,21 +464,21 @@ class _ProfileBuddyScreenState extends State<ProfileBuddyScreen> {
           Container(
             padding: EdgeInsets.all(4.w),
             decoration: BoxDecoration(
-              color: AppTheme.lightTheme.colorScheme.surfaceContainerHighest.transparent30,
+              color: Theme.of(context).colorScheme.surfaceContainerHighest.transparent30,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Row(
               children: [
                 CustomIconWidget(
                   iconName: 'event_available',
-                  color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
                   size: 24,
                 ),
                 SizedBox(width: 3.w),
                 Text(
                   'No sessions yet',
-                  style: AppTheme.lightTheme.textTheme.bodyMedium?.copyWith(
-                    color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
                 ),
               ],
@@ -489,10 +489,10 @@ class _ProfileBuddyScreenState extends State<ProfileBuddyScreen> {
                 margin: EdgeInsets.only(bottom: 2.h),
                 padding: EdgeInsets.all(3.w),
                 decoration: BoxDecoration(
-                  color: AppTheme.lightTheme.colorScheme.surface,
+                  color: Theme.of(context).colorScheme.surface,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: AppTheme.lightTheme.colorScheme.outline.transparent20,
+                    color: Theme.of(context).colorScheme.outline.transparent20,
                   ),
                 ),
                 child: Row(
@@ -516,7 +516,7 @@ class _ProfileBuddyScreenState extends State<ProfileBuddyScreen> {
                         children: [
                           Text(
                             session.title,
-                            style: AppTheme.lightTheme.textTheme.bodyLarge?.copyWith(
+                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                               fontWeight: FontWeight.w500,
                             ),
                             maxLines: 1,
@@ -524,8 +524,8 @@ class _ProfileBuddyScreenState extends State<ProfileBuddyScreen> {
                           ),
                           Text(
                             '${_formatDate(session.scheduledDate)} • ${session.status.toUpperCase()}',
-                            style: AppTheme.lightTheme.textTheme.bodySmall?.copyWith(
-                              color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: Theme.of(context).colorScheme.onSurfaceVariant,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -546,19 +546,19 @@ class _ProfileBuddyScreenState extends State<ProfileBuddyScreen> {
       children: [
         Text(
           'Progress Overview',
-          style: AppTheme.lightTheme.textTheme.titleLarge?.copyWith(
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
             fontWeight: FontWeight.w600,
-            color: AppTheme.lightTheme.colorScheme.onSurface,
+            color: Theme.of(context).colorScheme.onSurface,
           ),
         ),
         SizedBox(height: 2.h),
         Container(
           padding: EdgeInsets.all(4.w),
           decoration: BoxDecoration(
-            color: AppTheme.lightTheme.colorScheme.surface,
+            color: Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: AppTheme.lightTheme.colorScheme.outline.transparent20,
+              color: Theme.of(context).colorScheme.outline.transparent20,
             ),
           ),
           child: Column(
@@ -567,22 +567,22 @@ class _ProfileBuddyScreenState extends State<ProfileBuddyScreen> {
                 children: [
                   CustomIconWidget(
                     iconName: 'trending_up',
-                    color: AppTheme.lightTheme.colorScheme.primary,
+                    color: Theme.of(context).colorScheme.primary,
                     size: 24,
                   ),
                   SizedBox(width: 3.w),
                   Expanded(
                     child: Text(
                       'Overall Progress',
-                      style: AppTheme.lightTheme.textTheme.titleMedium?.copyWith(
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w500,
                       ),
                     ),
                   ),
                   Text(
                     '${(_recentProgress.length * 20).clamp(0, 100)}%',
-                    style: AppTheme.lightTheme.textTheme.titleMedium?.copyWith(
-                      color: AppTheme.lightTheme.colorScheme.primary,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -591,9 +591,9 @@ class _ProfileBuddyScreenState extends State<ProfileBuddyScreen> {
               SizedBox(height: 2.h),
               LinearProgressIndicator(
                 value: (_recentProgress.length * 0.2).clamp(0.0, 1.0),
-                backgroundColor: AppTheme.lightTheme.colorScheme.surfaceContainerHighest,
+                backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
                 valueColor: AlwaysStoppedAnimation<Color>(
-                  AppTheme.lightTheme.colorScheme.primary,
+                  Theme.of(context).colorScheme.primary,
                 ),
               ),
               SizedBox(height: 2.h),
@@ -603,8 +603,8 @@ class _ProfileBuddyScreenState extends State<ProfileBuddyScreen> {
                   Flexible(
                     child: Text(
                       'Last updated: ${_recentProgress.isNotEmpty ? _formatDate(_recentProgress.first.createdAt) : "No data"}',
-                      style: AppTheme.lightTheme.textTheme.bodySmall?.copyWith(
-                        color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -616,8 +616,8 @@ class _ProfileBuddyScreenState extends State<ProfileBuddyScreen> {
                     },
                     child: Text(
                       'View Details',
-                      style: AppTheme.lightTheme.textTheme.labelMedium?.copyWith(
-                        color: AppTheme.lightTheme.colorScheme.primary,
+                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                     ),
                   ),
@@ -633,15 +633,15 @@ class _ProfileBuddyScreenState extends State<ProfileBuddyScreen> {
   Color _getSessionStatusColor(String status) {
     switch (status.toLowerCase()) {
       case 'scheduled':
-        return AppTheme.lightTheme.colorScheme.primary;
+        return Theme.of(context).colorScheme.primary;
       case 'in_progress':
-        return AppTheme.lightTheme.colorScheme.secondary;
+        return Theme.of(context).colorScheme.secondary;
       case 'completed':
         return Colors.green;
       case 'cancelled':
-        return AppTheme.lightTheme.colorScheme.error;
+        return Theme.of(context).colorScheme.error;
       default:
-        return AppTheme.lightTheme.colorScheme.outline;
+        return Theme.of(context).colorScheme.outline;
     }
   }
 
@@ -649,3 +649,5 @@ class _ProfileBuddyScreenState extends State<ProfileBuddyScreen> {
     return '${date.day}/${date.month}/${date.year}';
   }
 }
+
+

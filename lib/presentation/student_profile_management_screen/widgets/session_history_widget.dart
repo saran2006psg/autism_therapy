@@ -22,7 +22,7 @@ class _SessionHistoryWidgetState extends State<SessionHistoryWidget> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('Sharing session: ${session['title']}'),
-        backgroundColor: AppTheme.lightTheme.colorScheme.primary,
+        backgroundColor: Theme.of(context).colorScheme.primary,
       ),
     );
   }
@@ -31,7 +31,7 @@ class _SessionHistoryWidgetState extends State<SessionHistoryWidget> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: AppTheme.lightTheme.colorScheme.surface,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -47,7 +47,7 @@ class _SessionHistoryWidgetState extends State<SessionHistoryWidget> {
                   width: 12.w,
                   height: 0.5.h,
                   decoration: BoxDecoration(
-                    color: AppTheme.lightTheme.colorScheme.outline,
+                    color: Theme.of(context).colorScheme.outline,
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
@@ -58,14 +58,14 @@ class _SessionHistoryWidgetState extends State<SessionHistoryWidget> {
                   Expanded(
                     child: Text(
                       session['title'] ?? 'Session Details',
-                      style: AppTheme.lightTheme.textTheme.titleLarge,
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                   ),
                   IconButton(
                     onPressed: () => _shareSession(session),
                     icon: CustomIconWidget(
                       iconName: 'share',
-                      color: AppTheme.lightTheme.colorScheme.primary,
+                      color: Theme.of(context).colorScheme.primary,
                       size: 24,
                     ),
                   ),
@@ -75,7 +75,7 @@ class _SessionHistoryWidgetState extends State<SessionHistoryWidget> {
               Container(
                 padding: EdgeInsets.all(3.w),
                 decoration: BoxDecoration(
-                  color: AppTheme.lightTheme.colorScheme.primary
+                  color: Theme.of(context).colorScheme.primary
                       .withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -83,14 +83,14 @@ class _SessionHistoryWidgetState extends State<SessionHistoryWidget> {
                   children: [
                     CustomIconWidget(
                       iconName: 'calendar_today',
-                      color: AppTheme.lightTheme.colorScheme.primary,
+                      color: Theme.of(context).colorScheme.primary,
                       size: 20,
                     ),
                     SizedBox(width: 2.w),
                     Text(
                       '${session['date']} • ${session['duration']} minutes',
-                      style: AppTheme.lightTheme.textTheme.bodyMedium?.copyWith(
-                        color: AppTheme.lightTheme.colorScheme.primary,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.primary,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -152,15 +152,15 @@ class _SessionHistoryWidgetState extends State<SessionHistoryWidget> {
       children: [
         Text(
           title,
-          style: AppTheme.lightTheme.textTheme.titleMedium?.copyWith(
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.w600,
           ),
         ),
         SizedBox(height: 1.h),
         Text(
           content,
-          style: AppTheme.lightTheme.textTheme.bodyMedium?.copyWith(
-            color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
           ),
         ),
         SizedBox(height: 2.h),
@@ -171,13 +171,13 @@ class _SessionHistoryWidgetState extends State<SessionHistoryWidget> {
   Color _getSessionTypeColor(String type) {
     switch (type.toLowerCase()) {
       case 'individual':
-        return AppTheme.lightTheme.colorScheme.primary;
+        return Theme.of(context).colorScheme.primary;
       case 'group':
-        return AppTheme.lightTheme.colorScheme.secondary;
+        return Theme.of(context).colorScheme.secondary;
       case 'assessment':
-        return AppTheme.lightTheme.colorScheme.tertiary;
+        return Theme.of(context).colorScheme.tertiary;
       default:
-        return AppTheme.lightTheme.colorScheme.primary;
+        return Theme.of(context).colorScheme.primary;
     }
   }
 
@@ -196,12 +196,12 @@ class _SessionHistoryWidgetState extends State<SessionHistoryWidget> {
           },
           leading: CustomIconWidget(
             iconName: 'history',
-            color: AppTheme.lightTheme.colorScheme.primary,
+            color: Theme.of(context).colorScheme.primary,
             size: 24,
           ),
           title: Text(
             'Session History (${widget.sessions.length})',
-            style: AppTheme.lightTheme.textTheme.titleLarge,
+            style: Theme.of(context).textTheme.titleLarge,
           ),
           children: [
             Padding(
@@ -220,7 +220,7 @@ class _SessionHistoryWidgetState extends State<SessionHistoryWidget> {
                           SizedBox(height: 2.h),
                           Text(
                             'No session history available',
-                            style: AppTheme.lightTheme.textTheme.titleMedium
+                            style: Theme.of(context).textTheme.titleMedium
                                 ?.copyWith(
                               color: AppTheme
                                   .lightTheme.colorScheme.onSurfaceVariant,
@@ -229,7 +229,7 @@ class _SessionHistoryWidgetState extends State<SessionHistoryWidget> {
                           SizedBox(height: 1.h),
                           Text(
                             'Session records will appear here after therapy sessions',
-                            style: AppTheme.lightTheme.textTheme.bodyMedium
+                            style: Theme.of(context).textTheme.bodyMedium
                                 ?.copyWith(
                               color: AppTheme
                                   .lightTheme.colorScheme.onSurfaceVariant,
@@ -254,10 +254,10 @@ class _SessionHistoryWidgetState extends State<SessionHistoryWidget> {
                           child: Container(
                             padding: EdgeInsets.all(3.w),
                             decoration: BoxDecoration(
-                              color: AppTheme.lightTheme.colorScheme.surface,
+                              color: Theme.of(context).colorScheme.surface,
                               borderRadius: BorderRadius.circular(12),
                               border: Border.all(
-                                color: AppTheme.lightTheme.colorScheme.outline
+                                color: Theme.of(context).colorScheme.outline
                                     .withValues(alpha: 0.2),
                               ),
                             ),
@@ -302,7 +302,7 @@ class _SessionHistoryWidgetState extends State<SessionHistoryWidget> {
                                   children: [
                                     CustomIconWidget(
                                       iconName: 'calendar_today',
-                                      color: AppTheme.lightTheme.colorScheme
+                                      color: Theme.of(context).colorScheme
                                           .onSurfaceVariant,
                                       size: 16,
                                     ),
@@ -312,14 +312,14 @@ class _SessionHistoryWidgetState extends State<SessionHistoryWidget> {
                                       style: AppTheme
                                           .lightTheme.textTheme.bodySmall
                                           ?.copyWith(
-                                        color: AppTheme.lightTheme.colorScheme
+                                        color: Theme.of(context).colorScheme
                                             .onSurfaceVariant,
                                       ),
                                     ),
                                     SizedBox(width: 4.w),
                                     CustomIconWidget(
                                       iconName: 'schedule',
-                                      color: AppTheme.lightTheme.colorScheme
+                                      color: Theme.of(context).colorScheme
                                           .onSurfaceVariant,
                                       size: 16,
                                     ),
@@ -329,7 +329,7 @@ class _SessionHistoryWidgetState extends State<SessionHistoryWidget> {
                                       style: AppTheme
                                           .lightTheme.textTheme.bodySmall
                                           ?.copyWith(
-                                        color: AppTheme.lightTheme.colorScheme
+                                        color: Theme.of(context).colorScheme
                                             .onSurfaceVariant,
                                       ),
                                     ),
@@ -342,7 +342,7 @@ class _SessionHistoryWidgetState extends State<SessionHistoryWidget> {
                                     style: AppTheme
                                         .lightTheme.textTheme.bodyMedium
                                         ?.copyWith(
-                                      color: AppTheme.lightTheme.colorScheme
+                                      color: Theme.of(context).colorScheme
                                           .onSurfaceVariant,
                                     ),
                                     maxLines: 2,
@@ -366,7 +366,7 @@ class _SessionHistoryWidgetState extends State<SessionHistoryWidget> {
                                     ),
                                     CustomIconWidget(
                                       iconName: 'arrow_forward_ios',
-                                      color: AppTheme.lightTheme.colorScheme
+                                      color: Theme.of(context).colorScheme
                                           .onSurfaceVariant,
                                       size: 16,
                                     ),
@@ -385,3 +385,5 @@ class _SessionHistoryWidgetState extends State<SessionHistoryWidget> {
     );
   }
 }
+
+

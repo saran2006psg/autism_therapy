@@ -20,10 +20,10 @@ class ConnectivityStatusWidget extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 1.h),
       decoration: BoxDecoration(
-        color: _getStatusColor().withValues(alpha: 0.1),
+        color: _getStatusColor(context).withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
-          color: _getStatusColor().withValues(alpha: 0.3),
+          color: _getStatusColor(context).withValues(alpha: 0.3),
           width: 1,
         ),
       ),
@@ -37,19 +37,19 @@ class ConnectivityStatusWidget extends StatelessWidget {
                   child: CircularProgressIndicator(
                     strokeWidth: 2,
                     valueColor:
-                        AlwaysStoppedAnimation<Color>(_getStatusColor()),
+                        AlwaysStoppedAnimation<Color>(_getStatusColor(context)),
                   ),
                 )
               : CustomIconWidget(
                   iconName: _getStatusIcon(),
-                  color: _getStatusColor(),
+                  color: _getStatusColor(context),
                   size: 16,
                 ),
           SizedBox(width: 2.w),
           Text(
             _getStatusText(),
-            style: AppTheme.lightTheme.textTheme.labelSmall?.copyWith(
-              color: _getStatusColor(),
+            style: Theme.of(context).textTheme.labelSmall?.copyWith(
+              color: _getStatusColor(context),
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -58,13 +58,13 @@ class ConnectivityStatusWidget extends StatelessWidget {
     );
   }
 
-  Color _getStatusColor() {
+  Color _getStatusColor(BuildContext context) {
     if (isSyncing) {
-      return AppTheme.lightTheme.colorScheme.secondary;
+      return Theme.of(context).colorScheme.secondary;
     }
     return isOnline
-        ? AppTheme.lightTheme.colorScheme.tertiary
-        : AppTheme.lightTheme.colorScheme.error;
+        ? Theme.of(context).colorScheme.tertiary
+        : Theme.of(context).colorScheme.error;
   }
 
   String _getStatusIcon() {
@@ -97,3 +97,5 @@ class ConnectivityStatusWidget extends StatelessWidget {
     return 'Offline';
   }
 }
+
+

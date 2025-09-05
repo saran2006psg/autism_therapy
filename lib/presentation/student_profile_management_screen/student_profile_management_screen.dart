@@ -414,7 +414,7 @@ class _StudentProfileManagementScreenState
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('Invitation sent to ${parent['name']}'),
-        backgroundColor: AppTheme.lightTheme.colorScheme.primary,
+        backgroundColor: Theme.of(context).colorScheme.primary,
       ),
     );
   }
@@ -434,11 +434,11 @@ class _StudentProfileManagementScreenState
       builder: (context) => AlertDialog(
         title: Text(
           'Unsaved Changes',
-          style: AppTheme.lightTheme.textTheme.titleLarge,
+          style: Theme.of(context).textTheme.titleLarge,
         ),
         content: Text(
           'You have unsaved changes. Do you want to save before leaving?',
-          style: AppTheme.lightTheme.textTheme.bodyMedium,
+          style: Theme.of(context).textTheme.bodyMedium,
         ),
         actions: [
           TextButton(
@@ -469,7 +469,7 @@ class _StudentProfileManagementScreenState
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: const Text('Please fill in all required fields'),
-          backgroundColor: AppTheme.lightTheme.colorScheme.error,
+          backgroundColor: Theme.of(context).colorScheme.error,
         ),
       );
       return;
@@ -512,7 +512,7 @@ class _StudentProfileManagementScreenState
               ],
             ],
           ),
-          backgroundColor: AppTheme.lightTheme.colorScheme.tertiary,
+          backgroundColor: Theme.of(context).colorScheme.tertiary,
         ),
       );
     } catch (e) {
@@ -524,7 +524,7 @@ class _StudentProfileManagementScreenState
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: const Text('Error saving profile. Please try again.'),
-          backgroundColor: AppTheme.lightTheme.colorScheme.error,
+          backgroundColor: Theme.of(context).colorScheme.error,
         ),
       );
     }
@@ -533,7 +533,7 @@ class _StudentProfileManagementScreenState
   void _showContextMenu() {
     showModalBottomSheet(
       context: context,
-      backgroundColor: AppTheme.lightTheme.colorScheme.surface,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -547,20 +547,20 @@ class _StudentProfileManagementScreenState
                 width: 12.w,
                 height: 0.5.h,
                 decoration: BoxDecoration(
-                  color: AppTheme.lightTheme.colorScheme.outline,
+                  color: Theme.of(context).colorScheme.outline,
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
               SizedBox(height: 3.h),
               Text(
                 'Profile Actions',
-                style: AppTheme.lightTheme.textTheme.titleLarge,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
               SizedBox(height: 3.h),
               ListTile(
                 leading: CustomIconWidget(
                   iconName: 'edit',
-                  color: AppTheme.lightTheme.colorScheme.primary,
+                  color: Theme.of(context).colorScheme.primary,
                   size: 24,
                 ),
                 title: const Text('Edit Profile'),
@@ -572,7 +572,7 @@ class _StudentProfileManagementScreenState
               ListTile(
                 leading: CustomIconWidget(
                   iconName: 'share',
-                  color: AppTheme.lightTheme.colorScheme.primary,
+                  color: Theme.of(context).colorScheme.primary,
                   size: 24,
                 ),
                 title: const Text('Share with Team'),
@@ -581,7 +581,7 @@ class _StudentProfileManagementScreenState
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: const Text('Sharing profile with therapy team...'),
-                      backgroundColor: AppTheme.lightTheme.colorScheme.primary,
+                      backgroundColor: Theme.of(context).colorScheme.primary,
                     ),
                   );
                 },
@@ -589,7 +589,7 @@ class _StudentProfileManagementScreenState
               ListTile(
                 leading: CustomIconWidget(
                   iconName: 'download',
-                  color: AppTheme.lightTheme.colorScheme.primary,
+                  color: Theme.of(context).colorScheme.primary,
                   size: 24,
                 ),
                 title: const Text('Export Data'),
@@ -598,7 +598,7 @@ class _StudentProfileManagementScreenState
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: const Text('Exporting profile data...'),
-                      backgroundColor: AppTheme.lightTheme.colorScheme.primary,
+                      backgroundColor: Theme.of(context).colorScheme.primary,
                     ),
                   );
                 },
@@ -625,7 +625,7 @@ class _StudentProfileManagementScreenState
         }
       },
       child: Scaffold(
-        backgroundColor: AppTheme.lightTheme.scaffoldBackgroundColor,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBar(
           title: const Text('Student Profile'),
           actions: [
@@ -634,7 +634,7 @@ class _StudentProfileManagementScreenState
                 padding: EdgeInsets.only(right: 2.w),
                 child: CustomIconWidget(
                   iconName: 'cloud_off',
-                  color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
                   size: 20,
                 ),
               ),
@@ -642,7 +642,7 @@ class _StudentProfileManagementScreenState
               onPressed: _showContextMenu,
               icon: CustomIconWidget(
                 iconName: 'more_vert',
-                color: AppTheme.lightTheme.colorScheme.onSurface,
+                color: Theme.of(context).colorScheme.onSurface,
                 size: 24,
               ),
             ),
@@ -740,13 +740,13 @@ class _StudentProfileManagementScreenState
                         child: CircularProgressIndicator(
                           strokeWidth: 2,
                           valueColor: AlwaysStoppedAnimation<Color>(
-                            AppTheme.lightTheme.colorScheme.onPrimary,
+                            Theme.of(context).colorScheme.onPrimary,
                           ),
                         ),
                       )
                     : CustomIconWidget(
                         iconName: 'save',
-                        color: AppTheme.lightTheme.colorScheme.onPrimary,
+                        color: Theme.of(context).colorScheme.onPrimary,
                         size: 20,
                       ),
                 label: Text(_isLoading ? 'Saving...' : 'Save Profile'),
@@ -756,3 +756,6 @@ class _StudentProfileManagementScreenState
     );
   }
 }
+
+
+

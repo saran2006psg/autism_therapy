@@ -132,7 +132,7 @@ class _StudentPhotoWidgetState extends State<StudentPhotoWidget> {
   void _showImageSourceDialog() {
     showModalBottomSheet(
       context: context,
-      backgroundColor: AppTheme.lightTheme.colorScheme.surface,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -146,25 +146,25 @@ class _StudentPhotoWidgetState extends State<StudentPhotoWidget> {
                 width: 12.w,
                 height: 0.5.h,
                 decoration: BoxDecoration(
-                  color: AppTheme.lightTheme.colorScheme.outline,
+                  color: Theme.of(context).colorScheme.outline,
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
               SizedBox(height: 3.h),
               Text(
                 'Select Photo Source',
-                style: AppTheme.lightTheme.textTheme.titleLarge,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
               SizedBox(height: 3.h),
               ListTile(
                 leading: CustomIconWidget(
                   iconName: 'camera_alt',
-                  color: AppTheme.lightTheme.colorScheme.primary,
+                  color: Theme.of(context).colorScheme.primary,
                   size: 24,
                 ),
                 title: Text(
                   'Camera',
-                  style: AppTheme.lightTheme.textTheme.bodyLarge,
+                  style: Theme.of(context).textTheme.bodyLarge,
                 ),
                 onTap: () async {
                   Navigator.of(context).pop();
@@ -179,12 +179,12 @@ class _StudentPhotoWidgetState extends State<StudentPhotoWidget> {
               ListTile(
                 leading: CustomIconWidget(
                   iconName: 'photo_library',
-                  color: AppTheme.lightTheme.colorScheme.primary,
+                  color: Theme.of(context).colorScheme.primary,
                   size: 24,
                 ),
                 title: Text(
                   'Gallery',
-                  style: AppTheme.lightTheme.textTheme.bodyLarge,
+                  style: Theme.of(context).textTheme.bodyLarge,
                 ),
                 onTap: () {
                   Navigator.of(context).pop();
@@ -195,13 +195,13 @@ class _StudentPhotoWidgetState extends State<StudentPhotoWidget> {
                 ListTile(
                   leading: CustomIconWidget(
                     iconName: 'delete',
-                    color: AppTheme.lightTheme.colorScheme.error,
+                    color: Theme.of(context).colorScheme.error,
                     size: 24,
                   ),
                   title: Text(
                     'Remove Photo',
-                    style: AppTheme.lightTheme.textTheme.bodyLarge?.copyWith(
-                      color: AppTheme.lightTheme.colorScheme.error,
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      color: Theme.of(context).colorScheme.error,
                     ),
                   ),
                   onTap: () {
@@ -238,7 +238,7 @@ class _StudentPhotoWidgetState extends State<StudentPhotoWidget> {
                           color: Colors.black,
                           child: Center(
                             child: CircularProgressIndicator(
-                              color: AppTheme.lightTheme.colorScheme.primary,
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                           ),
                         ),
@@ -289,7 +289,7 @@ class _StudentPhotoWidgetState extends State<StudentPhotoWidget> {
           width: 30.w,
           height: 30.w,
           decoration: BoxDecoration(
-            color: AppTheme.lightTheme.colorScheme.surface,
+            color: Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(15.w),
             boxShadow: [
               BoxShadow(
@@ -328,14 +328,14 @@ class _StudentPhotoWidgetState extends State<StudentPhotoWidget> {
                   children: [
                     CustomIconWidget(
                       iconName: 'add_a_photo',
-                      color: AppTheme.lightTheme.colorScheme.primary,
+                      color: Theme.of(context).colorScheme.primary,
                       size: 32,
                     ),
                     SizedBox(height: 1.h),
                     Text(
                       'Add Photo',
-                      style: AppTheme.lightTheme.textTheme.bodySmall?.copyWith(
-                        color: AppTheme.lightTheme.colorScheme.primary,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                     ),
                   ],
@@ -345,3 +345,5 @@ class _StudentPhotoWidgetState extends State<StudentPhotoWidget> {
     );
   }
 }
+
+

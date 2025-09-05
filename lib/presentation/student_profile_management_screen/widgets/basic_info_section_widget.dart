@@ -36,13 +36,13 @@ class BasicInfoSectionWidget extends StatelessWidget {
               children: [
                 CustomIconWidget(
                   iconName: 'person',
-                  color: AppTheme.lightTheme.colorScheme.primary,
+                  color: Theme.of(context).colorScheme.primary,
                   size: 24,
                 ),
                 SizedBox(width: 2.w),
                 Text(
                   'Basic Information',
-                  style: AppTheme.lightTheme.textTheme.titleLarge,
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
               ],
             ),
@@ -140,7 +140,7 @@ class BasicInfoSectionWidget extends StatelessWidget {
                 hintText: 'Select date of birth',
                 suffixIcon: CustomIconWidget(
                   iconName: 'calendar_today',
-                  color: AppTheme.lightTheme.colorScheme.primary,
+                  color: Theme.of(context).colorScheme.primary,
                   size: 20,
                 ),
               ),
@@ -159,3 +159,5 @@ class BasicInfoSectionWidget extends StatelessWidget {
     );
   }
 }
+
+

@@ -204,7 +204,7 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text('Error loading students: $error'),
-                  backgroundColor: AppTheme.lightTheme.colorScheme.error,
+                  backgroundColor: Theme.of(context).colorScheme.error,
                 ),
               );
             }
@@ -224,7 +224,7 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Error initializing: $e'),
-            backgroundColor: AppTheme.lightTheme.colorScheme.error,
+            backgroundColor: Theme.of(context).colorScheme.error,
           ),
         );
       }
@@ -294,7 +294,7 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: const Text('Please select a student first'),
-          backgroundColor: AppTheme.lightTheme.colorScheme.error,
+          backgroundColor: Theme.of(context).colorScheme.error,
         ),
       );
       return;
@@ -495,7 +495,7 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
       scaffoldMessenger.showSnackBar(
         SnackBar(
           content: const Text('Please select a student for this session'),
-          backgroundColor: AppTheme.lightTheme.colorScheme.error,
+          backgroundColor: Theme.of(context).colorScheme.error,
           action: SnackBarAction(
             label: 'OK',
             textColor: Colors.white,
@@ -510,7 +510,7 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
       scaffoldMessenger.showSnackBar(
         SnackBar(
           content: const Text('Please add at least one activity to the session plan'),
-          backgroundColor: AppTheme.lightTheme.colorScheme.error,
+          backgroundColor: Theme.of(context).colorScheme.error,
         ),
       );
       return;
@@ -521,7 +521,7 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
       scaffoldMessenger.showSnackBar(
         SnackBar(
           content: const Text('Invalid student data. Please refresh and try again.'),
-          backgroundColor: AppTheme.lightTheme.colorScheme.error,
+          backgroundColor: Theme.of(context).colorScheme.error,
         ),
       );
       return;
@@ -531,7 +531,7 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
       scaffoldMessenger.showSnackBar(
         SnackBar(
           content: const Text('User not authenticated. Please log in again.'),
-          backgroundColor: AppTheme.lightTheme.colorScheme.error,
+          backgroundColor: Theme.of(context).colorScheme.error,
         ),
       );
       return;
@@ -571,7 +571,7 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
         SnackBar(
           content: Text
           ('Session planned for ${_selectedStudent!.firstName} successfully!'),
-          backgroundColor: AppTheme.lightTheme.colorScheme.tertiary,
+          backgroundColor: Theme.of(context).colorScheme.tertiary,
           action: SnackBarAction(
             label: 'View',
             textColor: Colors.white,
@@ -591,7 +591,7 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
       scaffoldMessenger.showSnackBar(
         SnackBar(
           content: Text('Error saving session: $e'),
-          backgroundColor: AppTheme.lightTheme.colorScheme.error,
+          backgroundColor: Theme.of(context).colorScheme.error,
         ),
       );
     }
@@ -651,7 +651,7 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
         }
       },
       child: Scaffold(
-        backgroundColor: AppTheme.lightTheme.scaffoldBackgroundColor,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBar(
           title: const Text('Session Planning'),
           leading: IconButton(
@@ -663,7 +663,7 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
             },
             icon: CustomIconWidget(
               iconName: 'arrow_back',
-              color: AppTheme.lightTheme.colorScheme.onSurface,
+              color: Theme.of(context).colorScheme.onSurface,
               size: 6.w,
             ),
           ),
@@ -673,8 +673,8 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
               icon: CustomIconWidget(
                 iconName: 'save',
                 color: _hasUnsavedChanges
-                    ? AppTheme.lightTheme.colorScheme.primary
-                    : AppTheme.lightTheme.colorScheme.onSurfaceVariant
+                    ? Theme.of(context).colorScheme.primary
+                    : Theme.of(context).colorScheme.onSurfaceVariant
                         .withValues(alpha: 0.5),
                 size: 5.w,
               ),
@@ -682,8 +682,8 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
                 'Save',
                 style: TextStyle(
                   color: _hasUnsavedChanges
-                      ? AppTheme.lightTheme.colorScheme.primary
-                      : AppTheme.lightTheme.colorScheme.onSurfaceVariant
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(context).colorScheme.onSurfaceVariant
                           .withValues(alpha: 0.5),
                 ),
               ),
@@ -737,7 +737,7 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
                     child: Text(
                       'Planned Activities',
                       style:
-                          AppTheme.lightTheme.textTheme.titleMedium?.copyWith(
+                          Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -761,12 +761,12 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
                           margin: EdgeInsets.symmetric(
                               horizontal: 2.w, vertical: 1.h),
                           decoration: BoxDecoration(
-                            color: AppTheme.lightTheme.colorScheme.error,
+                            color: Theme.of(context).colorScheme.error,
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: CustomIconWidget(
                             iconName: 'delete',
-                            color: AppTheme.lightTheme.colorScheme.onError,
+                            color: Theme.of(context).colorScheme.onError,
                             size: 6.w,
                           ),
                         ),
@@ -790,7 +790,7 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
                       Text(
                         'Activity Library',
                         style:
-                            AppTheme.lightTheme.textTheme.titleMedium?.copyWith(
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -827,7 +827,7 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
             onPressed: _showCustomActivityBottomSheet,
             icon: CustomIconWidget(
               iconName: 'add',
-              color: AppTheme.lightTheme.colorScheme.onPrimary,
+              color: Theme.of(context).colorScheme.onPrimary,
               size: 5.w,
             ),
             label: const Text('Custom Activity'),
@@ -848,7 +848,7 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
               padding: EdgeInsets.all(3.w),
               child: CustomIconWidget(
                 iconName: 'search',
-                color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
                 size: 5.w,
               ),
             ),
@@ -859,7 +859,7 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
                     },
                     icon: CustomIconWidget(
                       iconName: 'clear',
-                      color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
                       size: 5.w,
                     ),
                   )
@@ -898,19 +898,19 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
           _filterActivities();
         });
       },
-      backgroundColor: AppTheme.lightTheme.colorScheme.surface,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       selectedColor:
-          AppTheme.lightTheme.colorScheme.primary.withValues(alpha: 0.1),
+          Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
       labelStyle: TextStyle(
         color: isSelected
-            ? AppTheme.lightTheme.colorScheme.primary
-            : AppTheme.lightTheme.colorScheme.onSurface,
+            ? Theme.of(context).colorScheme.primary
+            : Theme.of(context).colorScheme.onSurface,
         fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
       ),
       side: BorderSide(
         color: isSelected
-            ? AppTheme.lightTheme.colorScheme.primary
-            : AppTheme.lightTheme.colorScheme.outline.withValues(alpha: 0.2),
+            ? Theme.of(context).colorScheme.primary
+            : Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
       ),
     );
   }
@@ -936,15 +936,15 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            AppTheme.lightTheme.colorScheme.surface,
-            AppTheme.lightTheme.colorScheme.surface.withValues(alpha: 0.8),
+            Theme.of(context).colorScheme.surface,
+            Theme.of(context).colorScheme.surface.withValues(alpha: 0.8),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: AppTheme.lightTheme.colorScheme.outline.withValues(alpha: 0.1),
+          color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.1),
           width: 1,
         ),
         boxShadow: [
@@ -965,8 +965,8 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      AppTheme.lightTheme.colorScheme.primary,
-                      AppTheme.lightTheme.colorScheme.primary.withValues(alpha: 0.8),
+                      Theme.of(context).colorScheme.primary,
+                      Theme.of(context).colorScheme.primary.withValues(alpha: 0.8),
                     ],
                   ),
                   borderRadius: BorderRadius.circular(8),
@@ -980,9 +980,9 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
               SizedBox(width: 3.w),
               Text(
                 'Select Student',
-                style: AppTheme.lightTheme.textTheme.titleLarge?.copyWith(
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.w600,
-                  color: AppTheme.lightTheme.colorScheme.onSurface,
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
               ),
             ],
@@ -991,36 +991,36 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
           if (_isLoading)
             Center(
               child: CircularProgressIndicator(
-                color: AppTheme.lightTheme.colorScheme.primary,
+                color: Theme.of(context).colorScheme.primary,
               ),
             )
           else if (_availableStudents.isEmpty)
             Container(
               padding: EdgeInsets.all(4.w),
               decoration: BoxDecoration(
-                color: AppTheme.lightTheme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
+                color: Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Column(
                 children: [
                   CustomIconWidget(
                     iconName: 'group_add',
-                    color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
                     size: 48,
                   ),
                   SizedBox(height: 2.h),
                   Text(
                     'No Students Available',
-                    style: AppTheme.lightTheme.textTheme.titleMedium?.copyWith(
-                      color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
                   SizedBox(height: 1.h),
                   Text(
                     'Add students to your account to start planning sessions',
-                    style: AppTheme.lightTheme.textTheme.bodyMedium?.copyWith(
-                      color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -1032,7 +1032,7 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
                     icon: const Icon(Icons.add),
                     label: const Text('Add Student'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppTheme.lightTheme.colorScheme.primary,
+                      backgroundColor: Theme.of(context).colorScheme.primary,
                       foregroundColor: Colors.white,
                       padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 1.5.h),
                       shape: RoundedRectangleBorder(
@@ -1071,24 +1071,24 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
                             gradient: isSelected
                                 ? LinearGradient(
                                     colors: [
-                                      AppTheme.lightTheme.colorScheme.primary.withValues(alpha: 0.15),
-                                      AppTheme.lightTheme.colorScheme.primary.withValues(alpha: 0.08),
+                                      Theme.of(context).colorScheme.primary.withValues(alpha: 0.15),
+                                      Theme.of(context).colorScheme.primary.withValues(alpha: 0.08),
                                     ],
                                   )
                                 : null,
-                            color: isSelected ? null : AppTheme.lightTheme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
+                            color: isSelected ? null : Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
                             borderRadius: BorderRadius.circular(12),
                             border: Border.all(
                               color: isSelected
-                                  ? AppTheme.lightTheme.colorScheme.primary
+                                  ? Theme.of(context).colorScheme.primary
                                   : hasActivities
-                                      ? AppTheme.lightTheme.colorScheme.secondary
-                                      : AppTheme.lightTheme.colorScheme.outline.withValues(alpha: 0.2),
+                                      ? Theme.of(context).colorScheme.secondary
+                                      : Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
                               width: isSelected ? 2 : hasActivities ? 1.5 : 1,
                             ),
                             boxShadow: isSelected ? [
                               BoxShadow(
-                                color: AppTheme.lightTheme.colorScheme.primary.withValues(alpha: 0.2),
+                                color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.2),
                                 blurRadius: 8,
                                 offset: const Offset(0, 2),
                               ),
@@ -1107,19 +1107,19 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
                                       gradient: isSelected
                                           ? LinearGradient(
                                               colors: [
-                                                AppTheme.lightTheme.colorScheme.primary,
-                                                AppTheme.lightTheme.colorScheme.primary.withValues(alpha: 0.8),
+                                                Theme.of(context).colorScheme.primary,
+                                                Theme.of(context).colorScheme.primary.withValues(alpha: 0.8),
                                               ],
                                             )
                                           : null,
-                                      color: isSelected ? null : AppTheme.lightTheme.colorScheme.primary.withValues(alpha: 0.1),
+                                      color: isSelected ? null : Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
                                       borderRadius: BorderRadius.circular(8),
                                     ),
                                     child: Center(
                                       child: Text(
                                         student.firstName.isNotEmpty ? student.firstName[0].toUpperCase() : 'S',
-                                        style: AppTheme.lightTheme.textTheme.titleSmall?.copyWith(
-                                          color: isSelected ? Colors.white : AppTheme.lightTheme.colorScheme.primary,
+                                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                                          color: isSelected ? Colors.white : Theme.of(context).colorScheme.primary,
                                           fontWeight: FontWeight.w600,
                                         ),
                                       ),
@@ -1133,7 +1133,7 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
                                         width: 3.5.w, // Reduced size
                                         height: 3.5.w, // Reduced size
                                         decoration: BoxDecoration(
-                                          color: AppTheme.lightTheme.colorScheme.secondary,
+                                          color: Theme.of(context).colorScheme.secondary,
                                           shape: BoxShape.circle,
                                           border: Border.all(color: Colors.white, width: 1),
                                         ),
@@ -1155,10 +1155,10 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
                               Flexible( // Wrap text in Flexible
                                 child: Text(
                                   student.firstName.isNotEmpty ? student.firstName : 'Student',
-                                  style: AppTheme.lightTheme.textTheme.bodySmall?.copyWith(
+                                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                     color: isSelected
-                                        ? AppTheme.lightTheme.colorScheme.primary
-                                        : AppTheme.lightTheme.colorScheme.onSurface,
+                                        ? Theme.of(context).colorScheme.primary
+                                        : Theme.of(context).colorScheme.onSurface,
                                     fontWeight: FontWeight.w500,
                                     fontSize: 10, // Reduced font size
                                   ),
@@ -1196,7 +1196,7 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
               icon: const Icon(Icons.add, size: 20),
               label: const Text('New Student & Session'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.lightTheme.colorScheme.secondary,
+                backgroundColor: Theme.of(context).colorScheme.secondary,
                 foregroundColor: Colors.white,
                 padding: EdgeInsets.symmetric(vertical: 1.5.h),
                 shape: RoundedRectangleBorder(
@@ -1215,9 +1215,9 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
               icon: const Icon(Icons.schedule, size: 20),
               label: const Text('Schedule Session'),
               style: OutlinedButton.styleFrom(
-                foregroundColor: AppTheme.lightTheme.colorScheme.primary,
+                foregroundColor: Theme.of(context).colorScheme.primary,
                 padding: EdgeInsets.symmetric(vertical: 1.5.h),
-                side: BorderSide(color: AppTheme.lightTheme.colorScheme.primary),
+                side: BorderSide(color: Theme.of(context).colorScheme.primary),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -1235,10 +1235,10 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
     return Container(
       padding: EdgeInsets.all(4.w),
       decoration: BoxDecoration(
-        color: AppTheme.lightTheme.colorScheme.primaryContainer.withValues(alpha: 0.1),
+        color: Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: AppTheme.lightTheme.colorScheme.primary.withValues(alpha: 0.2),
+          color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.2),
           width: 1,
         ),
       ),
@@ -1249,15 +1249,15 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
             children: [
               CustomIconWidget(
                 iconName: 'schedule',
-                color: AppTheme.lightTheme.colorScheme.primary,
+                color: Theme.of(context).colorScheme.primary,
                 size: 20,
               ),
               SizedBox(width: 2.w),
               Text(
                 '${_selectedStudent!.firstName}\'s Schedule',
-                style: AppTheme.lightTheme.textTheme.titleMedium?.copyWith(
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.w600,
-                  color: AppTheme.lightTheme.colorScheme.primary,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
               ),
             ],
@@ -1267,21 +1267,21 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
             Container(
               padding: EdgeInsets.all(3.w),
               decoration: BoxDecoration(
-                color: AppTheme.lightTheme.colorScheme.surface,
+                color: Theme.of(context).colorScheme.surface,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Row(
                 children: [
                   CustomIconWidget(
                     iconName: 'event_available',
-                    color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
                     size: 24,
                   ),
                   SizedBox(width: 3.w),
                   Text(
                     'No upcoming sessions scheduled',
-                    style: AppTheme.lightTheme.textTheme.bodyMedium?.copyWith(
-                      color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
                   ),
                 ],
@@ -1294,10 +1294,10 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
                   margin: EdgeInsets.only(bottom: 2.h),
                   padding: EdgeInsets.all(3.w),
                   decoration: BoxDecoration(
-                    color: AppTheme.lightTheme.colorScheme.surface,
+                    color: Theme.of(context).colorScheme.surface,
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(
-                      color: AppTheme.lightTheme.colorScheme.outline.withValues(alpha: 0.1),
+                      color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.1),
                     ),
                   ),
                   child: Row(
@@ -1321,16 +1321,16 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
                           children: [
                             Text(
                               session.type,
-                              style: AppTheme.lightTheme.textTheme.bodyMedium?.copyWith(
+                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                 fontWeight: FontWeight.w500,
-                                color: AppTheme.lightTheme.colorScheme.onSurface,
+                                color: Theme.of(context).colorScheme.onSurface,
                               ),
                             ),
                             SizedBox(height: 0.5.h),
                             Text(
                               '${_formatDate(session.scheduledDate)} at ${_formatTime(session.scheduledDate)}',
-                              style: AppTheme.lightTheme.textTheme.bodySmall?.copyWith(
-                                color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                color: Theme.of(context).colorScheme.onSurfaceVariant,
                               ),
                             ),
                           ],
@@ -1344,7 +1344,7 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
                         ),
                         child: Text(
                           session.status.toUpperCase(),
-                          style: AppTheme.lightTheme.textTheme.labelSmall?.copyWith(
+                          style: Theme.of(context).textTheme.labelSmall?.copyWith(
                             color: _getSessionStatusColor(session.status),
                             fontWeight: FontWeight.w600,
                           ),
@@ -1362,8 +1362,8 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
               },
               child: Text(
                 'View All Sessions (${_getCurrentStudentSessions().length})',
-                style: AppTheme.lightTheme.textTheme.labelMedium?.copyWith(
-                  color: AppTheme.lightTheme.colorScheme.primary,
+                style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
                 ),
               ),
             ),
@@ -1375,15 +1375,15 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
   Color _getSessionStatusColor(String status) {
     switch (status.toLowerCase()) {
       case 'scheduled':
-        return AppTheme.lightTheme.colorScheme.primary;
+        return Theme.of(context).colorScheme.primary;
       case 'in_progress':
-        return AppTheme.lightTheme.colorScheme.secondary;
+        return Theme.of(context).colorScheme.secondary;
       case 'completed':
-        return AppTheme.lightTheme.colorScheme.tertiary;
+        return Theme.of(context).colorScheme.tertiary;
       case 'cancelled':
-        return AppTheme.lightTheme.colorScheme.error;
+        return Theme.of(context).colorScheme.error;
       default:
-        return AppTheme.lightTheme.colorScheme.onSurfaceVariant;
+        return Theme.of(context).colorScheme.onSurfaceVariant;
     }
   }
 
@@ -1410,15 +1410,15 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            AppTheme.lightTheme.colorScheme.secondaryContainer.withValues(alpha: 0.3),
-            AppTheme.lightTheme.colorScheme.secondaryContainer.withValues(alpha: 0.1),
+            Theme.of(context).colorScheme.secondaryContainer.withValues(alpha: 0.3),
+            Theme.of(context).colorScheme.secondaryContainer.withValues(alpha: 0.1),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: AppTheme.lightTheme.colorScheme.secondary.withValues(alpha: 0.2),
+          color: Theme.of(context).colorScheme.secondary.withValues(alpha: 0.2),
           width: 1,
         ),
       ),
@@ -1432,8 +1432,8 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      AppTheme.lightTheme.colorScheme.secondary,
-                      AppTheme.lightTheme.colorScheme.secondary.withValues(alpha: 0.8),
+                      Theme.of(context).colorScheme.secondary,
+                      Theme.of(context).colorScheme.secondary.withValues(alpha: 0.8),
                     ],
                   ),
                   borderRadius: BorderRadius.circular(8),
@@ -1447,22 +1447,22 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
               SizedBox(width: 3.w),
               Text(
                 'Session Summary',
-                style: AppTheme.lightTheme.textTheme.titleLarge?.copyWith(
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.w600,
-                  color: AppTheme.lightTheme.colorScheme.onSurface,
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
               ),
               const Spacer(),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 1.h),
                 decoration: BoxDecoration(
-                  color: AppTheme.lightTheme.colorScheme.secondary.withValues(alpha: 0.1),
+                  color: Theme.of(context).colorScheme.secondary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
                   '${allActivities.length} Activities',
-                  style: AppTheme.lightTheme.textTheme.labelMedium?.copyWith(
-                    color: AppTheme.lightTheme.colorScheme.secondary,
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.secondary,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -1475,10 +1475,10 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
               margin: EdgeInsets.only(bottom: 2.h),
               padding: EdgeInsets.all(3.w),
               decoration: BoxDecoration(
-                color: AppTheme.lightTheme.colorScheme.surface,
+                color: Theme.of(context).colorScheme.surface,
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: AppTheme.lightTheme.colorScheme.outline.withValues(alpha: 0.1),
+                  color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.1),
                 ),
               ),
               child: Row(
@@ -1486,12 +1486,12 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
                   Container(
                     padding: EdgeInsets.all(2.w),
                     decoration: BoxDecoration(
-                      color: AppTheme.lightTheme.colorScheme.primary.withValues(alpha: 0.1),
+                      color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: CustomIconWidget(
                       iconName: activity['icon'] ?? 'task',
-                      color: AppTheme.lightTheme.colorScheme.primary,
+                      color: Theme.of(context).colorScheme.primary,
                       size: 16,
                     ),
                   ),
@@ -1502,16 +1502,16 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
                       children: [
                         Text(
                           activity['name'] ?? 'Unknown Activity',
-                          style: AppTheme.lightTheme.textTheme.bodyMedium?.copyWith(
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             fontWeight: FontWeight.w500,
-                            color: AppTheme.lightTheme.colorScheme.onSurface,
+                            color: Theme.of(context).colorScheme.onSurface,
                           ),
                         ),
                         SizedBox(height: 0.5.h),
                         Text(
                           'For ${activity['studentName'] ?? 'Unknown Student'} • ${activity['duration'] ?? 0} min',
-                          style: AppTheme.lightTheme.textTheme.bodySmall?.copyWith(
-                            color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: Theme.of(context).colorScheme.onSurfaceVariant,
                           ),
                         ),
                       ],
@@ -1520,13 +1520,13 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 0.5.h),
                     decoration: BoxDecoration(
-                      color: AppTheme.lightTheme.colorScheme.primaryContainer.withValues(alpha: 0.3),
+                      color: Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.3),
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: Text(
                       activity['category'] ?? 'General',
-                      style: AppTheme.lightTheme.textTheme.labelSmall?.copyWith(
-                        color: AppTheme.lightTheme.colorScheme.onPrimaryContainer,
+                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                        color: Theme.of(context).colorScheme.onPrimaryContainer,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -1543,8 +1543,8 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
                 },
                 child: Text(
                   'View All ${allActivities.length} Activities',
-                  style: AppTheme.lightTheme.textTheme.labelMedium?.copyWith(
-                    color: AppTheme.lightTheme.colorScheme.secondary,
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.secondary,
                   ),
                 ),
               ),
@@ -1565,7 +1565,7 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
         maxChildSize: 0.95,
         builder: (context, scrollController) => Container(
           decoration: BoxDecoration(
-            color: AppTheme.lightTheme.colorScheme.surface,
+            color: Theme.of(context).colorScheme.surface,
             borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
           ),
           child: _buildCreateStudentSheet(scrollController),
@@ -1593,9 +1593,9 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
           // Title
           Text(
             'Create New Student',
-            style: AppTheme.lightTheme.textTheme.headlineSmall?.copyWith(
+            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
               fontWeight: FontWeight.bold,
-              color: AppTheme.lightTheme.colorScheme.primary,
+              color: Theme.of(context).colorScheme.primary,
             ),
           ),
           SizedBox(height: 3.h),
@@ -1742,8 +1742,8 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
                     
                     Text(
                       'Schedule the first session for this student:',
-                      style: AppTheme.lightTheme.textTheme.bodyMedium?.copyWith(
-                        color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
                     ),
                     SizedBox(height: 2.h),
@@ -1761,18 +1761,18 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
                               ),
                               child: Row(
                                 children: [
-                                  Icon(Icons.calendar_today, color: AppTheme.lightTheme.colorScheme.primary),
+                                  Icon(Icons.calendar_today, color: Theme.of(context).colorScheme.primary),
                                   SizedBox(width: 2.w),
                                   Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         'Date',
-                                        style: AppTheme.lightTheme.textTheme.bodySmall,
+                                        style: Theme.of(context).textTheme.bodySmall,
                                       ),
                                       Text(
                                         '${_selectedDate.day}/${_selectedDate.month}/${_selectedDate.year}',
-                                        style: AppTheme.lightTheme.textTheme.bodyMedium?.copyWith(
+                                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                           fontWeight: FontWeight.w500,
                                         ),
                                       ),
@@ -1795,18 +1795,18 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
                               ),
                               child: Row(
                                 children: [
-                                  Icon(Icons.access_time, color: AppTheme.lightTheme.colorScheme.primary),
+                                  Icon(Icons.access_time, color: Theme.of(context).colorScheme.primary),
                                   SizedBox(width: 2.w),
                                   Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         'Time',
-                                        style: AppTheme.lightTheme.textTheme.bodySmall,
+                                        style: Theme.of(context).textTheme.bodySmall,
                                       ),
                                       Text(
                                         '${_selectedTime.hour.toString().padLeft(2, '0')}:${_selectedTime.minute.toString().padLeft(2, '0')}',
-                                        style: AppTheme.lightTheme.textTheme.bodyMedium?.copyWith(
+                                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                           fontWeight: FontWeight.w500,
                                         ),
                                       ),
@@ -1824,7 +1824,7 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
                     // Duration Selection
                     Text(
                       'Session Duration',
-                      style: AppTheme.lightTheme.textTheme.bodyMedium?.copyWith(
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -1845,18 +1845,18 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
                             padding: EdgeInsets.symmetric(vertical: 1.h, horizontal: 4.w),
                             decoration: BoxDecoration(
                               color: isSelected 
-                                  ? AppTheme.lightTheme.colorScheme.primary
+                                  ? Theme.of(context).colorScheme.primary
                                   : Colors.grey.shade100,
                               borderRadius: BorderRadius.circular(20),
                               border: Border.all(
                                 color: isSelected 
-                                    ? AppTheme.lightTheme.colorScheme.primary
+                                    ? Theme.of(context).colorScheme.primary
                                     : Colors.grey.shade300,
                               ),
                             ),
                             child: Text(
                               '$duration min',
-                              style: AppTheme.lightTheme.textTheme.bodyMedium?.copyWith(
+                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                 color: isSelected ? Colors.white : Colors.grey.shade700,
                                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
                               ),
@@ -1875,7 +1875,7 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
                             onPressed: () => Navigator.pop(context),
                             style: OutlinedButton.styleFrom(
                               padding: EdgeInsets.symmetric(vertical: 2.h),
-                              side: BorderSide(color: AppTheme.lightTheme.colorScheme.primary),
+                              side: BorderSide(color: Theme.of(context).colorScheme.primary),
                             ),
                             child: const Text('Cancel'),
                           ),
@@ -1886,7 +1886,7 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
                           child: ElevatedButton(
                             onPressed: _isCreatingStudent ? null : _createStudentAndContinue,
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: AppTheme.lightTheme.colorScheme.primary,
+                              backgroundColor: Theme.of(context).colorScheme.primary,
                               padding: EdgeInsets.symmetric(vertical: 2.h),
                             ),
                             child: _isCreatingStudent
@@ -1921,7 +1921,7 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
     return Container(
       padding: EdgeInsets.symmetric(vertical: 1.h, horizontal: 3.w),
       decoration: BoxDecoration(
-        color: AppTheme.lightTheme.colorScheme.primary.transparent10,
+        color: Theme.of(context).colorScheme.primary.transparent10,
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
@@ -1929,14 +1929,14 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
           Icon(
             Icons.info_outline,
             size: 20,
-            color: AppTheme.lightTheme.colorScheme.primary,
+            color: Theme.of(context).colorScheme.primary,
           ),
           SizedBox(width: 2.w),
           Text(
             title,
-            style: AppTheme.lightTheme.textTheme.titleMedium?.copyWith(
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.w600,
-              color: AppTheme.lightTheme.colorScheme.primary,
+              color: Theme.of(context).colorScheme.primary,
             ),
           ),
         ],

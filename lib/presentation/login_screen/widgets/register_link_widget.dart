@@ -23,8 +23,8 @@ class RegisterLinkWidget extends StatelessWidget {
         children: [
           Text(
             isSignUpMode ? 'Already have an account? ' : 'New user? ',
-            style: AppTheme.lightTheme.textTheme.bodyMedium?.copyWith(
-              color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
           ),
           GestureDetector(
@@ -39,11 +39,11 @@ class RegisterLinkWidget extends StatelessWidget {
                 },
             child: Text(
               isSignUpMode ? 'Sign In' : 'Register',
-              style: AppTheme.lightTheme.textTheme.bodyMedium?.copyWith(
-                color: AppTheme.lightTheme.colorScheme.primary,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Theme.of(context).colorScheme.primary,
                 fontWeight: FontWeight.w600,
                 decoration: TextDecoration.underline,
-                decorationColor: AppTheme.lightTheme.colorScheme.primary,
+                decorationColor: Theme.of(context).colorScheme.primary,
               ),
             ),
           ),
@@ -52,3 +52,5 @@ class RegisterLinkWidget extends StatelessWidget {
     );
   }
 }
+
+

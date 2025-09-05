@@ -19,7 +19,7 @@ class QuickActionSheetWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppTheme.lightTheme.colorScheme.surface,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
       ),
       child: SafeArea(
@@ -31,7 +31,7 @@ class QuickActionSheetWidget extends StatelessWidget {
               height: 0.5.h,
               margin: EdgeInsets.only(top: 2.h, bottom: 3.h),
               decoration: BoxDecoration(
-                color: AppTheme.lightTheme.colorScheme.outline
+                color: Theme.of(context).colorScheme.outline
                     .withValues(alpha: 0.3),
                 borderRadius: BorderRadius.circular(2),
               ),
@@ -40,9 +40,9 @@ class QuickActionSheetWidget extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 4.w),
               child: Text(
                 'Quick Actions',
-                style: AppTheme.lightTheme.textTheme.titleLarge?.copyWith(
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.w600,
-                  color: AppTheme.lightTheme.colorScheme.onSurface,
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
               ),
             ),
@@ -102,14 +102,14 @@ class QuickActionSheetWidget extends StatelessWidget {
               width: 12.w,
               height: 12.w,
               decoration: BoxDecoration(
-                color: AppTheme.lightTheme.colorScheme.primary
+                color: Theme.of(context).colorScheme.primary
                     .withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Center(
                 child: CustomIconWidget(
                   iconName: icon,
-                  color: AppTheme.lightTheme.colorScheme.primary,
+                  color: Theme.of(context).colorScheme.primary,
                   size: 24,
                 ),
               ),
@@ -121,16 +121,16 @@ class QuickActionSheetWidget extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: AppTheme.lightTheme.textTheme.titleMedium?.copyWith(
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.w500,
-                      color: AppTheme.lightTheme.colorScheme.onSurface,
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
                   SizedBox(height: 0.5.h),
                   Text(
                     subtitle,
-                    style: AppTheme.lightTheme.textTheme.bodySmall?.copyWith(
-                      color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
                   ),
                 ],
@@ -138,7 +138,7 @@ class QuickActionSheetWidget extends StatelessWidget {
             ),
             CustomIconWidget(
               iconName: 'chevron_right',
-              color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
               size: 20,
             ),
           ],
@@ -147,3 +147,5 @@ class QuickActionSheetWidget extends StatelessWidget {
     );
   }
 }
+
+

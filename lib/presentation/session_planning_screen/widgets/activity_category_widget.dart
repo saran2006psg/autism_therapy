@@ -28,7 +28,7 @@ class _ActivityCategoryWidgetState extends State<ActivityCategoryWidget> {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
       decoration: BoxDecoration(
-        color: AppTheme.lightTheme.colorScheme.surface,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
@@ -75,7 +75,7 @@ class _ActivityCategoryWidgetState extends State<ActivityCategoryWidget> {
                         children: [
                           Text(
                             widget.categoryName,
-                            style: AppTheme.lightTheme.textTheme.titleMedium
+                            style: Theme.of(context).textTheme.titleMedium
                                 ?.copyWith(
                               fontWeight: FontWeight.w600,
                             ),
@@ -83,7 +83,7 @@ class _ActivityCategoryWidgetState extends State<ActivityCategoryWidget> {
                           SizedBox(height: 0.5.h),
                           Text(
                             '${widget.activities.length} activities available',
-                            style: AppTheme.lightTheme.textTheme.bodySmall
+                            style: Theme.of(context).textTheme.bodySmall
                                 ?.copyWith(
                               color: AppTheme
                                   .lightTheme.colorScheme.onSurfaceVariant,
@@ -97,7 +97,7 @@ class _ActivityCategoryWidgetState extends State<ActivityCategoryWidget> {
                       duration: const Duration(milliseconds: 200),
                       child: CustomIconWidget(
                         iconName: 'keyboard_arrow_down',
-                        color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                         size: 6.w,
                       ),
                     ),
@@ -114,7 +114,7 @@ class _ActivityCategoryWidgetState extends State<ActivityCategoryWidget> {
                     children: [
                       Divider(
                         height: 1,
-                        color: AppTheme.lightTheme.colorScheme.outline
+                        color: Theme.of(context).colorScheme.outline
                             .withValues(alpha: 0.2),
                       ),
                       ...widget.activities.map((activity) {
@@ -136,15 +136,15 @@ class _ActivityCategoryWidgetState extends State<ActivityCategoryWidget> {
   Color _getCategoryColor() {
     switch (widget.categoryName.toLowerCase()) {
       case 'communication skills':
-        return AppTheme.lightTheme.colorScheme.primary;
+        return Theme.of(context).colorScheme.primary;
       case 'social interaction':
-        return AppTheme.lightTheme.colorScheme.secondary;
+        return Theme.of(context).colorScheme.secondary;
       case 'behavioral training':
-        return AppTheme.lightTheme.colorScheme.tertiary;
+        return Theme.of(context).colorScheme.tertiary;
       case 'sensory integration':
-        return AppTheme.lightTheme.colorScheme.error;
+        return Theme.of(context).colorScheme.error;
       default:
-        return AppTheme.lightTheme.colorScheme.onSurfaceVariant;
+        return Theme.of(context).colorScheme.onSurfaceVariant;
     }
   }
 

@@ -124,7 +124,7 @@ class _AddStudentFormState extends State<AddStudentForm> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('${student.fullName} added successfully!'),
-            backgroundColor: AppTheme.lightTheme.colorScheme.tertiary,
+            backgroundColor: Theme.of(context).colorScheme.tertiary,
           ),
         );
         Navigator.pop(context, true); // Return true to indicate success
@@ -134,7 +134,7 @@ class _AddStudentFormState extends State<AddStudentForm> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Error adding student: ${e.toString()}'),
-            backgroundColor: AppTheme.lightTheme.colorScheme.error,
+            backgroundColor: Theme.of(context).colorScheme.error,
           ),
         );
       }
@@ -150,22 +150,22 @@ class _AddStudentFormState extends State<AddStudentForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.lightTheme.scaffoldBackgroundColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: AppTheme.lightTheme.colorScheme.surface,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         elevation: 0,
         leading: IconButton(
           icon: CustomIconWidget(
             iconName: 'arrow_back',
-            color: AppTheme.lightTheme.colorScheme.onSurface,
+            color: Theme.of(context).colorScheme.onSurface,
           ),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
           'Add New Student',
-          style: AppTheme.lightTheme.textTheme.titleLarge?.copyWith(
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
             fontWeight: FontWeight.w600,
-            color: AppTheme.lightTheme.colorScheme.onSurface,
+            color: Theme.of(context).colorScheme.onSurface,
           ),
         ),
         actions: [
@@ -186,7 +186,7 @@ class _AddStudentFormState extends State<AddStudentForm> {
               child: Text(
                 'Save',
                 style: TextStyle(
-                  color: AppTheme.lightTheme.colorScheme.primary,
+                  color: Theme.of(context).colorScheme.primary,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -244,7 +244,7 @@ class _AddStudentFormState extends State<AddStudentForm> {
                   padding: EdgeInsets.all(4.w),
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: AppTheme.lightTheme.colorScheme.outline
+                      color: Theme.of(context).colorScheme.outline
                           .transparent30,
                     ),
                     borderRadius: BorderRadius.circular(12),
@@ -253,7 +253,7 @@ class _AddStudentFormState extends State<AddStudentForm> {
                     children: [
                       CustomIconWidget(
                         iconName: 'calendar_today',
-                        color: AppTheme.lightTheme.colorScheme.primary,
+                        color: Theme.of(context).colorScheme.primary,
                         size: 20,
                       ),
                       SizedBox(width: 3.w),
@@ -261,10 +261,10 @@ class _AddStudentFormState extends State<AddStudentForm> {
                         _selectedDateOfBirth == null
                             ? 'Select Date of Birth'
                             : '${_selectedDateOfBirth!.day}/${_selectedDateOfBirth!.month}/${_selectedDateOfBirth!.year}',
-                        style: AppTheme.lightTheme.textTheme.bodyMedium?.copyWith(
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: _selectedDateOfBirth == null
-                              ? AppTheme.lightTheme.colorScheme.onSurfaceVariant
-                              : AppTheme.lightTheme.colorScheme.onSurface,
+                              ? Theme.of(context).colorScheme.onSurfaceVariant
+                              : Theme.of(context).colorScheme.onSurface,
                         ),
                       ),
                     ],
@@ -375,7 +375,7 @@ class _AddStudentFormState extends State<AddStudentForm> {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide(
-                            color: AppTheme.lightTheme.colorScheme.outline
+                            color: Theme.of(context).colorScheme.outline
                                 .transparent30,
                           ),
                         ),
@@ -388,10 +388,10 @@ class _AddStudentFormState extends State<AddStudentForm> {
                     onPressed: _addTrigger,
                     icon: CustomIconWidget(
                       iconName: 'add',
-                      color: AppTheme.lightTheme.colorScheme.primary,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                     style: IconButton.styleFrom(
-                      backgroundColor: AppTheme.lightTheme.colorScheme.primary
+                      backgroundColor: Theme.of(context).colorScheme.primary
                           .transparent10,
                     ),
                   ),
@@ -410,9 +410,9 @@ class _AddStudentFormState extends State<AddStudentForm> {
                       label: Text(trigger),
                       deleteIcon: const Icon(Icons.close, size: 18),
                       onDeleted: () => _removeTrigger(index),
-                      backgroundColor: AppTheme.lightTheme.colorScheme.primaryContainer,
+                      backgroundColor: Theme.of(context).colorScheme.primaryContainer,
                       labelStyle: TextStyle(
-                        color: AppTheme.lightTheme.colorScheme.onPrimaryContainer,
+                        color: Theme.of(context).colorScheme.onPrimaryContainer,
                       ),
                     );
                   }).toList(),
@@ -430,9 +430,9 @@ class _AddStudentFormState extends State<AddStudentForm> {
   Widget _buildSectionTitle(String title) {
     return Text(
       title,
-      style: AppTheme.lightTheme.textTheme.titleMedium?.copyWith(
+      style: Theme.of(context).textTheme.titleMedium?.copyWith(
         fontWeight: FontWeight.w600,
-        color: AppTheme.lightTheme.colorScheme.onSurface,
+        color: Theme.of(context).colorScheme.onSurface,
       ),
     );
   }
@@ -456,34 +456,34 @@ class _AddStudentFormState extends State<AddStudentForm> {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(
-            color: AppTheme.lightTheme.colorScheme.outline
+            color: Theme.of(context).colorScheme.outline
                 .transparent30,
           ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(
-            color: AppTheme.lightTheme.colorScheme.outline
+            color: Theme.of(context).colorScheme.outline
                 .transparent30,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(
-            color: AppTheme.lightTheme.colorScheme.primary,
+            color: Theme.of(context).colorScheme.primary,
             width: 2,
           ),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(
-            color: AppTheme.lightTheme.colorScheme.error,
+            color: Theme.of(context).colorScheme.error,
           ),
         ),
         disabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(
-            color: AppTheme.lightTheme.colorScheme.outline
+            color: Theme.of(context).colorScheme.outline
                 .transparent10,
           ),
         ),
@@ -504,21 +504,21 @@ class _AddStudentFormState extends State<AddStudentForm> {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(
-            color: AppTheme.lightTheme.colorScheme.outline
+            color: Theme.of(context).colorScheme.outline
                 .transparent30,
           ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(
-            color: AppTheme.lightTheme.colorScheme.outline
+            color: Theme.of(context).colorScheme.outline
                 .transparent30,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(
-            color: AppTheme.lightTheme.colorScheme.primary,
+            color: Theme.of(context).colorScheme.primary,
             width: 2,
           ),
         ),
@@ -533,3 +533,6 @@ class _AddStudentFormState extends State<AddStudentForm> {
     );
   }
 }
+
+
+

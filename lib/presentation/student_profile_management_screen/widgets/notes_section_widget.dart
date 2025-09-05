@@ -44,7 +44,7 @@ class _NotesSectionWidgetState extends State<NotesSectionWidget> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: AppTheme.lightTheme.colorScheme.surface,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -67,7 +67,7 @@ class _NotesSectionWidgetState extends State<NotesSectionWidget> {
                       width: 12.w,
                       height: 0.5.h,
                       decoration: BoxDecoration(
-                        color: AppTheme.lightTheme.colorScheme.outline,
+                        color: Theme.of(context).colorScheme.outline,
                         borderRadius: BorderRadius.circular(2),
                       ),
                     ),
@@ -78,7 +78,7 @@ class _NotesSectionWidgetState extends State<NotesSectionWidget> {
                       Expanded(
                         child: Text(
                           'Add New Note',
-                          style: AppTheme.lightTheme.textTheme.titleLarge,
+                          style: Theme.of(context).textTheme.titleLarge,
                         ),
                       ),
                       IconButton(
@@ -89,13 +89,13 @@ class _NotesSectionWidgetState extends State<NotesSectionWidget> {
                               content:
                                   const Text('Voice-to-text feature coming soon'),
                               backgroundColor:
-                                  AppTheme.lightTheme.colorScheme.primary,
+                                  Theme.of(context).colorScheme.primary,
                             ),
                           );
                         },
                         icon: CustomIconWidget(
                           iconName: 'mic',
-                          color: AppTheme.lightTheme.colorScheme.primary,
+                          color: Theme.of(context).colorScheme.primary,
                           size: 24,
                         ),
                         tooltip: 'Voice to Text',
@@ -124,7 +124,7 @@ class _NotesSectionWidgetState extends State<NotesSectionWidget> {
                   SizedBox(height: 2.h),
                   Text(
                     'Tags (Select relevant categories)',
-                    style: AppTheme.lightTheme.textTheme.titleMedium,
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                   SizedBox(height: 1.h),
                   Wrap(
@@ -145,14 +145,14 @@ class _NotesSectionWidgetState extends State<NotesSectionWidget> {
                           });
                         },
                         backgroundColor:
-                            AppTheme.lightTheme.colorScheme.surface,
-                        selectedColor: AppTheme.lightTheme.colorScheme.primary
+                            Theme.of(context).colorScheme.surface,
+                        selectedColor: Theme.of(context).colorScheme.primary
                             .withValues(alpha: 0.2),
-                        checkmarkColor: AppTheme.lightTheme.colorScheme.primary,
+                        checkmarkColor: Theme.of(context).colorScheme.primary,
                         labelStyle:
-                            AppTheme.lightTheme.textTheme.bodySmall?.copyWith(
+                            Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: isSelected
-                              ? AppTheme.lightTheme.colorScheme.primary
+                              ? Theme.of(context).colorScheme.primary
                               : AppTheme
                                   .lightTheme.colorScheme.onSurfaceVariant,
                         ),
@@ -205,7 +205,7 @@ class _NotesSectionWidgetState extends State<NotesSectionWidget> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: AppTheme.lightTheme.colorScheme.surface,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -221,7 +221,7 @@ class _NotesSectionWidgetState extends State<NotesSectionWidget> {
                   width: 12.w,
                   height: 0.5.h,
                   decoration: BoxDecoration(
-                    color: AppTheme.lightTheme.colorScheme.outline,
+                    color: Theme.of(context).colorScheme.outline,
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
@@ -232,7 +232,7 @@ class _NotesSectionWidgetState extends State<NotesSectionWidget> {
                   Expanded(
                     child: Text(
                       note['title'] ?? 'Note Details',
-                      style: AppTheme.lightTheme.textTheme.titleLarge,
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                   ),
                   PopupMenuButton<String>(
@@ -246,7 +246,7 @@ class _NotesSectionWidgetState extends State<NotesSectionWidget> {
                             SnackBar(
                               content: const Text('Sharing note with team...'),
                               backgroundColor:
-                                  AppTheme.lightTheme.colorScheme.primary,
+                                  Theme.of(context).colorScheme.primary,
                             ),
                           );
                           break;
@@ -255,7 +255,7 @@ class _NotesSectionWidgetState extends State<NotesSectionWidget> {
                             SnackBar(
                               content: const Text('Exporting note data...'),
                               backgroundColor:
-                                  AppTheme.lightTheme.colorScheme.primary,
+                                  Theme.of(context).colorScheme.primary,
                             ),
                           );
                           break;
@@ -268,7 +268,7 @@ class _NotesSectionWidgetState extends State<NotesSectionWidget> {
                           children: [
                             CustomIconWidget(
                               iconName: 'edit',
-                              color: AppTheme.lightTheme.colorScheme.onSurface,
+                              color: Theme.of(context).colorScheme.onSurface,
                               size: 20,
                             ),
                             SizedBox(width: 2.w),
@@ -282,7 +282,7 @@ class _NotesSectionWidgetState extends State<NotesSectionWidget> {
                           children: [
                             CustomIconWidget(
                               iconName: 'share',
-                              color: AppTheme.lightTheme.colorScheme.onSurface,
+                              color: Theme.of(context).colorScheme.onSurface,
                               size: 20,
                             ),
                             SizedBox(width: 2.w),
@@ -296,7 +296,7 @@ class _NotesSectionWidgetState extends State<NotesSectionWidget> {
                           children: [
                             CustomIconWidget(
                               iconName: 'download',
-                              color: AppTheme.lightTheme.colorScheme.onSurface,
+                              color: Theme.of(context).colorScheme.onSurface,
                               size: 20,
                             ),
                             SizedBox(width: 2.w),
@@ -312,7 +312,7 @@ class _NotesSectionWidgetState extends State<NotesSectionWidget> {
               Container(
                 padding: EdgeInsets.all(3.w),
                 decoration: BoxDecoration(
-                  color: AppTheme.lightTheme.colorScheme.primary
+                  color: Theme.of(context).colorScheme.primary
                       .withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -320,14 +320,14 @@ class _NotesSectionWidgetState extends State<NotesSectionWidget> {
                   children: [
                     CustomIconWidget(
                       iconName: 'person',
-                      color: AppTheme.lightTheme.colorScheme.primary,
+                      color: Theme.of(context).colorScheme.primary,
                       size: 20,
                     ),
                     SizedBox(width: 2.w),
                     Text(
                       'By ${note['author'] ?? 'Unknown'} • ${_formatDate(note['createdDate'])}',
-                      style: AppTheme.lightTheme.textTheme.bodyMedium?.copyWith(
-                        color: AppTheme.lightTheme.colorScheme.primary,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.primary,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -345,15 +345,15 @@ class _NotesSectionWidgetState extends State<NotesSectionWidget> {
                       padding: EdgeInsets.symmetric(
                           horizontal: 2.w, vertical: 0.5.h),
                       decoration: BoxDecoration(
-                        color: AppTheme.lightTheme.colorScheme.secondary
+                        color: Theme.of(context).colorScheme.secondary
                             .withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
                         tag.toString(),
                         style:
-                            AppTheme.lightTheme.textTheme.labelSmall?.copyWith(
-                          color: AppTheme.lightTheme.colorScheme.secondary,
+                            Theme.of(context).textTheme.labelSmall?.copyWith(
+                          color: Theme.of(context).colorScheme.secondary,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -366,7 +366,7 @@ class _NotesSectionWidgetState extends State<NotesSectionWidget> {
                 child: SingleChildScrollView(
                   child: Text(
                     note['content'] ?? '',
-                    style: AppTheme.lightTheme.textTheme.bodyMedium?.copyWith(
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       height: 1.5,
                     ),
                   ),
@@ -410,12 +410,12 @@ class _NotesSectionWidgetState extends State<NotesSectionWidget> {
           },
           leading: CustomIconWidget(
             iconName: 'note',
-            color: AppTheme.lightTheme.colorScheme.primary,
+            color: Theme.of(context).colorScheme.primary,
             size: 24,
           ),
           title: Text(
             'Notes (${widget.notes.length})',
-            style: AppTheme.lightTheme.textTheme.titleLarge,
+            style: Theme.of(context).textTheme.titleLarge,
           ),
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
@@ -424,13 +424,13 @@ class _NotesSectionWidgetState extends State<NotesSectionWidget> {
                 onPressed: _showAddNoteDialog,
                 icon: CustomIconWidget(
                   iconName: 'add',
-                  color: AppTheme.lightTheme.colorScheme.primary,
+                  color: Theme.of(context).colorScheme.primary,
                   size: 24,
                 ),
               ),
               CustomIconWidget(
                 iconName: _isExpanded ? 'expand_less' : 'expand_more',
-                color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
                 size: 24,
               ),
             ],
@@ -452,7 +452,7 @@ class _NotesSectionWidgetState extends State<NotesSectionWidget> {
                           SizedBox(height: 2.h),
                           Text(
                             'No notes added yet',
-                            style: AppTheme.lightTheme.textTheme.titleMedium
+                            style: Theme.of(context).textTheme.titleMedium
                                 ?.copyWith(
                               color: AppTheme
                                   .lightTheme.colorScheme.onSurfaceVariant,
@@ -461,7 +461,7 @@ class _NotesSectionWidgetState extends State<NotesSectionWidget> {
                           SizedBox(height: 1.h),
                           Text(
                             'Tap the + button to add therapy notes',
-                            style: AppTheme.lightTheme.textTheme.bodyMedium
+                            style: Theme.of(context).textTheme.bodyMedium
                                 ?.copyWith(
                               color: AppTheme
                                   .lightTheme.colorScheme.onSurfaceVariant,
@@ -484,10 +484,10 @@ class _NotesSectionWidgetState extends State<NotesSectionWidget> {
                           child: Container(
                             padding: EdgeInsets.all(3.w),
                             decoration: BoxDecoration(
-                              color: AppTheme.lightTheme.colorScheme.surface,
+                              color: Theme.of(context).colorScheme.surface,
                               borderRadius: BorderRadius.circular(12),
                               border: Border.all(
-                                color: AppTheme.lightTheme.colorScheme.outline
+                                color: Theme.of(context).colorScheme.outline
                                     .withValues(alpha: 0.2),
                               ),
                             ),
@@ -497,7 +497,7 @@ class _NotesSectionWidgetState extends State<NotesSectionWidget> {
                                 Text(
                                   note['title'] ?? 'Untitled Note',
                                   style:
-                                      AppTheme.lightTheme.textTheme.titleMedium,
+                                      Theme.of(context).textTheme.titleMedium,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                 ),
@@ -507,7 +507,7 @@ class _NotesSectionWidgetState extends State<NotesSectionWidget> {
                                   style: AppTheme
                                       .lightTheme.textTheme.bodyMedium
                                       ?.copyWith(
-                                    color: AppTheme.lightTheme.colorScheme
+                                    color: Theme.of(context).colorScheme
                                         .onSurfaceVariant,
                                   ),
                                   maxLines: 2,
@@ -556,13 +556,13 @@ class _NotesSectionWidgetState extends State<NotesSectionWidget> {
                                       style: AppTheme
                                           .lightTheme.textTheme.bodySmall
                                           ?.copyWith(
-                                        color: AppTheme.lightTheme.colorScheme
+                                        color: Theme.of(context).colorScheme
                                             .onSurfaceVariant,
                                       ),
                                     ),
                                     CustomIconWidget(
                                       iconName: 'arrow_forward_ios',
-                                      color: AppTheme.lightTheme.colorScheme
+                                      color: Theme.of(context).colorScheme
                                           .onSurfaceVariant,
                                       size: 16,
                                     ),
@@ -581,3 +581,5 @@ class _NotesSectionWidgetState extends State<NotesSectionWidget> {
     );
   }
 }
+
+

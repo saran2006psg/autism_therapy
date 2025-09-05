@@ -4,6 +4,7 @@ import 'package:sizer/sizer.dart';
 import 'dart:async';
 
 import '../../core/app_export.dart';
+import '../../widgets/theme_toggle_widget.dart';
 import '../session_planning_screen/session_planning_screen.dart';
 import './widgets/connectivity_status_widget.dart';
 import './widgets/metric_card_widget.dart';
@@ -330,7 +331,7 @@ class _TherapistDashboardState extends State<TherapistDashboard>
             ListTile(
               leading: CustomIconWidget(
                 iconName: 'visibility',
-                color: AppTheme.lightTheme.colorScheme.primary,
+                color: Theme.of(context).colorScheme.primary,
                 size: 24,
               ),
               title: const Text('View Details'),
@@ -342,7 +343,7 @@ class _TherapistDashboardState extends State<TherapistDashboard>
             ListTile(
               leading: CustomIconWidget(
                 iconName: 'file_download',
-                color: AppTheme.lightTheme.colorScheme.primary,
+                color: Theme.of(context).colorScheme.primary,
                 size: 24,
               ),
               title: const Text('Export Data'),
@@ -354,7 +355,7 @@ class _TherapistDashboardState extends State<TherapistDashboard>
             ListTile(
               leading: CustomIconWidget(
                 iconName: 'share',
-                color: AppTheme.lightTheme.colorScheme.primary,
+                color: Theme.of(context).colorScheme.primary,
                 size: 24,
               ),
               title: const Text('Share Progress'),
@@ -372,7 +373,7 @@ class _TherapistDashboardState extends State<TherapistDashboard>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.lightTheme.scaffoldBackgroundColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: _isLoading
             ? Center(
@@ -380,13 +381,13 @@ class _TherapistDashboardState extends State<TherapistDashboard>
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     CircularProgressIndicator(
-                      color: AppTheme.lightTheme.colorScheme.primary,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                     SizedBox(height: 2.h),
                     Text(
                       'Loading dashboard data...',
-                      style: AppTheme.lightTheme.textTheme.bodyMedium?.copyWith(
-                        color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
                     ),
                   ],
@@ -394,34 +395,37 @@ class _TherapistDashboardState extends State<TherapistDashboard>
               )
             : RefreshIndicator(
                 onRefresh: _refreshData,
-                color: AppTheme.lightTheme.colorScheme.primary,
+                color: Theme.of(context).colorScheme.primary,
                 child: CustomScrollView(
             slivers: [
               SliverAppBar(
                 floating: true,
                 pinned: true,
                 elevation: 0,
-                backgroundColor: AppTheme.lightTheme.scaffoldBackgroundColor,
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                 title: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       'Dashboard',
                       style:
-                          AppTheme.lightTheme.textTheme.headlineSmall?.copyWith(
+                          Theme.of(context).textTheme.headlineSmall?.copyWith(
                         fontWeight: FontWeight.w600,
-                        color: AppTheme.lightTheme.colorScheme.onSurface,
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                     ),
                     Text(
-                      'August 13, 2025',
-                      style: AppTheme.lightTheme.textTheme.bodyMedium?.copyWith(
-                        color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                      _lastSyncTime != null 
+                        ? 'Last sync: ${_lastSyncTime!.hour}:${_lastSyncTime!.minute.toString().padLeft(2, '0')}'
+                        : 'Never synced',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
                     ),
                   ],
                 ),
                 actions: [
+                  const ThemeToggleWidget(),
                   Padding(
                     padding: EdgeInsets.only(right: 4.w),
                     child: ConnectivityStatusWidget(
@@ -449,7 +453,7 @@ class _TherapistDashboardState extends State<TherapistDashboard>
                                   title: "Today's Sessions",
                                   value: "${_getTodaySessionsCount()}",
                                   subtitle: "${_getCompletedTodaySessionsCount()} completed",
-                                  color: AppTheme.lightTheme.colorScheme.primary,
+                                  color: Theme.of(context).colorScheme.primary,
                                   onTap: () => Navigator.pushNamed(
                                       context, '/session-planning-screen'),
                                   onLongPress: () =>
@@ -461,7 +465,7 @@ class _TherapistDashboardState extends State<TherapistDashboard>
                                   title: "Active Students",
                                   value: "${_students.length}",
                                   subtitle: "All progressing",
-                                  color: AppTheme.lightTheme.colorScheme.secondary,
+                                  color: Theme.of(context).colorScheme.secondary,
                                   onTap: () => Navigator.pushNamed(context,
                                       '/students-list'),
                                   onLongPress: () =>
@@ -478,7 +482,7 @@ class _TherapistDashboardState extends State<TherapistDashboard>
                                   title: "Completion Rate",
                                   value: _getCompletionRate(),
                                   subtitle: "This week",
-                                  color: AppTheme.lightTheme.colorScheme.tertiary,
+                                  color: Theme.of(context).colorScheme.tertiary,
                                   onLongPress: () =>
                                       _showMetricContextMenu('completion'),
                                 ),
@@ -508,15 +512,15 @@ class _TherapistDashboardState extends State<TherapistDashboard>
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
-                            AppTheme.lightTheme.colorScheme.surface,
-                            AppTheme.lightTheme.colorScheme.surface.withValues(alpha: 0.8),
+                            Theme.of(context).colorScheme.surface,
+                            Theme.of(context).colorScheme.surface.withValues(alpha: 0.8),
                           ],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ),
                         borderRadius: BorderRadius.circular(16),
                         border: Border.all(
-                          color: AppTheme.lightTheme.colorScheme.outline.withValues(alpha: 0.1),
+                          color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.1),
                           width: 1,
                         ),
                         boxShadow: [
@@ -572,14 +576,14 @@ class _TherapistDashboardState extends State<TherapistDashboard>
                                     decoration: BoxDecoration(
                                       gradient: LinearGradient(
                                         colors: [
-                                          AppTheme.lightTheme.colorScheme.tertiary,
-                                          AppTheme.lightTheme.colorScheme.tertiary.withValues(alpha: 0.8),
+                                          Theme.of(context).colorScheme.tertiary,
+                                          Theme.of(context).colorScheme.tertiary.withValues(alpha: 0.8),
                                         ],
                                       ),
                                       borderRadius: BorderRadius.circular(12),
                                       boxShadow: [
                                         BoxShadow(
-                                          color: AppTheme.lightTheme.colorScheme.tertiary.withValues(alpha: 0.3),
+                                          color: Theme.of(context).colorScheme.tertiary.withValues(alpha: 0.3),
                                           blurRadius: 8,
                                           offset: const Offset(0, 4),
                                         ),
@@ -820,10 +824,10 @@ class _TherapistDashboardState extends State<TherapistDashboard>
                         children: [
                           Text(
                             'Student Progress',
-                            style: AppTheme.lightTheme.textTheme.titleLarge
+                            style: Theme.of(context).textTheme.titleLarge
                                 ?.copyWith(
                               fontWeight: FontWeight.w600,
-                              color: AppTheme.lightTheme.colorScheme.onSurface,
+                              color: Theme.of(context).colorScheme.onSurface,
                             ),
                           ),
                           TextButton(
@@ -831,9 +835,9 @@ class _TherapistDashboardState extends State<TherapistDashboard>
                                 context, '/profile-buddy'),
                             child: Text(
                               'View All',
-                              style: AppTheme.lightTheme.textTheme.labelLarge
+                              style: Theme.of(context).textTheme.labelLarge
                                   ?.copyWith(
-                                color: AppTheme.lightTheme.colorScheme.primary,
+                                color: Theme.of(context).colorScheme.primary,
                               ),
                             ),
                           ),
@@ -891,8 +895,8 @@ class _TherapistDashboardState extends State<TherapistDashboard>
             icon: CustomIconWidget(
               iconName: 'dashboard',
               color: _currentTabIndex == 0
-                  ? AppTheme.lightTheme.colorScheme.primary
-                  : AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).colorScheme.onSurfaceVariant,
               size: 24,
             ),
             label: 'Dashboard',
@@ -901,8 +905,8 @@ class _TherapistDashboardState extends State<TherapistDashboard>
             icon: CustomIconWidget(
               iconName: 'event',
               color: _currentTabIndex == 1
-                  ? AppTheme.lightTheme.colorScheme.primary
-                  : AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).colorScheme.onSurfaceVariant,
               size: 24,
             ),
             label: 'Sessions',
@@ -911,8 +915,8 @@ class _TherapistDashboardState extends State<TherapistDashboard>
             icon: CustomIconWidget(
               iconName: 'people',
               color: _currentTabIndex == 2
-                  ? AppTheme.lightTheme.colorScheme.primary
-                  : AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).colorScheme.onSurfaceVariant,
               size: 24,
             ),
             label: 'Students',
@@ -921,8 +925,8 @@ class _TherapistDashboardState extends State<TherapistDashboard>
             icon: CustomIconWidget(
               iconName: 'person',
               color: _currentTabIndex == 3
-                  ? AppTheme.lightTheme.colorScheme.primary
-                  : AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).colorScheme.onSurfaceVariant,
               size: 24,
             ),
             label: 'Profile',
@@ -933,10 +937,12 @@ class _TherapistDashboardState extends State<TherapistDashboard>
         onPressed: _showQuickActionSheet,
         child: CustomIconWidget(
           iconName: 'add',
-          color: AppTheme.lightTheme.colorScheme.onPrimary,
+          color: Theme.of(context).colorScheme.onPrimary,
           size: 28,
         ),
       ),
     );
   }
 }
+
+

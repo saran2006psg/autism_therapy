@@ -25,10 +25,10 @@ class RoleIndicatorWidget extends StatelessWidget {
       margin: EdgeInsets.only(top: 2.h),
       padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
       decoration: BoxDecoration(
-        color: _getRoleColor().withValues(alpha: 0.1),
+        color: _getRoleColor(context).withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: _getRoleColor(),
+          color: _getRoleColor(context),
           width: 1.5,
         ),
       ),
@@ -37,14 +37,14 @@ class RoleIndicatorWidget extends StatelessWidget {
         children: [
           CustomIconWidget(
             iconName: _getRoleIcon(),
-            color: _getRoleColor(),
+            color: _getRoleColor(context),
             size: 18,
           ),
           SizedBox(width: 2.w),
           Text(
             'Logged in as $userRole',
-            style: AppTheme.lightTheme.textTheme.bodyMedium?.copyWith(
-              color: _getRoleColor(),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: _getRoleColor(context),
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -53,14 +53,14 @@ class RoleIndicatorWidget extends StatelessWidget {
     );
   }
 
-  Color _getRoleColor() {
+  Color _getRoleColor(BuildContext context) {
     switch (userRole?.toLowerCase()) {
       case 'therapist':
-        return AppTheme.lightTheme.colorScheme.primary;
+        return Theme.of(context).colorScheme.primary;
       case 'parent':
-        return AppTheme.lightTheme.colorScheme.secondary;
+        return Theme.of(context).colorScheme.secondary;
       default:
-        return AppTheme.lightTheme.colorScheme.onSurfaceVariant;
+        return Theme.of(context).colorScheme.onSurfaceVariant;
     }
   }
 

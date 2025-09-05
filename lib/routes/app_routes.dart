@@ -9,6 +9,7 @@ import '../presentation/profile_buddy_screen/profile_buddy_screen.dart';
 import '../presentation/students_list_screen/students_list_screen.dart';
 import '../presentation/therapist_profile_screen/therapist_profile_screen.dart';
 import '../presentation/forms/add_student_form.dart';
+import '../presentation/settings_screen/settings_screen.dart';
 
 class AppRoutes {
   // Route constants for navigation throughout the app
@@ -24,6 +25,7 @@ class AppRoutes {
   static const String studentsList = '/students-list';
   static const String therapistProfile = '/therapist-profile';
   static const String addStudentForm = '/add-student-form';
+  static const String settings = '/settings';
 
   static Map<String, WidgetBuilder> routes = {
     initial: (context) => const LoginScreen(),
@@ -38,6 +40,7 @@ class AppRoutes {
     studentsList: (context) => const StudentsListScreen(),
     therapistProfile: (context) => const TherapistProfileScreen(),
     addStudentForm: (context) => const AddStudentForm(),
+    settings: (context) => const SettingsScreen(),
     // Additional routes can be added here as the app expands
   };
 }

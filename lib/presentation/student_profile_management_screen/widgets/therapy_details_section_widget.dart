@@ -45,12 +45,12 @@ class _TherapyDetailsSectionWidgetState
           },
           leading: CustomIconWidget(
             iconName: 'psychology',
-            color: AppTheme.lightTheme.colorScheme.primary,
+            color: Theme.of(context).colorScheme.primary,
             size: 24,
           ),
           title: Text(
             'Therapy-Specific Details',
-            style: AppTheme.lightTheme.textTheme.titleLarge,
+            style: Theme.of(context).textTheme.titleLarge,
           ),
           children: [
             Padding(
@@ -89,7 +89,7 @@ class _TherapyDetailsSectionWidgetState
                         value: value,
                         child: Text(
                           value,
-                          style: AppTheme.lightTheme.textTheme.bodyMedium,
+                          style: Theme.of(context).textTheme.bodyMedium,
                           overflow: TextOverflow.ellipsis,
                         ),
                       );
@@ -141,3 +141,5 @@ class _TherapyDetailsSectionWidgetState
     );
   }
 }
+
+

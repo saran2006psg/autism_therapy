@@ -22,8 +22,8 @@ class ActivityCardWidget extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 2.w, vertical: 1.h),
       decoration: BoxDecoration(
         color: isDragging
-            ? AppTheme.lightTheme.colorScheme.primary.withValues(alpha: 0.1)
-            : AppTheme.lightTheme.colorScheme.surface,
+            ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.1)
+            : Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
@@ -34,7 +34,7 @@ class ActivityCardWidget extends StatelessWidget {
         ],
         border: isDragging
             ? Border.all(
-                color: AppTheme.lightTheme.colorScheme.primary
+                color: Theme.of(context).colorScheme.primary
                     .withValues(alpha: 0.3),
                 width: 2,
               )
@@ -53,13 +53,13 @@ class ActivityCardWidget extends StatelessWidget {
                   width: 12.w,
                   height: 12.w,
                   decoration: BoxDecoration(
-                    color: _getDifficultyColor().withValues(alpha: 0.1),
+                    color: _getDifficultyColor(context).withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Center(
                     child: CustomIconWidget(
                       iconName: activity['icon'] as String? ?? 'psychology',
-                      color: _getDifficultyColor(),
+                      color: _getDifficultyColor(context),
                       size: 6.w,
                     ),
                   ),
@@ -72,7 +72,7 @@ class ActivityCardWidget extends StatelessWidget {
                       Text(
                         activity['name'] as String? ?? 'Unknown Activity',
                         style:
-                            AppTheme.lightTheme.textTheme.titleMedium?.copyWith(
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.w600,
                         ),
                         maxLines: 2,
@@ -83,9 +83,9 @@ class ActivityCardWidget extends StatelessWidget {
                         activity['description'] as String? ??
                             'No description available',
                         style:
-                            AppTheme.lightTheme.textTheme.bodySmall?.copyWith(
+                            Theme.of(context).textTheme.bodySmall?.copyWith(
                           color:
-                              AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                              Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
@@ -97,7 +97,7 @@ class ActivityCardWidget extends StatelessWidget {
                             padding: EdgeInsets.symmetric(
                                 horizontal: 2.w, vertical: 0.5.h),
                             decoration: BoxDecoration(
-                              color: AppTheme.lightTheme.colorScheme.secondary
+                              color: Theme.of(context).colorScheme.secondary
                                   .withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(6),
                             ),
@@ -107,7 +107,7 @@ class ActivityCardWidget extends StatelessWidget {
                                 CustomIconWidget(
                                   iconName: 'schedule',
                                   color:
-                                      AppTheme.lightTheme.colorScheme.secondary,
+                                      Theme.of(context).colorScheme.secondary,
                                   size: 3.w,
                                 ),
                                 SizedBox(width: 1.w),
@@ -130,14 +130,14 @@ class ActivityCardWidget extends StatelessWidget {
                                 horizontal: 2.w, vertical: 0.5.h),
                             decoration: BoxDecoration(
                               color:
-                                  _getDifficultyColor().withValues(alpha: 0.1),
+                                  _getDifficultyColor(context).withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(6),
                             ),
                             child: Text(
                               _getDifficultyText(),
-                              style: AppTheme.lightTheme.textTheme.labelSmall
+                              style: Theme.of(context).textTheme.labelSmall
                                   ?.copyWith(
-                                color: _getDifficultyColor(),
+                                color: _getDifficultyColor(context),
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -149,7 +149,7 @@ class ActivityCardWidget extends StatelessWidget {
                 ),
                 CustomIconWidget(
                   iconName: 'drag_handle',
-                  color: AppTheme.lightTheme.colorScheme.onSurfaceVariant
+                  color: Theme.of(context).colorScheme.onSurfaceVariant
                       .withValues(alpha: 0.5),
                   size: 5.w,
                 ),
@@ -161,15 +161,15 @@ class ActivityCardWidget extends StatelessWidget {
     );
   }
 
-  Color _getDifficultyColor() {
+  Color _getDifficultyColor(BuildContext context) {
     final difficulty = activity['difficulty'] as String? ?? 'medium';
     switch (difficulty.toLowerCase()) {
       case 'easy':
-        return AppTheme.lightTheme.colorScheme.tertiary;
+        return Theme.of(context).colorScheme.tertiary;
       case 'hard':
-        return AppTheme.lightTheme.colorScheme.error;
+        return Theme.of(context).colorScheme.error;
       default:
-        return AppTheme.lightTheme.colorScheme.secondary;
+        return Theme.of(context).colorScheme.secondary;
     }
   }
 

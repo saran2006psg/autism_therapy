@@ -29,7 +29,7 @@ class SessionHeaderWidget extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
       padding: EdgeInsets.all(4.w),
       decoration: BoxDecoration(
-        color: AppTheme.lightTheme.colorScheme.surface,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
@@ -48,14 +48,14 @@ class SessionHeaderWidget extends StatelessWidget {
                 width: 12.w,
                 height: 12.w,
                 decoration: BoxDecoration(
-                  color: AppTheme.lightTheme.colorScheme.primary
+                  color: Theme.of(context).colorScheme.primary
                       .withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Center(
                   child: CustomIconWidget(
                     iconName: 'person',
-                    color: AppTheme.lightTheme.colorScheme.primary,
+                    color: Theme.of(context).colorScheme.primary,
                     size: 6.w,
                   ),
                 ),
@@ -67,14 +67,14 @@ class SessionHeaderWidget extends StatelessWidget {
                   children: [
                     Text(
                       'Session for',
-                      style: AppTheme.lightTheme.textTheme.bodySmall?.copyWith(
-                        color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
                     ),
                     SizedBox(height: 0.5.h),
                     Text(
                       studentName,
-                      style: AppTheme.lightTheme.textTheme.titleLarge?.copyWith(
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -88,6 +88,7 @@ class SessionHeaderWidget extends StatelessWidget {
             children: [
               Expanded(
                 child: _buildInfoCard(
+                  context: context,
                   icon: 'calendar_today',
                   label: 'Date',
                   value: _formatDate(selectedDate),
@@ -97,6 +98,7 @@ class SessionHeaderWidget extends StatelessWidget {
               SizedBox(width: 3.w),
               Expanded(
                 child: _buildInfoCard(
+                  context: context,
                   icon: 'access_time',
                   label: 'Time',
                   value: _formatTime(selectedTime),
@@ -106,13 +108,14 @@ class SessionHeaderWidget extends StatelessWidget {
             ],
           ),
           SizedBox(height: 2.h),
-          _buildDurationSelector(),
+          _buildDurationSelector(context),
         ],
       ),
     );
   }
 
   Widget _buildInfoCard({
+    required BuildContext context,
     required String icon,
     required String label,
     required String value,
@@ -126,10 +129,10 @@ class SessionHeaderWidget extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.all(3.w),
           decoration: BoxDecoration(
-            color: AppTheme.lightTheme.colorScheme.surface,
+            color: Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
-              color: AppTheme.lightTheme.colorScheme.outline
+              color: Theme.of(context).colorScheme.outline
                   .withValues(alpha: 0.2),
             ),
           ),
@@ -140,14 +143,14 @@ class SessionHeaderWidget extends StatelessWidget {
                 children: [
                   CustomIconWidget(
                     iconName: icon,
-                    color: AppTheme.lightTheme.colorScheme.primary,
+                    color: Theme.of(context).colorScheme.primary,
                     size: 4.w,
                   ),
                   SizedBox(width: 2.w),
                   Text(
                     label,
-                    style: AppTheme.lightTheme.textTheme.labelMedium?.copyWith(
-                      color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
                   ),
                 ],
@@ -155,7 +158,7 @@ class SessionHeaderWidget extends StatelessWidget {
               SizedBox(height: 1.h),
               Text(
                 value,
-                style: AppTheme.lightTheme.textTheme.titleMedium?.copyWith(
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -166,7 +169,7 @@ class SessionHeaderWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildDurationSelector() {
+  Widget _buildDurationSelector(BuildContext context) {
     final durations = [30, 45, 60, 90, 120];
 
     return Column(
@@ -176,14 +179,14 @@ class SessionHeaderWidget extends StatelessWidget {
           children: [
             CustomIconWidget(
               iconName: 'timer',
-              color: AppTheme.lightTheme.colorScheme.primary,
+              color: Theme.of(context).colorScheme.primary,
               size: 4.w,
             ),
             SizedBox(width: 2.w),
             Text(
               'Session Duration',
-              style: AppTheme.lightTheme.textTheme.labelMedium?.copyWith(
-                color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+              style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
               ),
             ),
           ],
@@ -204,22 +207,22 @@ class SessionHeaderWidget extends StatelessWidget {
                       EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.5.h),
                   decoration: BoxDecoration(
                     color: isSelected
-                        ? AppTheme.lightTheme.colorScheme.primary
-                        : AppTheme.lightTheme.colorScheme.surface,
+                        ? Theme.of(context).colorScheme.primary
+                        : Theme.of(context).colorScheme.surface,
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(
                       color: isSelected
-                          ? AppTheme.lightTheme.colorScheme.primary
-                          : AppTheme.lightTheme.colorScheme.outline
+                          ? Theme.of(context).colorScheme.primary
+                          : Theme.of(context).colorScheme.outline
                               .withValues(alpha: 0.2),
                     ),
                   ),
                   child: Text(
                     '$duration min',
-                    style: AppTheme.lightTheme.textTheme.labelMedium?.copyWith(
+                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
                       color: isSelected
-                          ? AppTheme.lightTheme.colorScheme.onPrimary
-                          : AppTheme.lightTheme.colorScheme.onSurface,
+                          ? Theme.of(context).colorScheme.onPrimary
+                          : Theme.of(context).colorScheme.onSurface,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
