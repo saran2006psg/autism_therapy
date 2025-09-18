@@ -106,7 +106,7 @@ class _SessionHistoryWidgetState extends State<SessionHistoryWidget> {
                       _buildDetailSection('Session Type',
                           session['type'] ?? 'Individual Therapy'),
                       _buildDetailSection('Therapist',
-                          session['therapist'] ?? 'Dr. Sarah Johnson'),
+                          session['therapist'] ?? 'Current Therapist'),
                       _buildDetailSection(
                           'Goals Addressed',
                           session['goals'] ??

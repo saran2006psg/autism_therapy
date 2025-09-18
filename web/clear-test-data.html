@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ThrivEers - Clear Test Data</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #6366f1;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border-left: 4px solid #6366f1;
+        }
+
+        .section h3 {
+            margin-top: 0;
+            color: #1e293b;
+        }
+
+        .step {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .step-number {
+            background: #6366f1;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .warning {
+            background: #fef3cd;
+            border-color: #f59e0b;
+            color: #92400e;
+        }
+
+        .success {
+            background: #d1fae5;
+            border-color: #10b981;
+            color: #065f46;
+        }
+
+        code {
+            background: #e2e8f0;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .button {
+            background: #6366f1;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin: 5px;
+        }
+
+        .button:hover {
+            background: #5856eb;
+        }
+
+        .student-list {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🔥 ThrivEers Test Data Cleanup</h1>
+
+        <div class="section warning">
+            <h3>⚠️ Current Issue</h3>
+            <p>Your students list is showing test data instead of real registered students:</p>
+            <div class="student-list">
+                <strong>Test Students Currently Showing:</strong>
+                <ul>
+                    <li>Jacob Thompson (Age 5, Developmental Delay)</li>
+                    <li>Michael Chen (Age 9, ADHD with Learning Disability)</li>
+                    <li>Sarah Williams (Age 6, Speech and Language Delay)</li>
+                    <li>Zoe Patel (Age 10, Intellectual Disability with Autism)</li>
+                </ul>
+            </div>
+            <p>These are stored in your Firebase database and need to be manually removed.</p>
+        </div>
+
+        <div class="section">
+            <h3>🎯 Quick Firebase Console Cleanup</h3>
+
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>Open Firebase Console</strong><br>
+                <a href="https://console.firebase.google.com" target="_blank" class="button">Open Firebase Console</a>
+                <p>Login with your Firebase account and select your ThrivEers project.</p>
+            </div>
+
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>Navigate to Firestore Database</strong><br>
+                <p>Click on "Firestore Database" in the left sidebar, then go to the "Data" tab.</p>
+            </div>
+
+            <div class="step">
+                <span class="step-number">3</span>
+                <strong>Clear Students Collection</strong><br>
+                <p>Click on the <code>students</code> collection and delete all documents that contain test data:</p>
+                <ul>
+                    <li>Look for documents with firstName: "Jacob", lastName: "Thompson"</li>
+                    <li>Look for documents with firstName: "Michael", lastName: "Chen"</li>
+                    <li>Look for documents with firstName: "Sarah", lastName: "Williams"</li>
+                    <li>Look for documents with firstName: "Zoe", lastName: "Patel"</li>
+                </ul>
+                <p><strong>Delete each document by clicking the trash icon.</strong></p>
+            </div>
+
+            <div class="step">
+                <span class="step-number">4</span>
+                <strong>Clear Related Data</strong><br>
+                <p>Also clean up these collections if they contain test data:</p>
+                <ul>
+                    <li><code>sessions</code> - Delete sessions linked to test students</li>
+                    <li><code>goals</code> - Delete goals linked to test students</li>
+                    <li><code>notes</code> - Delete notes linked to test students</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>🔄 App Reset</h3>
+
+            <div class="step">
+                <span class="step-number">5</span>
+                <strong>Clear Browser Cache</strong><br>
+                <p>In Chrome: Press <code>F12</code> → Application tab → Storage → "Clear site data"</p>
+                <p>Or use Incognito/Private browsing mode for testing.</p>
+            </div>
+
+            <div class="step">
+                <span class="step-number">6</span>
+                <strong>Restart Flutter App</strong><br>
+                <p>Stop the current app and restart:</p>
+                <code>flutter run -d chrome</code>
+            </div>
+        </div>
+
+        <div class="section success">
+            <h3>✅ Verification Steps</h3>
+
+            <div class="step">
+                <span class="step-number">7</span>
+                <strong>Test Clean State</strong><br>
+                <p>After cleanup, you should see:</p>
+                <ul>
+                    <li><strong>Therapist login:</strong> "No students yet" message</li>
+                    <li><strong>Parent login:</strong> "No children found" message</li>
+                </ul>
+            </div>
+
+            <div class="step">
+                <span class="step-number">8</span>
+                <strong>Add Real Student</strong><br>
+                <p>Test the real data flow:</p>
+                <ul>
+                    <li>Login as therapist: <code>therapist@example.com</code></li>
+                    <li>Click "+" to add a new student</li>
+                    <li>Fill form with real data</li>
+                    <li>Add parent email: <code>parent@example.com</code></li>
+                    <li>Save the student</li>
+                </ul>
+            </div>
+
+            <div class="step">
+                <span class="step-number">9</span>
+                <strong>Verify Parent Connection</strong><br>
+                <p>Test parent access:</p>
+                <ul>
+                    <li>Login as parent: <code>parent@example.com</code></li>
+                    <li>Should see the student you just created</li>
+                    <li>Data should be synced in real-time</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>🎯 Alternative: Fresh Firebase Project</h3>
+            <p>If you prefer a completely clean start:</p>
+            <ol>
+                <li>Create a new Firebase project</li>
+                <li>Update <code>firebase_options.dart</code> with new config</li>
+                <li>Re-deploy Firebase rules and indexes</li>
+                <li>Start with completely empty database</li>
+            </ol>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <p><strong>After cleanup, your app will show only real, registered students linked to actual parent emails!
+                    🎉</strong></p>
+        </div>
+    </div>
+</body>
+
+</html>

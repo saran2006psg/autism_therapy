@@ -27,6 +27,10 @@ class SessionExecutionScreen extends StatefulWidget {
 
 class _SessionExecutionScreenState extends State<SessionExecutionScreen>
     with TickerProviderStateMixin, WidgetsBindingObserver {
+  // Route arguments
+  String? _sessionIdArg;
+  String? _activityIdArg;
+  String? _activityTitleArg;
   // Core session state
   final PageController _pageController = PageController();
   int _currentActivityIndex = 0;
@@ -96,7 +100,37 @@ class _SessionExecutionScreenState extends State<SessionExecutionScreen>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    _initializeSession();
+    _guardRoleAndInit();
+  }
+
+  Future<void> _guardRoleAndInit() async {
+    try {
+      // Pull any route arguments passed from the parent dashboard
+      final args = ModalRoute.of(context)?.settings.arguments;
+      if (args is Map) {
+        _sessionIdArg = args['sessionId']?.toString();
+        _activityIdArg = args['activityId']?.toString();
+        _activityTitleArg = args['activityTitle']?.toString();
+      }
+
+      final dataService = DataService();
+      if (!dataService.isInitialized) {
+        await dataService.initialize();
+      }
+      final role = (dataService.currentUserRole ?? '').toLowerCase();
+      if (role != 'parent') {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Only parents can run this test.')),
+          );
+          Navigator.pushReplacementNamed(context, '/therapist-dashboard');
+        }
+        return;
+      }
+      await _initializeSession();
+    } catch (_) {
+      await _initializeSession();
+    }
   }
 
   @override
@@ -358,11 +392,39 @@ class _SessionExecutionScreenState extends State<SessionExecutionScreen>
     }
   }
 
-  void _completeSession() {
-    setState(() {
-    });
+  Future<void> _completeSession() async {
+    // Optionally collect a quick completion note count summary
+    try {
+      if (_sessionIdArg != null && _activityIdArg != null) {
+        // Mark the activity as completed via DataService guard (parent only)
+        final dataService = DataService();
+        if (!dataService.isInitialized) {
+          await dataService.initialize();
+        }
+        await dataService.updateActivityStatus(
+          _sessionIdArg!.toString(),
+          _activityIdArg!.toString(),
+          'completed',
+          _sessionNotes.isNotEmpty ? _sessionNotes.join('\n') : null,
+        );
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Marked as completed.')),
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to mark as completed: $e')),
+        );
+      }
+    }
 
-    _showSessionSummary();
+    if (mounted) {
+      setState(() {});
+      _showSessionSummary();
+    }
   }
 
   void _showSessionSummary() {
@@ -378,7 +440,7 @@ class _SessionExecutionScreenState extends State<SessionExecutionScreen>
               size: 24,
             ),
             SizedBox(width: 3.w),
-            const Text('Session Complete'),
+            Text(_activityTitleArg?.isNotEmpty == true ? '${_activityTitleArg!} Complete' : 'Session Complete'),
           ],
         ),
         content: Column(
@@ -401,7 +463,7 @@ class _SessionExecutionScreenState extends State<SessionExecutionScreen>
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
-              Navigator.pushReplacementNamed(context, '/therapist-dashboard');
+              Navigator.pushReplacementNamed(context, '/parent-dashboard');
             },
             child: const Text('Return to Dashboard'),
           ),

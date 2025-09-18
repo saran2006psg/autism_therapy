@@ -173,7 +173,7 @@ class FirestoreService {
     }
   }
 
-  /// Get sessions for a student
+  
   static Future<List<SessionModel>> getSessionsForStudent(String studentId) async {
     try {
       final query = await _sessionsCollection
@@ -496,6 +496,37 @@ class FirestoreService {
     }
   }
 
+  /// Update activity completion date
+  static Future<void> updateActivityCompletionDate(String sessionId, String activityId, DateTime? completionDate) async {
+    try {
+      // Find the session document first
+      final sessionRef = _sessionsCollection.doc(sessionId);
+      final sessionSnapshot = await sessionRef.get();
+      
+      if (!sessionSnapshot.exists) {
+        throw Exception('Session not found: $sessionId');
+      }
+      
+      // Update the specific activity within the session
+      final updateData = {
+        'activities.$activityId.completedAt': completionDate,
+        'updatedAt': FieldValue.serverTimestamp(),
+      };
+      
+      // If setting to null (resetting completion), explicitly use null
+      if (completionDate == null) {
+        await sessionRef.update({
+          'activities.$activityId.completedAt': null,
+          'updatedAt': FieldValue.serverTimestamp(),
+        });
+      } else {
+        await sessionRef.update(updateData);
+      }
+    } catch (e) {
+      throw Exception('Failed to update activity completion date: $e');
+    }
+  }
+
   // ================== UTILITY METHODS ==================
 
   /// Get user profile data
@@ -508,6 +539,34 @@ class FirestoreService {
       return null;
     } catch (e) {
       throw Exception('Failed to get user profile: $e');
+    }
+  }
+
+  /// Update user profile fields (e.g., displayName, avatarUrl)
+  static Future<void> updateUserProfile(String userId, Map<String, dynamic> data) async {
+    try {
+      data['updatedAt'] = FieldValue.serverTimestamp();
+      await _usersCollection.doc(userId).set(data, SetOptions(merge: true));
+    } catch (e) {
+      throw Exception('Failed to update user profile: $e');
+    }
+  }
+
+  /// Get user ID by email address
+  static Future<String?> getUserIdByEmail(String email) async {
+    try {
+      final querySnapshot = await _usersCollection
+          .where('email', isEqualTo: email.toLowerCase())
+          .limit(1)
+          .get();
+      
+      if (querySnapshot.docs.isNotEmpty) {
+        return querySnapshot.docs.first.id;
+      }
+      return null;
+    } catch (e) {
+      AppLogger.error('Failed to get user ID by email: $e', name: 'FirestoreService', error: e);
+      return null;
     }
   }
 

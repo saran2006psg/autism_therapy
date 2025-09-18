@@ -54,9 +54,9 @@ class ProgressModel {
       sessionId: data['sessionId'],
       type: data['type'] ?? '',
       date: (data['date'] as Timestamp?)?.toDate() ?? DateTime.now(),
-      metrics: Map<String, dynamic>.from(data['metrics'] ?? {}),
+      metrics: _convertToMap(data['metrics']),
       notes: data['notes'],
-      mediaFiles: List<String>.from(data['mediaFiles'] ?? []),
+      mediaFiles: _convertToStringList(data['mediaFiles']),
       therapistId: data['therapistId'] ?? '',
       createdAt: (data['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
     );
@@ -89,6 +89,24 @@ class ProgressModel {
       therapistId: therapistId ?? this.therapistId,
       createdAt: createdAt ?? this.createdAt,
     );
+  }
+
+  /// Helper method to safely convert data to List<String>
+  static List<String> _convertToStringList(dynamic data) {
+    if (data == null) return [];
+    if (data is List) {
+      return data.map((item) => item.toString()).toList();
+    }
+    return [];
+  }
+
+  /// Helper method to safely convert data to Map<String, dynamic>
+  static Map<String, dynamic> _convertToMap(dynamic data) {
+    if (data == null) return {};
+    if (data is Map) {
+      return Map<String, dynamic>.from(data);
+    }
+    return {};
   }
 }
 
@@ -160,9 +178,9 @@ class ActivityModel {
       difficulty: data['difficulty'] ?? 'medium',
       estimatedDuration: data['estimatedDuration'] ?? 15,
       iconName: data['iconName'] ?? 'activity',
-      materials: List<String>.from(data['materials'] ?? []),
-      instructions: List<String>.from(data['instructions'] ?? []),
-      goals: Map<String, dynamic>.from(data['goals'] ?? {}),
+      materials: _convertToStringList(data['materials']),
+      instructions: _convertToStringList(data['instructions']),
+      goals: _convertToMap(data['goals']),
       isCustom: data['isCustom'] ?? false,
       createdBy: data['createdBy'],
       createdAt: (data['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
@@ -205,5 +223,23 @@ class ActivityModel {
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
+  }
+
+  /// Helper method to safely convert data to List<String>
+  static List<String> _convertToStringList(dynamic data) {
+    if (data == null) return [];
+    if (data is List) {
+      return data.map((item) => item.toString()).toList();
+    }
+    return [];
+  }
+
+  /// Helper method to safely convert data to Map<String, dynamic>
+  static Map<String, dynamic> _convertToMap(dynamic data) {
+    if (data == null) return {};
+    if (data is Map) {
+      return Map<String, dynamic>.from(data);
+    }
+    return {};
   }
 }

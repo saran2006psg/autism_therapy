@@ -87,13 +87,13 @@ class StudentModel {
       diagnosis: data['diagnosis'] ?? '',
       communicationLevel: data['communicationLevel'] ?? '',
       sensoryNeeds: data['sensoryNeeds'] ?? '',
-      triggers: List<String>.from(data['triggers'] ?? []),
+      triggers: _convertToStringList(data['triggers']),
       severity: data['severity'] ?? '',
       therapistId: data['therapistId'] ?? '',
-      parentIds: List<String>.from(data['parentIds'] ?? []),
-      goalIds: List<String>.from(data['goalIds'] ?? []),
-      emergencyContacts: Map<String, dynamic>.from(data['emergencyContacts'] ?? {}),
-      preferences: Map<String, dynamic>.from(data['preferences'] ?? {}),
+      parentIds: _convertToStringList(data['parentIds']),
+      goalIds: _convertToStringList(data['goalIds']),
+      emergencyContacts: _convertToMap(data['emergencyContacts']),
+      preferences: _convertToMap(data['preferences']),
       isActive: data['isActive'] ?? true,
       createdAt: (data['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
       updatedAt: (data['updatedAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
@@ -145,5 +145,23 @@ class StudentModel {
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
+  }
+
+  /// Helper method to safely convert data to List<String>
+  static List<String> _convertToStringList(dynamic data) {
+    if (data == null) return [];
+    if (data is List) {
+      return data.map((item) => item.toString()).toList();
+    }
+    return [];
+  }
+
+  /// Helper method to safely convert data to Map<String, dynamic>
+  static Map<String, dynamic> _convertToMap(dynamic data) {
+    if (data == null) return {};
+    if (data is Map) {
+      return Map<String, dynamic>.from(data);
+    }
+    return {};
   }
 }

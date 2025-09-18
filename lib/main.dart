@@ -7,8 +7,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:provider/provider.dart';
 
 import 'firebase_options.dart';
-import '../core/app_export.dart';
-import '../widgets/custom_error_widget.dart';
+import 'core/app_export.dart';
 
 // Global theme manager instance
 late ThemeManager themeManager;

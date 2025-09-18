@@ -73,9 +73,9 @@ class GoalModel {
       status: data['status'] ?? 'active',
       targetDate: (data['targetDate'] as Timestamp?)?.toDate() ?? DateTime.now(),
       progressPercentage: (data['progressPercentage'] ?? 0.0).toDouble(),
-      milestones: List<Map<String, dynamic>>.from(data['milestones'] ?? []),
-      strategies: List<String>.from(data['strategies'] ?? []),
-      measurementCriteria: Map<String, dynamic>.from(data['measurementCriteria'] ?? {}),
+      milestones: _convertToMapList(data['milestones']),
+      strategies: _convertToStringList(data['strategies']),
+      measurementCriteria: _convertToMap(data['measurementCriteria']),
       notes: data['notes'],
       createdAt: (data['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
       updatedAt: (data['updatedAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
@@ -119,5 +119,37 @@ class GoalModel {
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
+  }
+
+  /// Helper method to safely convert data to List<String>
+  static List<String> _convertToStringList(dynamic data) {
+    if (data == null) return [];
+    if (data is List) {
+      return data.map((item) => item.toString()).toList();
+    }
+    return [];
+  }
+
+  /// Helper method to safely convert data to List<Map<String, dynamic>>
+  static List<Map<String, dynamic>> _convertToMapList(dynamic data) {
+    if (data == null) return [];
+    if (data is List) {
+      return data.map((item) {
+        if (item is Map) {
+          return Map<String, dynamic>.from(item);
+        }
+        return <String, dynamic>{};
+      }).toList();
+    }
+    return [];
+  }
+
+  /// Helper method to safely convert data to Map<String, dynamic>
+  static Map<String, dynamic> _convertToMap(dynamic data) {
+    if (data == null) return {};
+    if (data is Map) {
+      return Map<String, dynamic>.from(data);
+    }
+    return {};
   }
 }

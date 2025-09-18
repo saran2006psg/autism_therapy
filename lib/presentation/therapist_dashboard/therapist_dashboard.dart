@@ -51,7 +51,7 @@ class _TherapistDashboardState extends State<TherapistDashboard>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 4, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
     _lastSyncTime = DateTime.now().subtract(const Duration(minutes: 5));
     _dataService = DataService();
     _loadDashboardData();
@@ -774,8 +774,13 @@ class _TherapistDashboardState extends State<TherapistDashboard>
                     SessionOverviewCardWidget(
                       title: 'Upcoming Sessions',
                       upcomingSessions: _upcomingSessions.map(_sessionToMap).toList(),
-                      onSessionTap: (session) => Navigator.pushNamed(
-                          context, '/session-execution-screen'),
+                      onSessionTap: (session) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Only parents can run tests. Ask the parent to use their app.'),
+                          ),
+                        );
+                      },
                       onReschedule: (session) {
                         // Handle reschedule
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -860,6 +865,12 @@ class _TherapistDashboardState extends State<TherapistDashboard>
                         },
                       ),
                     ),
+                    
+                    SizedBox(height: 4.h),
+                    
+                    // Activity Monitoring Section
+                    _buildActivityMonitoringSection(),
+                    
                     SizedBox(height: 10.h), // Extra space for FAB
                   ],
                 ),
@@ -868,70 +879,105 @@ class _TherapistDashboardState extends State<TherapistDashboard>
           ),
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentTabIndex,
-        onTap: (index) {
-          setState(() {
-            _currentTabIndex = index;
-          });
-          switch (index) {
-            case 0:
-              // Already on dashboard
-              break;
-            case 1:
-              Navigator.pushNamed(context, '/session-planning-screen');
-              break;
-            case 2:
-              Navigator.pushNamed(context, '/students-list');
-              break;
-            case 3:
-              Navigator.pushNamed(context, '/therapist-profile');
-              break;
-          }
-        },
-        type: BottomNavigationBarType.fixed,
-        items: [
-          BottomNavigationBarItem(
-            icon: CustomIconWidget(
-              iconName: 'dashboard',
-              color: _currentTabIndex == 0
-                  ? Theme.of(context).colorScheme.primary
-                  : Theme.of(context).colorScheme.onSurfaceVariant,
-              size: 24,
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Theme.of(context).shadowColor.withOpacity(0.1),
+              blurRadius: 10,
+              offset: const Offset(0, -5),
             ),
-            label: 'Dashboard',
+          ],
+        ),
+        child: BottomNavigationBar(
+          currentIndex: _currentTabIndex,
+          onTap: (index) {
+            setState(() {
+              _currentTabIndex = index;
+            });
+            switch (index) {
+              case 0:
+                Navigator.pushNamed(context, '/session-planning-screen');
+                break;
+              case 1:
+                Navigator.pushNamed(context, '/students-list');
+                break;
+              case 2:
+                Navigator.pushNamed(context, '/therapist-profile');
+                break;
+            }
+          },
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: Theme.of(context).bottomNavigationBarTheme.backgroundColor ??
+              Theme.of(context).colorScheme.surface,
+          selectedItemColor: Theme.of(context).colorScheme.primary,
+          unselectedItemColor: Theme.of(context).colorScheme.onSurfaceVariant,
+          selectedLabelStyle: Theme.of(context).textTheme.labelSmall?.copyWith(
+            fontWeight: FontWeight.w600,
           ),
-          BottomNavigationBarItem(
-            icon: CustomIconWidget(
-              iconName: 'event',
-              color: _currentTabIndex == 1
-                  ? Theme.of(context).colorScheme.primary
-                  : Theme.of(context).colorScheme.onSurfaceVariant,
-              size: 24,
+          unselectedLabelStyle: Theme.of(context).textTheme.labelSmall?.copyWith(
+            fontWeight: FontWeight.w400,
+          ),
+          items: [
+            BottomNavigationBarItem(
+              icon: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: _currentTabIndex == 0
+                      ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
+                      : Colors.transparent,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: CustomIconWidget(
+                  iconName: 'calendar_month',
+                  color: _currentTabIndex == 0
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(context).colorScheme.onSurfaceVariant,
+                  size: 24,
+                ),
+              ),
+              label: 'Sessions',
             ),
-            label: 'Sessions',
-          ),
-          BottomNavigationBarItem(
-            icon: CustomIconWidget(
-              iconName: 'people',
-              color: _currentTabIndex == 2
-                  ? Theme.of(context).colorScheme.primary
-                  : Theme.of(context).colorScheme.onSurfaceVariant,
-              size: 24,
+            BottomNavigationBarItem(
+              icon: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: _currentTabIndex == 1
+                      ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
+                      : Colors.transparent,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: CustomIconWidget(
+                  iconName: 'groups',
+                  color: _currentTabIndex == 1
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(context).colorScheme.onSurfaceVariant,
+                  size: 24,
+                ),
+              ),
+              label: 'Students',
             ),
-            label: 'Students',
-          ),
-          BottomNavigationBarItem(
-            icon: CustomIconWidget(
-              iconName: 'person',
-              color: _currentTabIndex == 3
-                  ? Theme.of(context).colorScheme.primary
-                  : Theme.of(context).colorScheme.onSurfaceVariant,
-              size: 24,
+            BottomNavigationBarItem(
+              icon: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: _currentTabIndex == 2
+                      ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
+                      : Colors.transparent,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: CustomIconWidget(
+                  iconName: 'account_circle',
+                  color: _currentTabIndex == 2
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(context).colorScheme.onSurfaceVariant,
+                  size: 24,
+                ),
+              ),
+              label: 'Profile',
             ),
-            label: 'Profile',
-          ),
-        ],
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _showQuickActionSheet,
@@ -942,6 +988,317 @@ class _TherapistDashboardState extends State<TherapistDashboard>
         ),
       ),
     );
+  }
+  
+  Widget _buildActivityMonitoringSection() {
+    // Get all activities from all students' sessions
+    final allActivities = <Map<String, dynamic>>[];
+    for (final student in _students) {
+      final allSessions = [..._upcomingSessions, ..._completedSessions];
+      final studentSessions = allSessions.where((s) => s.studentId == student.id).toList();
+      for (final session in studentSessions) {
+        for (final activity in session.activities) {
+          allActivities.add({
+            'id': '${session.id}_${activity['id']}',
+            'sessionId': session.id,
+            'studentId': student.id,
+            'studentName': student.fullName,
+            'sessionTitle': session.title,
+            'sessionDate': session.scheduledDate,
+            'status': activity['status'] ?? 'not_started',
+            'completedAt': activity['completedAt'],
+            'studentNotes': activity['studentNotes'] ?? '',
+            ...activity,
+          });
+        }
+      }
+    }
+
+    // Sort by most recently updated/completed
+    allActivities.sort((a, b) {
+      final aTime = a['completedAt'] ?? a['sessionDate'] ?? DateTime.now();
+      final bTime = b['completedAt'] ?? b['sessionDate'] ?? DateTime.now();
+      return (bTime as DateTime).compareTo(aTime as DateTime);
+    });
+
+    final completedActivities = allActivities.where((a) => a['status'] == 'completed').take(5).toList();
+    final inProgressActivities = allActivities.where((a) => a['status'] == 'in_progress').take(3).toList();
+
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 4.w),
+      padding: EdgeInsets.all(4.w),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                Icons.monitor_heart,
+                color: Theme.of(context).colorScheme.primary,
+                size: 24,
+              ),
+              SizedBox(width: 2.w),
+              Text(
+                'Activity Monitoring',
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 3.h),
+          
+          // Quick stats
+          Row(
+            children: [
+              Expanded(
+                child: _buildActivityStatTile(
+                  'Total',
+                  allActivities.length.toString(),
+                  Icons.assignment,
+                  Theme.of(context).colorScheme.primary,
+                ),
+              ),
+              SizedBox(width: 2.w),
+              Expanded(
+                child: _buildActivityStatTile(
+                  'Completed Today',
+                  allActivities.where((a) => 
+                    a['status'] == 'completed' && 
+                    a['completedAt'] != null &&
+                    _isToday(a['completedAt'])
+                  ).length.toString(),
+                  Icons.check_circle,
+                  Colors.green,
+                ),
+              ),
+              SizedBox(width: 2.w),
+              Expanded(
+                child: _buildActivityStatTile(
+                  'In Progress',
+                  inProgressActivities.length.toString(),
+                  Icons.play_circle_filled,
+                  Colors.orange,
+                ),
+              ),
+            ],
+          ),
+          
+          if (completedActivities.isNotEmpty) ...[
+            SizedBox(height: 3.h),
+            Text(
+              'Recently Completed',
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            SizedBox(height: 2.h),
+            
+            ...completedActivities.take(3).map((activity) => 
+              _buildActivityMonitoringCard(activity, allowEdit: true)
+            ),
+          ],
+          
+          if (inProgressActivities.isNotEmpty) ...[
+            SizedBox(height: 3.h),
+            Text(
+              'Activities in Progress',
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            SizedBox(height: 2.h),
+            
+            ...inProgressActivities.map((activity) => 
+              _buildActivityMonitoringCard(activity, allowEdit: true)
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildActivityStatTile(String title, String value, IconData icon, Color color) {
+    return Container(
+      padding: EdgeInsets.all(3.w),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        children: [
+          Icon(icon, color: color, size: 20),
+          SizedBox(height: 0.5.h),
+          Text(
+            value,
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.w700,
+              color: color,
+            ),
+          ),
+          Text(
+            title,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+            textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _refreshActivityStatus(Map<String, dynamic> activity) async {
+    try {
+      final studentId = activity['studentId']?.toString();
+      if (studentId == null) {
+        throw Exception('Student ID not found in activity data');
+      }
+      
+      // Refresh sessions for this student to get the latest activity status
+      await _dataService.refreshSessionsForStudent(studentId);
+      
+      // Trigger a UI update
+      if (mounted) {
+        setState(() {});
+        
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Activity status refreshed'),
+            backgroundColor: Theme.of(context).colorScheme.tertiary,
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to refresh activity: $e'),
+            backgroundColor: Theme.of(context).colorScheme.error,
+            duration: const Duration(seconds: 3),
+          ),
+        );
+      }
+    }
+  }
+
+  Widget _buildActivityMonitoringCard(Map<String, dynamic> activity, {bool allowEdit = false}) {
+    final status = activity['status'] as String;
+    Color statusColor;
+    IconData statusIcon;
+    
+    switch (status) {
+      case 'completed':
+        statusColor = Colors.green;
+        statusIcon = Icons.check_circle;
+        break;
+      case 'in_progress':
+        statusColor = Colors.orange;
+        statusIcon = Icons.play_circle_filled;
+        break;
+      default:
+        statusColor = Theme.of(context).colorScheme.outline;
+        statusIcon = Icons.radio_button_unchecked;
+    }
+
+    return Container(
+      margin: EdgeInsets.only(bottom: 2.h),
+      padding: EdgeInsets.all(3.w),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: statusColor.withOpacity(0.3),
+        ),
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: statusColor.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(statusIcon, color: statusColor, size: 16),
+          ),
+          SizedBox(width: 3.w),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  activity['name'] as String,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                SizedBox(height: 0.5.h),
+                Text(
+                  '${activity['studentName']} • ${activity['sessionTitle']}',
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                if (activity['studentNotes']?.isNotEmpty == true) ...[
+                  SizedBox(height: 0.5.h),
+                  Text(
+                    'Note: ${activity['studentNotes']}',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      fontStyle: FontStyle.italic,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ],
+            ),
+          ),
+          if (activity['completedAt'] != null)
+            Text(
+              _formatShortDate(activity['completedAt']),
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+            ),
+          if (allowEdit)
+            IconButton(
+              icon: const Icon(Icons.refresh, size: 20),
+              tooltip: 'Refresh activity status',
+              onPressed: () => _refreshActivityStatus(activity),
+              color: Theme.of(context).colorScheme.primary,
+            ),
+        ],
+      ),
+    );
+  }
+
+  bool _isToday(DateTime? date) {
+    if (date == null) return false;
+    final now = DateTime.now();
+    return date.year == now.year && date.month == now.month && date.day == now.day;
+  }
+
+  String _formatShortDate(DateTime date) {
+    return '${date.day}/${date.month}';
   }
 }
 

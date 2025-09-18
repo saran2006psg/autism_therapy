@@ -359,6 +359,117 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                     ),
             ),
           ),
+
+          SizedBox(height: 3.h),
+
+          // Quick Login Section for Testing
+          Container(
+            padding: EdgeInsets.all(4.w),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: Theme.of(context).colorScheme.outline.withOpacity(0.2),
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Quick Login (Testing)',
+                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                ),
+                SizedBox(height: 2.h),
+                
+                Row(
+                  children: [
+                    Expanded(
+                      child: _buildQuickLoginButton(
+                        'Therapist',
+                        'math@gmail.com',
+                        'math123',
+                        Icons.psychology,
+                        Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                    SizedBox(width: 2.w),
+                    Expanded(
+                      child: _buildQuickLoginButton(
+                        'Parent',
+                        'muni@gmail.com',
+                        'muni123',
+                        Icons.family_restroom,
+                        Theme.of(context).colorScheme.secondary,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 2.h),
+                
+                Center(
+                  child: _buildQuickLoginButton(
+                    'Student',
+                    'student@example.com',
+                    'student123',
+                    Icons.school,
+                    Theme.of(context).colorScheme.tertiary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildQuickLoginButton(
+    String role,
+    String email,
+    String password,
+    IconData icon,
+    Color color,
+  ) {
+    return ElevatedButton(
+      onPressed: widget.isLoading
+          ? null
+          : () {
+              setState(() {
+                _emailController.text = email;
+                _passwordController.text = password;
+                _isFormValid = true;
+              });
+              // Auto-login after setting credentials
+              Future.delayed(const Duration(milliseconds: 500), () {
+                if (mounted) {
+                  _handleLogin();
+                }
+              });
+            },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: color.withOpacity(0.1),
+        foregroundColor: color,
+        elevation: 0,
+        padding: EdgeInsets.symmetric(vertical: 1.5.h, horizontal: 3.w),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+          side: BorderSide(color: color.withOpacity(0.3)),
+        ),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 20),
+          SizedBox(height: 0.5.h),
+          Text(
+            role,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              fontWeight: FontWeight.w600,
+            ),
+          ),
         ],
       ),
     );

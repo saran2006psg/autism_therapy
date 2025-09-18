@@ -21,7 +21,8 @@ class _LoginScreenState extends State<LoginScreen> {
   String? _userRole;
   bool _showRoleIndicator = false;
   bool _isSignUpMode = false;
-  String _selectedRole = 'Therapist'; // Default role selection
+  String _selectedRole = 'Therapist';
+  bool _showRoleSelection = true;
 
   Future<void> _handleSignUp(String email, String password, String name) async {
     setState(() {
@@ -30,40 +31,34 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     try {
-      // Use Firebase Authentication to create account with selected role
       final result = await AuthService.createUserWithEmailAndPassword(
         email: email,
         password: password,
         name: name,
-        role: _selectedRole, // Use selected role instead of default
+        role: _selectedRole,
       );
 
       if (result.success && result.user != null) {
-        // Success - show role indicator
         setState(() {
           _userRole = result.userRole ?? _selectedRole;
           _showRoleIndicator = true;
           _isLoading = false;
         });
 
-        // Haptic feedback
         HapticFeedback.lightImpact();
 
-        // Show success message
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Welcome to Thriveers, ${result.userName ?? 'User'}!'),
-              backgroundColor: AppTheme.lightTheme.colorScheme.tertiary,
+              backgroundColor: Theme.of(context).colorScheme.tertiary,
               duration: const Duration(seconds: 2),
             ),
           );
         }
 
-        // Navigate based on role after delay
         await Future.delayed(const Duration(seconds: 1));
 
-        // Initialize data service
         final dataService = DataService();
         await dataService.initialize();
 
@@ -74,7 +69,6 @@ class _LoginScreenState extends State<LoginScreen> {
           Navigator.pushReplacementNamed(context, route);
         }
       } else {
-        // Sign-up failed
         setState(() {
           _isLoading = false;
           _showRoleIndicator = false;
@@ -84,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(result.errorMessage ?? 'Sign-up failed. Please try again.'),
-              backgroundColor: AppTheme.lightTheme.colorScheme.error,
+              backgroundColor: Theme.of(context).colorScheme.error,
               duration: const Duration(seconds: 3),
             ),
           );
@@ -100,7 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('An error occurred: ${e.toString()}'),
-            backgroundColor: AppTheme.lightTheme.colorScheme.error,
+            backgroundColor: Theme.of(context).colorScheme.error,
             duration: const Duration(seconds: 3),
           ),
         );
@@ -115,6 +109,21 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
+  void _selectRole(String role) {
+    setState(() {
+      _selectedRole = role;
+      _showRoleSelection = false;
+    });
+  }
+
+  void _goBackToRoleSelection() {
+    setState(() {
+      _showRoleSelection = true;
+      _isSignUpMode = false;
+      _showRoleIndicator = false;
+    });
+  }
+
   Future<void> _handleLogin(String email, String password) async {
     setState(() {
       _isLoading = true;
@@ -122,38 +131,32 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     try {
-      // Use Firebase Authentication
       final result = await AuthService.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
 
       if (result.success && result.user != null) {
-        // Success - show role indicator
         setState(() {
           _userRole = result.userRole ?? 'Therapist';
           _showRoleIndicator = true;
           _isLoading = false;
         });
 
-        // Haptic feedback
         HapticFeedback.lightImpact();
 
-        // Show success message
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Welcome back, ${result.userName ?? 'User'}!'),
-              backgroundColor: AppTheme.lightTheme.colorScheme.tertiary,
+              backgroundColor: Theme.of(context).colorScheme.tertiary,
               duration: const Duration(seconds: 2),
             ),
           );
         }
 
-        // Navigate based on role after delay
         await Future.delayed(const Duration(seconds: 1));
 
-        // Initialize data service
         final dataService = DataService();
         await dataService.initialize();
 
@@ -164,7 +167,6 @@ class _LoginScreenState extends State<LoginScreen> {
           Navigator.pushReplacementNamed(context, route);
         }
       } else {
-        // Authentication failed
         setState(() {
           _isLoading = false;
           _showRoleIndicator = false;
@@ -174,7 +176,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(result.errorMessage ?? 'Login failed. Please try again.'),
-              backgroundColor: AppTheme.lightTheme.colorScheme.error,
+              backgroundColor: Theme.of(context).colorScheme.error,
               duration: const Duration(seconds: 3),
             ),
           );
@@ -189,9 +191,8 @@ class _LoginScreenState extends State<LoginScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text(
-                'Network error. Please check your connection and try again.'),
-            backgroundColor: AppTheme.lightTheme.colorScheme.error,
+            content: Text('An error occurred: ${e.toString()}'),
+            backgroundColor: Theme.of(context).colorScheme.error,
             duration: const Duration(seconds: 3),
           ),
         );
@@ -199,14 +200,177 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  Widget _buildRoleSelectionScreen() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        SizedBox(height: 4.h),
+        Text(
+          'Welcome to ThrivePath',
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+            fontWeight: FontWeight.w700,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+        ),
+        SizedBox(height: 1.h),
+        Text(
+          'Please select your role to get started',
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
+        ),
+        SizedBox(height: 5.h),
+        _buildRoleCard(
+          role: 'Therapist',
+          icon: Icons.medical_services_outlined,
+          description: 'Manage therapy sessions, track client progress, and create personalized treatment plans',
+          color: Theme.of(context).colorScheme.primary,
+        ),
+        SizedBox(height: 3.h),
+        _buildRoleCard(
+          role: 'Parent',
+          icon: Icons.family_restroom_outlined,
+          description: 'Monitor your child\'s therapy progress, communicate with therapists, and access resources',
+          color: Theme.of(context).colorScheme.secondary,
+        ),
+        SizedBox(height: 3.h),
+        
+        // Student login option
+        Container(
+          width: double.infinity,
+          padding: EdgeInsets.all(4.w),
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surfaceVariant,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
+            ),
+          ),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Icon(
+                    Icons.school,
+                    color: Theme.of(context).colorScheme.tertiary,
+                    size: 24,
+                  ),
+                  SizedBox(width: 3.w),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Are you a student?',
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        Text(
+                          'Access your therapy activities and track your progress',
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 2.h),
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton.icon(
+                  onPressed: () => Navigator.pushNamed(context, '/student-login'),
+                  icon: const Icon(Icons.login),
+                  label: const Text('Student Login'),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: Theme.of(context).colorScheme.tertiary,
+                    side: BorderSide(color: Theme.of(context).colorScheme.tertiary),
+                    padding: EdgeInsets.symmetric(vertical: 1.5.h),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        
+        SizedBox(height: 4.h),
+      ],
+    );
+  }
+
+  Widget _buildRoleCard({
+    required String role,
+    required IconData icon,
+    required String description,
+    required Color color,
+  }) {
+    return GestureDetector(
+      onTap: () => _selectRole(role),
+      child: Container(
+        padding: EdgeInsets.all(5.w),
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.1),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: color.withValues(alpha: 0.3),
+            width: 2,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: color.withValues(alpha: 0.1),
+              blurRadius: 15,
+              offset: const Offset(0, 5),
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.all(4.w),
+              decoration: BoxDecoration(
+                color: color.withValues(alpha: 0.2),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                icon,
+                size: 15.w,
+                color: color,
+              ),
+            ),
+            SizedBox(height: 3.h),
+            Text(
+              role,
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                fontWeight: FontWeight.w700,
+                color: color,
+              ),
+            ),
+            SizedBox(height: 2.h),
+            Text(
+              description,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                height: 1.5,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildRoleSelector() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Select Your Role',
-          style: AppTheme.lightTheme.textTheme.titleMedium?.copyWith(
-            color: AppTheme.lightTheme.colorScheme.onSurface,
+          'I am a:',
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -214,124 +378,103 @@ class _LoginScreenState extends State<LoginScreen> {
         Row(
           children: [
             Expanded(
-              child: _buildRoleCard(
-                'Therapist',
-                'Manage therapy sessions and track student progress',
-                Icons.medical_services_outlined,
-                AppTheme.lightTheme.colorScheme.primary,
+              child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _selectedRole = 'Therapist';
+                  });
+                },
+                child: Container(
+                  padding: EdgeInsets.all(3.w),
+                  decoration: BoxDecoration(
+                    color: _selectedRole == 'Therapist'
+                        ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.1)
+                        : Theme.of(context).colorScheme.surface,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: _selectedRole == 'Therapist'
+                          ? Theme.of(context).colorScheme.primary
+                          : Theme.of(context).colorScheme.outline.withValues(alpha: 0.3),
+                      width: _selectedRole == 'Therapist' ? 2 : 1,
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      Icon(
+                        Icons.medical_services_outlined,
+                        color: _selectedRole == 'Therapist'
+                            ? Theme.of(context).colorScheme.primary
+                            : Theme.of(context).colorScheme.onSurfaceVariant,
+                        size: 8.w,
+                      ),
+                      SizedBox(height: 1.h),
+                      Text(
+                        'Therapist',
+                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                          color: _selectedRole == 'Therapist'
+                              ? Theme.of(context).colorScheme.primary
+                              : Theme.of(context).colorScheme.onSurfaceVariant,
+                          fontWeight: _selectedRole == 'Therapist'
+                              ? FontWeight.w600
+                              : FontWeight.w400,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
-            SizedBox(width: 3.w),
+            SizedBox(width: 4.w),
             Expanded(
-              child: _buildRoleCard(
-                'Parent',
-                'Monitor your child\'s therapy progress and activities',
-                Icons.family_restroom_outlined,
-                AppTheme.lightTheme.colorScheme.secondary,
+              child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _selectedRole = 'Parent';
+                  });
+                },
+                child: Container(
+                  padding: EdgeInsets.all(3.w),
+                  decoration: BoxDecoration(
+                    color: _selectedRole == 'Parent'
+                        ? Theme.of(context).colorScheme.secondary.withValues(alpha: 0.1)
+                        : Theme.of(context).colorScheme.surface,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: _selectedRole == 'Parent'
+                          ? Theme.of(context).colorScheme.secondary
+                          : Theme.of(context).colorScheme.outline.withValues(alpha: 0.3),
+                      width: _selectedRole == 'Parent' ? 2 : 1,
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      Icon(
+                        Icons.family_restroom_outlined,
+                        color: _selectedRole == 'Parent'
+                            ? Theme.of(context).colorScheme.secondary
+                            : Theme.of(context).colorScheme.onSurfaceVariant,
+                        size: 8.w,
+                      ),
+                      SizedBox(height: 1.h),
+                      Text(
+                        'Parent',
+                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                          color: _selectedRole == 'Parent'
+                              ? Theme.of(context).colorScheme.secondary
+                              : Theme.of(context).colorScheme.onSurfaceVariant,
+                          fontWeight: _selectedRole == 'Parent'
+                              ? FontWeight.w600
+                              : FontWeight.w400,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
           ],
         ),
       ],
-    );
-  }
-
-  Widget _buildRoleCard(String role, String description, IconData icon, Color color) {
-    final isSelected = _selectedRole == role;
-    
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          _selectedRole = role;
-        });
-        HapticFeedback.selectionClick();
-      },
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: EdgeInsets.all(4.w),
-        decoration: BoxDecoration(
-          gradient: isSelected 
-              ? LinearGradient(
-                  colors: [
-                    color.withValues(alpha: 0.1),
-                    color.withValues(alpha: 0.05),
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                )
-              : null,
-          color: isSelected ? null : AppTheme.lightTheme.colorScheme.surface,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: isSelected 
-                ? color 
-                : AppTheme.lightTheme.colorScheme.outline.withValues(alpha: 0.2),
-            width: isSelected ? 2 : 1,
-          ),
-          boxShadow: isSelected 
-              ? [
-                  BoxShadow(
-                    color: color.withValues(alpha: 0.2),
-                    blurRadius: 12,
-                    offset: const Offset(0, 6),
-                  ),
-                ]
-              : [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
-                    blurRadius: 6,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-        ),
-        child: Column(
-          children: [
-            Container(
-              padding: EdgeInsets.all(3.w),
-              decoration: BoxDecoration(
-                gradient: isSelected 
-                    ? LinearGradient(
-                        colors: [color, color.withValues(alpha: 0.8)],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      )
-                    : null,
-                color: isSelected 
-                    ? null 
-                    : color.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Icon(
-                icon,
-                color: isSelected ? Colors.white : color,
-                size: 24,
-              ),
-            ),
-            SizedBox(height: 2.h),
-            Text(
-              role,
-              style: AppTheme.lightTheme.textTheme.titleSmall?.copyWith(
-                color: isSelected 
-                    ? color
-                    : AppTheme.lightTheme.colorScheme.onSurface,
-                fontWeight: FontWeight.w600,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 1.h),
-            Text(
-              description,
-              style: AppTheme.lightTheme.textTheme.bodySmall?.copyWith(
-                color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
-                fontSize: 10,
-              ),
-              textAlign: TextAlign.center,
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
-        ),
-      ),
     );
   }
 
@@ -344,9 +487,9 @@ class _LoginScreenState extends State<LoginScreen> {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              AppTheme.lightTheme.colorScheme.primary.withValues(alpha: 0.1),
-              AppTheme.lightTheme.colorScheme.secondary.withValues(alpha: 0.05),
-              AppTheme.lightTheme.scaffoldBackgroundColor,
+              Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+              Theme.of(context).colorScheme.secondary.withValues(alpha: 0.05),
+              Theme.of(context).scaffoldBackgroundColor,
             ],
             stops: const [0.0, 0.5, 1.0],
           ),
@@ -363,242 +506,128 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                        SizedBox(height: MediaQuery.of(context).size.height < 700 ? 4.h : 8.h),
+                    SizedBox(height: MediaQuery.of(context).size.height < 700 ? 4.h : 8.h),
 
-                        // App Logo Section
-                        const AppLogoWidget(),
+                    // App Logo Section
+                    if (!_showRoleSelection) const AppLogoWidget(),
 
-                        SizedBox(height: MediaQuery.of(context).size.height < 700 ? 3.h : 6.h),
+                    SizedBox(height: MediaQuery.of(context).size.height < 700 ? 3.h : 6.h),
 
-                        // Main Content Card
-                        Container(
-                          width: double.infinity,
-                          constraints: BoxConstraints(
-                            maxWidth: MediaQuery.of(context).size.width * 0.9,
+                    // Main Content Card
+                    Container(
+                      width: double.infinity,
+                      constraints: BoxConstraints(
+                        maxWidth: MediaQuery.of(context).size.width * 0.9,
+                      ),
+                      padding: EdgeInsets.all(MediaQuery.of(context).size.width < 400 ? 4.w : 6.w),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.surface,
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.1),
+                          width: 1,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.1),
+                            blurRadius: 30,
+                            offset: const Offset(0, 10),
                           ),
-                          padding: EdgeInsets.all(MediaQuery.of(context).size.width < 400 ? 4.w : 6.w),
-                          decoration: BoxDecoration(
-                            color: AppTheme.lightTheme.colorScheme.surface,
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(
-                              color: AppTheme.lightTheme.colorScheme.outline.withValues(alpha: 0.1),
-                              width: 1,
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withValues(alpha: 0.1),
-                                blurRadius: 30,
-                                offset: const Offset(0, 10),
-                              ),
-                              BoxShadow(
-                                color: AppTheme.lightTheme.colorScheme.primary.withValues(alpha: 0.05),
-                                blurRadius: 20,
-                                offset: const Offset(0, 5),
-                              ),
-                            ],
+                          BoxShadow(
+                            color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.05),
+                            blurRadius: 20,
+                            offset: const Offset(0, 5),
                           ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              // Header Section
-                              Container(
-                                padding: EdgeInsets.symmetric(vertical: 2.h),
-                                child: Column(
+                        ],
+                      ),
+                      child: _showRoleSelection
+                          ? _buildRoleSelectionScreen()
+                          : Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                // Header Section with Back Button and Role Display
+                                Row(
                                   children: [
-                                    Text(
-                                      _isSignUpMode ? 'Create Account' : 'Welcome Back',
-                                      style: AppTheme.lightTheme.textTheme.headlineSmall
-                                          ?.copyWith(
-                                        color: AppTheme.lightTheme.colorScheme.onSurface,
-                                        fontWeight: FontWeight.w700,
+                                    IconButton(
+                                      onPressed: _goBackToRoleSelection,
+                                      icon: Icon(
+                                        Icons.arrow_back,
+                                        color: Theme.of(context).colorScheme.primary,
                                       ),
-                                      textAlign: TextAlign.center,
                                     ),
-                                    SizedBox(height: 1.h),
-                                    Text(
-                                      _isSignUpMode 
-                                          ? 'Join our community of therapy professionals and families'
-                                          : 'Sign in to continue your therapy management journey',
-                                      style: AppTheme.lightTheme.textTheme.bodyMedium
-                                          ?.copyWith(
-                                        color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                                    SizedBox(width: 2.w),
+                                    Expanded(
+                                      child: Text(
+                                        _isSignUpMode ? 'Create Account' : 'Welcome Back',
+                                        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                          fontWeight: FontWeight.w600,
+                                        ),
                                       ),
-                                      textAlign: TextAlign.center,
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 1.h),
+                                      decoration: BoxDecoration(
+                                        color: (_selectedRole == 'Therapist' 
+                                            ? Theme.of(context).colorScheme.primary 
+                                            : Theme.of(context).colorScheme.secondary).withValues(alpha: 0.1),
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      child: Text(
+                                        _selectedRole,
+                                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                                          color: _selectedRole == 'Therapist' 
+                                              ? Theme.of(context).colorScheme.primary 
+                                              : Theme.of(context).colorScheme.secondary,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
                                     ),
                                   ],
                                 ),
-                              ),
-
-                              SizedBox(height: 4.h),
-
-                              // Role Selection (only for sign up)
-                              if (_isSignUpMode) ...[
-                                _buildRoleSelector(),
                                 SizedBox(height: 3.h),
-                              ],
 
-                              // Login or Sign Up Form
-                              _isSignUpMode
-                                  ? SignUpFormWidget(
-                                      onSignUp: _handleSignUp,
-                                      isLoading: _isLoading,
-                                    )
-                                  : LoginFormWidget(
-                                      onLogin: _handleLogin,
-                                      isLoading: _isLoading,
-                                    ),
-
-                              // Role Indicator
-                              RoleIndicatorWidget(
-                                userRole: _userRole,
-                                isVisible: _showRoleIndicator,
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        SizedBox(height: 4.h),
-
-                        // Register/Sign In Link
-                        RegisterLinkWidget(
-                          isSignUpMode: _isSignUpMode,
-                          onRegisterTap: _toggleSignUpMode,
-                        ),
-
-                        SizedBox(height: 3.h),
-
-                        // Demo Credentials Info
-                        Container(
-                          padding: EdgeInsets.all(4.w),
-                          margin: EdgeInsets.symmetric(horizontal: 2.w),
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [
-                                AppTheme.lightTheme.colorScheme.primaryContainer.withValues(alpha: 0.1),
-                                AppTheme.lightTheme.colorScheme.primaryContainer.withValues(alpha: 0.05),
-                              ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(
-                              color: AppTheme.lightTheme.colorScheme.primary.withValues(alpha: 0.2),
-                              width: 1,
-                            ),
-                          ),
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.info_outline,
-                                    color: AppTheme.lightTheme.colorScheme.primary,
-                                    size: 20,
-                                  ),
-                                  SizedBox(width: 2.w),
-                                  Text(
-                                    'Demo Credentials',
-                                    style: AppTheme.lightTheme.textTheme.labelLarge?.copyWith(
-                                      color: AppTheme.lightTheme.colorScheme.primary,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
+                                // Role Selection (only for sign up)
+                                if (_isSignUpMode) ...[
+                                  _buildRoleSelector(),
+                                  SizedBox(height: 3.h),
                                 ],
-                              ),
-                              SizedBox(height: 2.h),
-                              Container(
-                                padding: EdgeInsets.all(3.w),
-                                decoration: BoxDecoration(
-                                  color: AppTheme.lightTheme.colorScheme.surface,
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Column(
-                                  children: [
-                                    _buildDemoCredential(
-                                      'Therapist Account',
-                                      'dr.sarah.johnson@therapycenter.com',
-                                      'therapist123',
-                                      Icons.medical_services,
-                                      AppTheme.lightTheme.colorScheme.primary,
-                                    ),
-                                    SizedBox(height: 2.h),
-                                    _buildDemoCredential(
-                                      'Parent Account',
-                                      'michael.parent@email.com',
-                                      'parent123',
-                                      Icons.family_restroom,
-                                      AppTheme.lightTheme.colorScheme.secondary,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
 
-                        SizedBox(height: 4.h),
-                      ],
+                                // Login or Sign Up Form
+                                _isSignUpMode
+                                    ? SignUpFormWidget(
+                                        onSignUp: _handleSignUp,
+                                        isLoading: _isLoading,
+                                      )
+                                    : LoginFormWidget(
+                                        onLogin: _handleLogin,
+                                        isLoading: _isLoading,
+                                      ),
+
+                                // Role Indicator
+                                RoleIndicatorWidget(
+                                  userRole: _userRole,
+                                  isVisible: _showRoleIndicator,
+                                ),
+                              ],
+                            ),
+                    ),
+
+                    SizedBox(height: 4.h),
+
+                    // Register/Sign In Link (only show when not in role selection)
+                    if (!_showRoleSelection)
+                      RegisterLinkWidget(
+                        isSignUpMode: _isSignUpMode,
+                        onRegisterTap: _toggleSignUpMode,
+                      ),
+
+                    SizedBox(height: 4.h),
+                  ],
                 ),
               ),
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildDemoCredential(String title, String email, String password, IconData icon, Color color) {
-    return Container(
-      padding: EdgeInsets.all(3.w),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.05),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          color: color.withValues(alpha: 0.2),
-          width: 1,
-        ),
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: EdgeInsets.all(2.w),
-            decoration: BoxDecoration(
-              color: color.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(6),
-            ),
-            child: Icon(
-              icon,
-              color: color,
-              size: 16,
-            ),
-          ),
-          SizedBox(width: 3.w),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: AppTheme.lightTheme.textTheme.labelMedium?.copyWith(
-                    color: color,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                SizedBox(height: 0.5.h),
-                Text(
-                  '$email\n$password',
-                  style: AppTheme.lightTheme.textTheme.bodySmall?.copyWith(
-                    color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
-                    fontSize: 10,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }

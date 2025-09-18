@@ -18,6 +18,9 @@ class _AddStudentFormState extends State<AddStudentForm> {
   final _diagnosisController = TextEditingController();
   final _communicationController = TextEditingController();
   final _sensoryNeedsController = TextEditingController();
+  final _parentEmailController = TextEditingController();
+  final _studentEmailController = TextEditingController();
+  final _studentPasswordController = TextEditingController();
   
   String _selectedGender = 'Male';
   String _selectedSeverity = 'mild';
@@ -25,6 +28,7 @@ class _AddStudentFormState extends State<AddStudentForm> {
   final List<String> _triggers = [];
   final _triggerController = TextEditingController();
   bool _isLoading = false;
+  bool _createStudentAccount = false;
 
   final List<String> _genderOptions = ['Male', 'Female', 'Other'];
   final List<String> _severityOptions = ['mild', 'moderate', 'severe'];
@@ -38,6 +42,9 @@ class _AddStudentFormState extends State<AddStudentForm> {
     _communicationController.dispose();
     _sensoryNeedsController.dispose();
     _triggerController.dispose();
+    _parentEmailController.dispose();
+    _studentEmailController.dispose();
+    _studentPasswordController.dispose();
     super.dispose();
   }
 
@@ -98,7 +105,64 @@ class _AddStudentFormState extends State<AddStudentForm> {
 
       AppLogger.info('Creating student for therapist: ${currentUser.uid}', name: 'AddStudentForm');
 
+      // Find parent user ID by email if provided
+      List<String> parentIds = [];
+      if (_parentEmailController.text.trim().isNotEmpty) {
+        try {
+          final parentEmail = _parentEmailController.text.trim().toLowerCase();
+          final parentUserId = await FirestoreService.getUserIdByEmail(parentEmail);
+          if (parentUserId != null) {
+            parentIds.add(parentUserId);
+            AppLogger.info('Found parent user: $parentEmail -> $parentUserId', name: 'AddStudentForm');
+          } else {
+            AppLogger.warning('Parent user not found for email: $parentEmail', name: 'AddStudentForm');
+            // Show warning but continue with student creation
+            if (mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Warning: Parent account not found for $parentEmail. Student will be created without parent link.'),
+                  backgroundColor: Theme.of(context).colorScheme.secondary,
+                  duration: const Duration(seconds: 4),
+                ),
+              );
+            }
+          }
+        } catch (e) {
+          AppLogger.error('Error finding parent user: $e', name: 'AddStudentForm', error: e);
+          // Continue with student creation even if parent lookup fails
+        }
+      }
+
+      // Create student Firebase Auth account if requested
+      String? studentUserId;
+      if (_createStudentAccount) {
+        try {
+          final studentEmail = _studentEmailController.text.trim();
+          final studentPassword = _studentPasswordController.text.trim();
+          
+          AppLogger.info('Creating Firebase Auth account for student: $studentEmail', name: 'AddStudentForm');
+          
+          final authResult = await AuthService.createUserWithEmailAndPassword(
+            email: studentEmail,
+            password: studentPassword,
+            name: '${_firstNameController.text.trim()} ${_lastNameController.text.trim()}',
+            role: 'Student',
+          );
+          
+          if (authResult.success && authResult.user != null) {
+            studentUserId = authResult.user!.uid;
+            AppLogger.info('Student Firebase Auth account created: $studentUserId', name: 'AddStudentForm');
+          } else {
+            throw Exception('Failed to create student authentication account: ${authResult.errorMessage}');
+          }
+        } catch (e) {
+          AppLogger.error('Error creating student auth account: $e', name: 'AddStudentForm', error: e);
+          throw Exception('Failed to create student login account: $e');
+        }
+      }
+
       final student = StudentModel(
+        id: studentUserId, // Use the Firebase Auth UID if account was created
         firstName: _firstNameController.text.trim(),
         lastName: _lastNameController.text.trim(),
         age: int.parse(_ageController.text),
@@ -110,6 +174,7 @@ class _AddStudentFormState extends State<AddStudentForm> {
         severity: _selectedSeverity,
         triggers: _triggers,
         therapistId: currentUser.uid,
+        parentIds: parentIds,
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
       );
@@ -121,10 +186,18 @@ class _AddStudentFormState extends State<AddStudentForm> {
       AppLogger.info('Student created with ID: $studentId', name: 'AddStudentForm');
 
       if (mounted) {
+        String successMessage = '${student.fullName} added successfully!';
+        if (parentIds.isNotEmpty) {
+          successMessage += ' Parent account linked.';
+        } else if (_parentEmailController.text.trim().isNotEmpty) {
+          successMessage += ' (Parent account not found - will need to register)';
+        }
+        
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('${student.fullName} added successfully!'),
+            content: Text(successMessage),
             backgroundColor: Theme.of(context).colorScheme.tertiary,
+            duration: const Duration(seconds: 4),
           ),
         );
         Navigator.pop(context, true); // Return true to indicate success
@@ -357,6 +430,120 @@ class _AddStudentFormState extends State<AddStudentForm> {
                   return null;
                 },
               ),
+
+              SizedBox(height: 3.h),
+
+              // Parent Email Field
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: Theme.of(context).colorScheme.outline.transparent30,
+                  ),
+                ),
+                child: TextFormField(
+                  controller: _parentEmailController,
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: InputDecoration(
+                    labelText: 'Parent Email (Optional)',
+                    hintText: 'Enter parent\'s email to link accounts',
+                    prefixIcon: CustomIconWidget(
+                      iconName: 'email',
+                      color: Theme.of(context).colorScheme.primary,
+                      size: 20,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide.none,
+                    ),
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 4.w,
+                      vertical: 2.h,
+                    ),
+                  ),
+                  validator: (value) {
+                    if (value?.trim().isNotEmpty ?? false) {
+                      final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+                      if (!emailRegex.hasMatch(value!.trim())) {
+                        return 'Please enter a valid email address';
+                      }
+                    }
+                    return null; // Optional field, so null is valid
+                  },
+                ),
+              ),
+
+              SizedBox(height: 4.h),
+
+              // Student Account Creation Section
+              _buildSectionTitle('Student Account (Optional)'),
+              SizedBox(height: 2.h),
+              
+              // Checkbox to enable student account creation
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: Theme.of(context).colorScheme.outline.transparent30,
+                  ),
+                ),
+                child: CheckboxListTile(
+                  title: Text(
+                    'Create student login account',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                  subtitle: Text(
+                    'Allow student to log in and access their activities',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                  value: _createStudentAccount,
+                  onChanged: (value) {
+                    setState(() {
+                      _createStudentAccount = value ?? false;
+                    });
+                  },
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+
+              if (_createStudentAccount) ...[
+                SizedBox(height: 3.h),
+                _buildTextField(
+                  controller: _studentEmailController,
+                  label: 'Student Email',
+                  keyboardType: TextInputType.emailAddress,
+                  validator: (value) {
+                    if (_createStudentAccount && (value?.trim().isEmpty ?? true)) {
+                      return 'Please enter student email';
+                    }
+                    if (value?.trim().isNotEmpty ?? false) {
+                      final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+                      if (!emailRegex.hasMatch(value!.trim())) {
+                        return 'Please enter a valid email address';
+                      }
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 3.h),
+                _buildTextField(
+                  controller: _studentPasswordController,
+                  label: 'Student Password',
+                  validator: (value) {
+                    if (_createStudentAccount && (value?.trim().isEmpty ?? true)) {
+                      return 'Please enter student password';
+                    }
+                    if (_createStudentAccount && (value?.length ?? 0) < 6) {
+                      return 'Password must be at least 6 characters';
+                    }
+                    return null;
+                  },
+                ),
+              ],
 
               SizedBox(height: 4.h),
 

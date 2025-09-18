@@ -98,6 +98,319 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
     await _loadStudents();
   }
 
+  Future<void> _deleteAllTestData() async {
+    // Show confirmation dialog
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(
+          'Delete All Students',
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'This will permanently delete:',
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            SizedBox(height: 1.h),
+            Text(
+              '• All students assigned to you',
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Theme.of(context).colorScheme.error,
+              ),
+            ),
+            Text(
+              '• All related sessions and goals',
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Theme.of(context).colorScheme.error,
+              ),
+            ),
+            Text(
+              '• All progress data',
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Theme.of(context).colorScheme.error,
+              ),
+            ),
+            SizedBox(height: 1.h),
+            Text(
+              'This action cannot be undone!',
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                fontWeight: FontWeight.w600,
+                color: Theme.of(context).colorScheme.error,
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.error,
+              foregroundColor: Theme.of(context).colorScheme.onError,
+            ),
+            child: const Text('Delete All'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed == true) {
+      await _performDataDeletion();
+    }
+  }
+
+  Future<void> _performDataDeletion() async {
+    try {
+      // Show loading indicator
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => AlertDialog(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CircularProgressIndicator(
+                color: Theme.of(context).colorScheme.primary,
+              ),
+              SizedBox(height: 2.h),
+              Text(
+                'Deleting student data...',
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+            ],
+          ),
+        ),
+      );
+
+      final currentUser = AuthService.currentUser;
+      if (currentUser?.uid == null) {
+        throw Exception('No authenticated user found');
+      }
+
+      // Get all students for current therapist
+      final students = _dataService.getMyStudents();
+      
+      for (final student in students) {
+        AppLogger.info('Deleting student: ${student.fullName}', name: 'StudentsListScreen');
+        
+        // Delete student and all related data
+        await _dataService.deleteStudent(student.id!);
+      }
+
+      // Close loading dialog
+      Navigator.of(context).pop();
+
+      // Show success message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Row(
+            children: [
+              Icon(
+                Icons.check_circle,
+                color: Theme.of(context).colorScheme.onTertiary,
+              ),
+              SizedBox(width: 2.w),
+              Text(
+                'All student data deleted successfully',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onTertiary,
+                ),
+              ),
+            ],
+          ),
+          backgroundColor: Theme.of(context).colorScheme.tertiary,
+          duration: const Duration(seconds: 3),
+        ),
+      );
+
+      // Refresh the list
+      await _refreshStudents();
+
+    } catch (e) {
+      // Close loading dialog if open
+      Navigator.of(context).pop();
+      
+      AppLogger.error('Error deleting student data: $e', name: 'StudentsListScreen', error: e);
+      
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Error deleting data: ${e.toString()}',
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onError,
+            ),
+          ),
+          backgroundColor: Theme.of(context).colorScheme.error,
+          duration: const Duration(seconds: 5),
+        ),
+      );
+    }
+  }
+
+  Future<void> _deleteIndividualStudent(StudentModel student) async {
+    // Show confirmation dialog
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(
+          'Delete Student',
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Are you sure you want to delete:',
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            SizedBox(height: 1.h),
+            Text(
+              student.fullName,
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.w600,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+            SizedBox(height: 1.h),
+            Text(
+              'This will also delete:',
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            SizedBox(height: 0.5.h),
+            Text(
+              '• All sessions and goals',
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: Theme.of(context).colorScheme.error,
+              ),
+            ),
+            Text(
+              '• All progress data',
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: Theme.of(context).colorScheme.error,
+              ),
+            ),
+            SizedBox(height: 1.h),
+            Text(
+              'This action cannot be undone!',
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                fontWeight: FontWeight.w600,
+                color: Theme.of(context).colorScheme.error,
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.error,
+              foregroundColor: Theme.of(context).colorScheme.onError,
+            ),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed == true) {
+      await _performIndividualDeletion(student);
+    }
+  }
+
+  Future<void> _performIndividualDeletion(StudentModel student) async {
+    try {
+      // Show loading indicator
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => AlertDialog(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CircularProgressIndicator(
+                color: Theme.of(context).colorScheme.primary,
+              ),
+              SizedBox(height: 2.h),
+              Text(
+                'Deleting ${student.firstName}...',
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+            ],
+          ),
+        ),
+      );
+
+      AppLogger.info('Deleting student: ${student.fullName}', name: 'StudentsListScreen');
+      
+      // Delete student and all related data
+      await _dataService.deleteStudent(student.id!);
+
+      // Close loading dialog
+      Navigator.of(context).pop();
+
+      // Show success message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Row(
+            children: [
+              Icon(
+                Icons.check_circle,
+                color: Theme.of(context).colorScheme.onTertiary,
+              ),
+              SizedBox(width: 2.w),
+              Text(
+                '${student.firstName} deleted successfully',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onTertiary,
+                ),
+              ),
+            ],
+          ),
+          backgroundColor: Theme.of(context).colorScheme.tertiary,
+          duration: const Duration(seconds: 3),
+        ),
+      );
+
+      // Refresh the list
+      await _refreshStudents();
+
+    } catch (e) {
+      // Close loading dialog if open
+      Navigator.of(context).pop();
+      
+      AppLogger.error('Error deleting student: $e', name: 'StudentsListScreen', error: e);
+      
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Error deleting ${student.firstName}: ${e.toString()}',
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onError,
+            ),
+          ),
+          backgroundColor: Theme.of(context).colorScheme.error,
+          duration: const Duration(seconds: 5),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -113,6 +426,17 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
           ),
         ),
         actions: [
+          // Delete All Data Button (only show if there are students)
+          if (_students.isNotEmpty)
+            IconButton(
+              onPressed: _deleteAllTestData,
+              icon: CustomIconWidget(
+                iconName: 'delete_sweep',
+                color: Theme.of(context).colorScheme.error,
+                size: 24,
+              ),
+              tooltip: 'Delete All Students',
+            ),
           IconButton(
             onPressed: () async {
               // Navigate to add student and wait for result
@@ -127,6 +451,7 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
               color: Theme.of(context).colorScheme.primary,
               size: 24,
             ),
+            tooltip: 'Add Student',
           ),
         ],
       ),
@@ -337,10 +662,33 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
                                       ),
                                     ],
                                   ),
-                                  trailing: CustomIconWidget(
-                                    iconName: 'arrow_forward_ios',
-                                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                                    size: 20,
+                                  trailing: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      IconButton(
+                                        onPressed: () => _editStudent(student),
+                                        icon: CustomIconWidget(
+                                          iconName: 'edit',
+                                          color: Theme.of(context).colorScheme.primary,
+                                          size: 20,
+                                        ),
+                                        tooltip: 'Edit Student',
+                                      ),
+                                      IconButton(
+                                        onPressed: () => _deleteIndividualStudent(student),
+                                        icon: CustomIconWidget(
+                                          iconName: 'delete',
+                                          color: Theme.of(context).colorScheme.error,
+                                          size: 20,
+                                        ),
+                                        tooltip: 'Delete Student',
+                                      ),
+                                      CustomIconWidget(
+                                        iconName: 'arrow_forward_ios',
+                                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                        size: 20,
+                                      ),
+                                    ],
                                   ),
                                   onTap: () {
                                     // Navigate to Profile Buddy with student ID
@@ -359,6 +707,117 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
               ),
             ),
     );
+  }
+}
+
+extension on _StudentsListScreenState {
+  Future<void> _editStudent(StudentModel student) async {
+    final firstController = TextEditingController(text: student.firstName);
+    final lastController = TextEditingController(text: student.lastName);
+    final ageController = TextEditingController(text: student.age.toString());
+    final diagnosisController = TextEditingController(text: student.diagnosis);
+    final communicationController = TextEditingController(text: student.communicationLevel);
+    final sensoryController = TextEditingController(text: student.sensoryNeeds);
+    String severity = student.severity;
+    String gender = student.gender;
+
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Edit Student'),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: firstController,
+                decoration: const InputDecoration(labelText: 'First Name'),
+              ),
+              TextField(
+                controller: lastController,
+                decoration: const InputDecoration(labelText: 'Last Name'),
+              ),
+              TextField(
+                controller: ageController,
+                decoration: const InputDecoration(labelText: 'Age'),
+                keyboardType: TextInputType.number,
+              ),
+              TextField(
+                controller: diagnosisController,
+                decoration: const InputDecoration(labelText: 'Diagnosis'),
+              ),
+              TextField(
+                controller: communicationController,
+                decoration: const InputDecoration(labelText: 'Communication Level'),
+              ),
+              TextField(
+                controller: sensoryController,
+                decoration: const InputDecoration(labelText: 'Sensory Needs'),
+              ),
+              const SizedBox(height: 8),
+              DropdownButtonFormField<String>(
+                value: gender.isNotEmpty ? gender : 'Male',
+                items: const [
+                  DropdownMenuItem(value: 'Male', child: Text('Male')),
+                  DropdownMenuItem(value: 'Female', child: Text('Female')),
+                  DropdownMenuItem(value: 'Other', child: Text('Other')),
+                ],
+                onChanged: (val) { if (val != null) gender = val; },
+                decoration: const InputDecoration(labelText: 'Gender'),
+              ),
+              DropdownButtonFormField<String>(
+                value: severity.isNotEmpty ? severity : 'mild',
+                items: const [
+                  DropdownMenuItem(value: 'mild', child: Text('Mild')),
+                  DropdownMenuItem(value: 'moderate', child: Text('Moderate')),
+                  DropdownMenuItem(value: 'severe', child: Text('Severe')),
+                ],
+                onChanged: (val) { if (val != null) severity = val; },
+                decoration: const InputDecoration(labelText: 'Severity'),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Save'),
+          ),
+        ],
+      ),
+    );
+
+    if (result == true) {
+      try {
+        final updated = student.copyWith(
+          firstName: firstController.text.trim(),
+          lastName: lastController.text.trim(),
+          age: int.tryParse(ageController.text.trim()) ?? student.age,
+          diagnosis: diagnosisController.text.trim(),
+          communicationLevel: communicationController.text.trim(),
+          sensoryNeeds: sensoryController.text.trim(),
+          gender: gender,
+          severity: severity,
+          updatedAt: DateTime.now(),
+        );
+        await _dataService.updateStudent(student.id!, updated);
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Student updated')),
+          );
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Failed to update: $e')),
+          );
+        }
+      }
+    }
   }
 }
 

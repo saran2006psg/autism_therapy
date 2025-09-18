@@ -96,15 +96,15 @@ class SessionModel {
       estimatedDuration: data['estimatedDuration'] ?? 60,
       actualDuration: data['actualDuration'],
       status: data['status'] ?? 'scheduled',
-      goalIds: List<String>.from(data['goalIds'] ?? []),
-      activities: List<Map<String, dynamic>>.from(data['activities'] ?? []),
-      sessionData: List<Map<String, dynamic>>.from(data['sessionData'] ?? []),
-      mediaFiles: List<String>.from(data['mediaFiles'] ?? []),
+      goalIds: _convertToStringList(data['goalIds']),
+      activities: _convertToMapList(data['activities']),
+      sessionData: _convertToMapList(data['sessionData']),
+      mediaFiles: _convertToStringList(data['mediaFiles']),
       summary: data['summary'],
-      achievements: List<String>.from(data['achievements'] ?? []),
+      achievements: _convertToStringList(data['achievements']),
       homeworkAssigned: data['homeworkAssigned'],
       nextSessionFocus: data['nextSessionFocus'],
-      progress: Map<String, dynamic>.from(data['progress'] ?? {}),
+      progress: _convertToMap(data['progress']),
       createdAt: (data['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
       updatedAt: (data['updatedAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
     );
@@ -161,5 +161,37 @@ class SessionModel {
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
+  }
+
+  /// Helper method to safely convert data to List<String>
+  static List<String> _convertToStringList(dynamic data) {
+    if (data == null) return [];
+    if (data is List) {
+      return data.map((item) => item.toString()).toList();
+    }
+    return [];
+  }
+
+  /// Helper method to safely convert data to List<Map<String, dynamic>>
+  static List<Map<String, dynamic>> _convertToMapList(dynamic data) {
+    if (data == null) return [];
+    if (data is List) {
+      return data.map((item) {
+        if (item is Map) {
+          return Map<String, dynamic>.from(item);
+        }
+        return <String, dynamic>{};
+      }).toList();
+    }
+    return [];
+  }
+
+  /// Helper method to safely convert data to Map<String, dynamic>
+  static Map<String, dynamic> _convertToMap(dynamic data) {
+    if (data == null) return {};
+    if (data is Map) {
+      return Map<String, dynamic>.from(data);
+    }
+    return {};
   }
 }

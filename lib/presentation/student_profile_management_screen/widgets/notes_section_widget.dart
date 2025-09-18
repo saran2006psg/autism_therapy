@@ -180,8 +180,7 @@ class _NotesSectionWidgetState extends State<NotesSectionWidget> {
                                 'content': contentController.text.trim(),
                                 'tags': selectedTags,
                                 'createdDate': DateTime.now(),
-                                'author':
-                                    'Dr. Sarah Johnson', // Current therapist
+                                'author': 'Current Therapist', // Dynamic therapist name
                               };
                               widget.onNoteAdded(newNote);
                               Navigator.of(context).pop();

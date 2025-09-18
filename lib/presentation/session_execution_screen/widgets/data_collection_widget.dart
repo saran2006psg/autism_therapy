@@ -81,7 +81,7 @@ class _DataCollectionWidgetState extends State<DataCollectionWidget> {
     return Container(
       padding: EdgeInsets.all(4.w),
       decoration: BoxDecoration(
-        color: AppTheme.lightTheme.colorScheme.surface,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
         boxShadow: [
           BoxShadow(
@@ -100,7 +100,7 @@ class _DataCollectionWidgetState extends State<DataCollectionWidget> {
               width: 12.w,
               height: 0.5.h,
               decoration: BoxDecoration(
-                color: AppTheme.lightTheme.colorScheme.outline,
+                color: Theme.of(context).colorScheme.outline,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -108,14 +108,14 @@ class _DataCollectionWidgetState extends State<DataCollectionWidget> {
           SizedBox(height: 3.h),
           Text(
             'Quick Data Collection',
-            style: AppTheme.lightTheme.textTheme.titleLarge?.copyWith(
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.w600,
             ),
           ),
           SizedBox(height: 3.h),
           Text(
             'Behavioral Markers',
-            style: AppTheme.lightTheme.textTheme.titleMedium?.copyWith(
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -133,11 +133,11 @@ class _DataCollectionWidgetState extends State<DataCollectionWidget> {
                   decoration: BoxDecoration(
                     color: isSelected
                         ? (marker['color'] as Color).withValues(alpha: 0.2)
-                        : AppTheme.lightTheme.colorScheme.surface,
+                        : Theme.of(context).colorScheme.surface,
                     border: Border.all(
                       color: isSelected
                           ? (marker['color'] as Color)
-                          : AppTheme.lightTheme.colorScheme.outline
+                          : Theme.of(context).colorScheme.outline
                               .withValues(alpha: 0.5),
                       width: isSelected ? 2 : 1,
                     ),
@@ -155,10 +155,10 @@ class _DataCollectionWidgetState extends State<DataCollectionWidget> {
                       Text(
                         marker['label'] as String,
                         style:
-                            AppTheme.lightTheme.textTheme.bodySmall?.copyWith(
+                            Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: isSelected
                               ? (marker['color'] as Color)
-                              : AppTheme.lightTheme.colorScheme.onSurface,
+                              : Theme.of(context).colorScheme.onSurface,
                           fontWeight:
                               isSelected ? FontWeight.w600 : FontWeight.w400,
                         ),
@@ -172,7 +172,7 @@ class _DataCollectionWidgetState extends State<DataCollectionWidget> {
           SizedBox(height: 4.h),
           Text(
             'Session Notes',
-            style: AppTheme.lightTheme.textTheme.titleMedium?.copyWith(
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -185,7 +185,7 @@ class _DataCollectionWidgetState extends State<DataCollectionWidget> {
                 onPressed: _onNotesSubmit,
                 icon: CustomIconWidget(
                   iconName: 'send',
-                  color: AppTheme.lightTheme.colorScheme.primary,
+                  color: Theme.of(context).colorScheme.primary,
                   size: 20,
                 ),
               ),
@@ -202,7 +202,7 @@ class _DataCollectionWidgetState extends State<DataCollectionWidget> {
                   onPressed: widget.onPhotoCapture,
                   icon: CustomIconWidget(
                     iconName: 'camera_alt',
-                    color: AppTheme.lightTheme.colorScheme.primary,
+                    color: Theme.of(context).colorScheme.primary,
                     size: 20,
                   ),
                   label: const Text('Photo'),
@@ -214,7 +214,7 @@ class _DataCollectionWidgetState extends State<DataCollectionWidget> {
                   onPressed: widget.onVoiceNote,
                   icon: CustomIconWidget(
                     iconName: 'mic',
-                    color: AppTheme.lightTheme.colorScheme.primary,
+                    color: Theme.of(context).colorScheme.primary,
                     size: 20,
                   ),
                   label: const Text('Voice Note'),

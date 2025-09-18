@@ -36,6 +36,7 @@ class DataService extends ChangeNotifier {
   String? get currentUserId => _currentUserId;
   String? get currentUserRole => _currentUserRole;
   Map<String, dynamic>? get currentUserProfile => _currentUserProfile;
+  String? get currentUserAvatarUrl => _currentUserProfile?['avatarUrl'] as String?;
   List<StudentModel> get students => List.unmodifiable(_students);
   List<SessionModel> get sessions => List.unmodifiable(_sessions);
   List<GoalModel> get goals => List.unmodifiable(_goals);
@@ -68,15 +69,10 @@ class DataService extends ChangeNotifier {
       // Load initial data based on user role
       if (_currentUserRole?.toLowerCase() == 'therapist') {
         await _loadTherapistData();
-        
-        // Initialize test data if this is a new therapist with no students
-        if (_students.isEmpty && kDebugMode) {
-          developer.log('No students found. Initializing test data...', name: 'DataService');
-          await TestDataService.initializeTherapistTestData();
-          await _loadTherapistData(); // Reload after creating test data
-        }
       } else if (_currentUserRole?.toLowerCase() == 'parent') {
         await _loadParentData();
+      } else if (_currentUserRole?.toLowerCase() == 'student') {
+        await _loadStudentData();
       }
 
       _isInitialized = true;
@@ -100,6 +96,8 @@ class DataService extends ChangeNotifier {
         await _loadTherapistData();
       } else if (_currentUserRole?.toLowerCase() == 'parent') {
         await _loadParentData();
+      } else if (_currentUserRole?.toLowerCase() == 'student') {
+        await _loadStudentData();
       }
 
       notifyListeners();
@@ -108,6 +106,18 @@ class DataService extends ChangeNotifier {
     } finally {
       _setLoading(false);
     }
+  }
+
+  /// Update current user's profile (e.g., displayName, avatarUrl)
+  Future<void> updateMyProfile(Map<String, dynamic> data) async {
+    if (_currentUserId == null) throw Exception('No authenticated user');
+    await FirestoreService.updateUserProfile(_currentUserId!, data);
+    // Update local cache and notify
+    _currentUserProfile = {
+      ...(_currentUserProfile ?? {}),
+      ...data,
+    };
+    notifyListeners();
   }
 
   // ================ STUDENT MANAGEMENT ================
@@ -198,6 +208,32 @@ class DataService extends ChangeNotifier {
       }
     } catch (e) {
       developer.log('Error updating student: $e', name: 'DataService');
+      rethrow;
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  /// Delete student and all related data
+  Future<void> deleteStudent(String studentId) async {
+    try {
+      _setLoading(true);
+
+      // Delete from Firestore (this will cascade delete related data)
+      await FirestoreService.deleteStudent(studentId);
+      
+      // Remove from local cache
+      _students.removeWhere((s) => s.id == studentId);
+      
+      // Remove related data from local cache
+      _sessions.removeWhere((s) => s.studentId == studentId);
+      _goals.removeWhere((g) => g.studentId == studentId);
+      
+      notifyListeners();
+      
+      developer.log('Student deleted successfully: $studentId', name: 'DataService');
+    } catch (e) {
+      developer.log('Error deleting student: $e', name: 'DataService');
       rethrow;
     } finally {
       _setLoading(false);
@@ -556,6 +592,14 @@ class DataService extends ChangeNotifier {
       // Load students
       _students = await FirestoreService.getStudentsForTherapist(_currentUserId!);
       
+      // If no students found, initialize test data for testing
+      if (_students.isEmpty) {
+        developer.log('No students found, initializing test data', name: 'DataService');
+        await TestDataService.initializeTherapistTestData();
+        // Reload students after creating test data
+        _students = await FirestoreService.getStudentsForTherapist(_currentUserId!);
+      }
+      
       // Load sessions for all students
       _sessions.clear();
       for (final student in _students) {
@@ -590,6 +634,17 @@ class DataService extends ChangeNotifier {
       // Load children
       _students = await FirestoreService.getStudentsForParent(_currentUserId!);
       
+      // If no students found, initialize test data for testing
+      if (_students.isEmpty) {
+        developer.log('No students found for parent, initializing test data', name: 'DataService');
+        await TestDataService.initializeTherapistTestData();
+        // Reload students after creating test data - fetch those created under this user
+        final uid = AuthService.currentUser?.uid;
+        if (uid != null) {
+          _students = await FirestoreService.getStudentsForTherapist(uid);
+        }
+      }
+      
       // Load sessions for children
       _sessions.clear();
       for (final student in _students) {
@@ -612,6 +667,37 @@ class DataService extends ChangeNotifier {
       }
     } catch (e) {
       developer.log('Error loading parent data: $e', name: 'DataService');
+      rethrow;
+    }
+  }
+
+  Future<void> _loadStudentData() async {
+    try {
+      // For students, load their own record and sessions
+      final studentRecord = await FirestoreService.getStudent(_currentUserId!);
+      if (studentRecord != null) {
+        _students = [studentRecord];
+        
+        // Load sessions for this student
+        _sessions.clear();
+        final studentSessions = await FirestoreService.getSessionsForStudent(_currentUserId!);
+        _sessions.addAll(studentSessions);
+        
+        // Load goals for this student
+        _goals.clear();
+        final studentGoals = await FirestoreService.getGoalsForStudent(_currentUserId!);
+        _goals.addAll(studentGoals);
+        
+        // Load progress for this student
+        _progressEntries.clear();
+        final studentProgress = await FirestoreService.getProgressForStudent(_currentUserId!);
+        _progressEntries.addAll(studentProgress);
+      }
+      
+      // Load activities
+      await loadActivities();
+    } catch (e) {
+      developer.log('Error loading student data: $e', name: 'DataService');
       rethrow;
     }
   }
@@ -651,7 +737,78 @@ class DataService extends ChangeNotifier {
         s.scheduledDate.isBefore(endOfWeek)).length;
   }
 
-  /// Clear all data (for logout)
+  /// Update activity status in a session
+  Future<void> updateActivityStatus(String sessionId, String activityId, String status, String? notes) async {
+    try {
+      // Find the session
+      final sessionIndex = _sessions.indexWhere((s) => s.id == sessionId);
+      if (sessionIndex == -1) {
+        throw Exception('Session not found: $sessionId');
+      }
+
+      final session = _sessions[sessionIndex];
+      final activities = List<Map<String, dynamic>>.from(session.activities);
+      
+      // Find and update the activity
+      // Be lenient with ID matching: activities may store id as int or string,
+      // and some payloads may use 'activityId' instead of 'id'.
+      final activityIndex = activities.indexWhere((a) {
+        final dynamicId = a['id'] ?? a['activityId'];
+        return dynamicId?.toString() == activityId.toString();
+      });
+      if (activityIndex == -1) {
+        throw Exception('Activity not found: $activityId');
+      }
+
+      activities[activityIndex] = {
+        ...activities[activityIndex],
+        'status': status,
+        'studentNotes': notes ?? activities[activityIndex]['studentNotes'],
+        'completedAt': status == 'completed' ? DateTime.now() : activities[activityIndex]['completedAt'],
+        'updatedAt': DateTime.now(),
+      };
+
+      // Update the session with new activities
+      final updatedSession = session.copyWith(
+        activities: activities,
+        updatedAt: DateTime.now(),
+      );
+
+      // Update in Firestore
+      await FirestoreService.updateSession(sessionId, updatedSession);
+      
+      // Update local cache
+      _sessions[sessionIndex] = updatedSession;
+      
+      notifyListeners();
+      
+      developer.log('Activity status updated: $activityId -> $status', name: 'DataService');
+    } catch (e) {
+      developer.log('Error updating activity status: $e', name: 'DataService');
+      rethrow;
+    }
+  }
+  
+  /// Refresh sessions for a specific student
+  /// This can be called after completing an activity to ensure data is in sync between parent and therapist
+  Future<void> refreshSessionsForStudent(String studentId) async {
+    try {
+      // Fetch fresh session data from Firestore
+      final freshSessions = await FirestoreService.getSessionsForStudent(studentId);
+      
+      // Update local cache by removing old sessions and adding new ones
+      _sessions.removeWhere((s) => s.studentId == studentId);
+      _sessions.addAll(freshSessions);
+      
+      notifyListeners();
+      developer.log('Sessions refreshed for student: $studentId', name: 'DataService');
+    } catch (e) {
+      developer.log('Error refreshing sessions: $e', name: 'DataService');
+      rethrow;
+    }
+  }
+
+  
   void clearData() {
     _currentUserId = null;
     _currentUserRole = null;
