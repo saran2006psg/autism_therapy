@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../core/app_export.dart';
+import 'package:thriveers/core/app_export.dart';
 
 class MetricCardWidget extends StatelessWidget {
   final String title;
@@ -41,7 +41,6 @@ class MetricCardWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: color.transparent20,
-            width: 1,
           ),
           boxShadow: [
             BoxShadow(
@@ -148,11 +147,11 @@ class MetricCardWidget extends StatelessWidget {
     switch (title.toLowerCase()) {
       case "today's sessions":
         return Icons.schedule;
-      case "active students":
+      case 'active students':
         return Icons.people;
-      case "completion rate":
+      case 'completion rate':
         return Icons.check_circle;
-      case "avg progress":
+      case 'avg progress':
         return Icons.trending_up;
       default:
         return Icons.analytics;

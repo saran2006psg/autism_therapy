@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../core/app_export.dart';
+import 'package:thriveers/core/app_export.dart';
 
 class HomeworkCardWidget extends StatefulWidget {
   final Map<String, dynamic> homeworkData;
+  // ignore: inference_failure_on_function_return_type
   final Function(String, bool) onCompletionChanged;
+  // ignore: inference_failure_on_function_return_type
   final Function(String) onPhotoUpload;
 
   const HomeworkCardWidget({
@@ -22,7 +24,7 @@ class HomeworkCardWidget extends StatefulWidget {
 class _HomeworkCardWidgetState extends State<HomeworkCardWidget> {
   @override
   Widget build(BuildContext context) {
-    final activities = widget.homeworkData["activities"] as List;
+    final activities = widget.homeworkData['activities'] as List;
 
     return Container(
       margin: EdgeInsets.only(bottom: 2.h),
@@ -51,7 +53,7 @@ class _HomeworkCardWidgetState extends State<HomeworkCardWidget> {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
-                  "Homework",
+                  'Homework',
                   style: Theme.of(context).textTheme.labelMedium?.copyWith(
                     color: Theme.of(context).colorScheme.secondary,
                     fontWeight: FontWeight.w600,
@@ -69,21 +71,21 @@ class _HomeworkCardWidgetState extends State<HomeworkCardWidget> {
           ),
           SizedBox(height: 2.h),
           Text(
-            widget.homeworkData["title"] as String,
+            widget.homeworkData['title'] as String,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.w600,
             ),
           ),
           SizedBox(height: 1.h),
           Text(
-            widget.homeworkData["description"] as String,
+            widget.homeworkData['description'] as String,
             style: Theme.of(context).textTheme.bodyMedium,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
           SizedBox(height: 2.h),
           Text(
-            "Activities (${_getCompletedCount(activities)}/${activities.length} completed)",
+            'Activities (${_getCompletedCount(activities)}/${activities.length} completed)',
             style: Theme.of(context).textTheme.titleSmall?.copyWith(
               fontWeight: FontWeight.w600,
               color: AppTheme.lightTheme.primaryColor,
@@ -110,7 +112,7 @@ class _HomeworkCardWidgetState extends State<HomeworkCardWidget> {
               ),
               SizedBox(width: 3.w),
               Text(
-                "${(_getCompletionPercentage(activities) * 100).toInt()}%",
+                '${(_getCompletionPercentage(activities) * 100).toInt()}%',
                 style: Theme.of(context).textTheme.labelMedium?.copyWith(
                   fontWeight: FontWeight.w600,
                   color: Theme.of(context).colorScheme.secondary,
@@ -134,17 +136,17 @@ class _HomeworkCardWidgetState extends State<HomeworkCardWidget> {
                 ),
               ),
               const Spacer(),
-              if (widget.homeworkData["requiresEvidence"] as bool)
+              if (widget.homeworkData['requiresEvidence'] as bool)
                 TextButton.icon(
                   onPressed: () =>
-                      widget.onPhotoUpload(widget.homeworkData["id"] as String),
+                      widget.onPhotoUpload(widget.homeworkData['id'] as String),
                   icon: CustomIconWidget(
                     iconName: 'camera_alt',
                     color: AppTheme.lightTheme.primaryColor,
                     size: 16,
                   ),
                   label: Text(
-                    "Add Photo",
+                    'Add Photo',
                     style: Theme.of(context).textTheme.labelMedium?.copyWith(
                       color: AppTheme.lightTheme.primaryColor,
                       fontWeight: FontWeight.w500,
@@ -162,29 +164,29 @@ class _HomeworkCardWidgetState extends State<HomeworkCardWidget> {
     return Container(
       margin: EdgeInsets.only(bottom: 1.h),
       child: CheckboxListTile(
-        value: activityData["completed"] as bool,
+        value: activityData['completed'] as bool,
         onChanged: (bool? value) {
           if (value != null) {
             setState(() {
-              activityData["completed"] = value;
+              activityData['completed'] = value;
             });
-            widget.onCompletionChanged(activityData["id"] as String, value);
+            widget.onCompletionChanged(activityData['id'] as String, value);
           }
         },
         title: Text(
-          activityData["title"] as String,
+          activityData['title'] as String,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            decoration: (activityData["completed"] as bool)
+            decoration: (activityData['completed'] as bool)
                 ? TextDecoration.lineThrough
                 : TextDecoration.none,
           ),
         ),
-        subtitle: activityData["description"] != null
+        subtitle: activityData['description'] != null
             ? Text(
-                activityData["description"] as String,
+                activityData['description'] as String,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  decoration: (activityData["completed"] as bool)
+                  decoration: (activityData['completed'] as bool)
                       ? TextDecoration.lineThrough
                       : TextDecoration.none,
                 ),
@@ -202,7 +204,7 @@ class _HomeworkCardWidgetState extends State<HomeworkCardWidget> {
   int _getCompletedCount(List activities) {
     return activities
         .where((activity) =>
-            (activity as Map<String, dynamic>)["completed"] as bool)
+            (activity as Map<String, dynamic>)['completed'] as bool)
         .length;
   }
 

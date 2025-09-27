@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../core/app_export.dart';
+import 'package:thriveers/core/app_export.dart';
 
 class EmergencyContactWidget extends StatefulWidget {
   final TextEditingController primaryNameController;
@@ -58,7 +58,6 @@ class _EmergencyContactWidgetState extends State<EmergencyContactWidget> {
           leading: CustomIconWidget(
             iconName: 'emergency',
             color: Theme.of(context).colorScheme.error,
-            size: 24,
           ),
           title: Text(
             'Emergency Contacts',

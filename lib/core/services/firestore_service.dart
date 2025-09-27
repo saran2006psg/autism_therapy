@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../models/student_model.dart';
-import '../models/session_model.dart';
-import '../models/goal_model.dart';
-import '../models/progress_model.dart';
-import '../utils/app_logger.dart';
+import 'package:thriveers/core/models/student_model.dart';
+import 'package:thriveers/core/models/session_model.dart';
+import 'package:thriveers/core/models/goal_model.dart';
+import 'package:thriveers/core/models/progress_model.dart';
+import 'package:thriveers/core/utils/app_logger.dart';
 
 /// Comprehensive Firestore Database Service
 /// Handles all data operations for the Thriveers app
@@ -65,7 +65,7 @@ class FirestoreService {
 
       // Filter and sort in memory to avoid index requirement
       final students = query.docs
-          .map((doc) => StudentModel.fromFirestore(doc))
+          .map(StudentModel.fromFirestore)
           .where((student) => student.isActive)
           .toList();
       
@@ -86,7 +86,7 @@ class FirestoreService {
         .map((snapshot) {
       // Filter and sort in memory to avoid index requirement
       final students = snapshot.docs
-          .map((doc) => StudentModel.fromFirestore(doc))
+          .map(StudentModel.fromFirestore)
           .where((student) => student.isActive)
           .toList();
       
@@ -107,7 +107,7 @@ class FirestoreService {
 
       // Filter and sort in memory to avoid index requirement
       final students = query.docs
-          .map((doc) => StudentModel.fromFirestore(doc))
+          .map(StudentModel.fromFirestore)
           .where((student) => student.isActive)
           .toList();
       
@@ -181,7 +181,7 @@ class FirestoreService {
           .get();
 
       // Sort in-memory to avoid composite index requirement
-      final sessions = query.docs.map((doc) => SessionModel.fromFirestore(doc)).toList();
+      final sessions = query.docs.map(SessionModel.fromFirestore).toList();
       sessions.sort((a, b) => b.scheduledDate.compareTo(a.scheduledDate));
       return sessions;
     } catch (e) {
@@ -196,7 +196,7 @@ class FirestoreService {
         .snapshots()
         .map((snapshot) {
       // Sort in-memory to avoid composite index requirement
-      final sessions = snapshot.docs.map((doc) => SessionModel.fromFirestore(doc)).toList();
+      final sessions = snapshot.docs.map(SessionModel.fromFirestore).toList();
       sessions.sort((a, b) => b.scheduledDate.compareTo(a.scheduledDate));
       return sessions;
     });
@@ -211,7 +211,7 @@ class FirestoreService {
           .get();
 
       // Filter and sort in-memory to avoid composite index requirement
-      final sessions = query.docs.map((doc) => SessionModel.fromFirestore(doc)).toList();
+      final sessions = query.docs.map(SessionModel.fromFirestore).toList();
       final filteredSessions = sessions.where((session) => 
         session.scheduledDate.isAfter(now) && 
         (session.status == 'scheduled' || session.status == 'in_progress')
@@ -232,7 +232,7 @@ class FirestoreService {
         .map((snapshot) {
       final now = DateTime.now();
       // Filter and sort in-memory to avoid composite index requirement
-      final sessions = snapshot.docs.map((doc) => SessionModel.fromFirestore(doc)).toList();
+      final sessions = snapshot.docs.map(SessionModel.fromFirestore).toList();
       final filteredSessions = sessions.where((session) => 
         session.scheduledDate.isAfter(now) && 
         (session.status == 'scheduled' || session.status == 'in_progress')
@@ -249,7 +249,7 @@ class FirestoreService {
         .where('therapistId', isEqualTo: therapistId)
         .snapshots()
         .map((snapshot) {
-      final sessions = snapshot.docs.map((doc) => SessionModel.fromFirestore(doc)).toList();
+      final sessions = snapshot.docs.map(SessionModel.fromFirestore).toList();
       sessions.sort((a, b) => b.scheduledDate.compareTo(a.scheduledDate)); // Most recent first
       return sessions;
     });
@@ -363,12 +363,12 @@ class FirestoreService {
           .get();
 
       // Filter and sort in-memory to avoid composite index requirement
-      final goals = query.docs.map((doc) => GoalModel.fromFirestore(doc)).toList();
+      final goals = query.docs.map(GoalModel.fromFirestore).toList();
       final filteredGoals = goals.where((goal) => goal.status != 'cancelled').toList();
       
       // Sort by status first, then by priority
       filteredGoals.sort((a, b) {
-        int statusComparison = a.status.compareTo(b.status);
+        final int statusComparison = a.status.compareTo(b.status);
         if (statusComparison != 0) return statusComparison;
         return a.priority.compareTo(b.priority);
       });
@@ -446,7 +446,7 @@ class FirestoreService {
       }
 
       final querySnapshot = await query.get();
-      final progressList = querySnapshot.docs.map((doc) => ProgressModel.fromFirestore(doc)).toList();
+      final progressList = querySnapshot.docs.map(ProgressModel.fromFirestore).toList();
       
       // Sort in-memory to avoid composite index requirement
       progressList.sort((a, b) => b.date.compareTo(a.date));
@@ -465,11 +465,11 @@ class FirestoreService {
       final query = await _activitiesCollection.get();
       
       // Sort in-memory to avoid composite index requirement
-      final activities = query.docs.map((doc) => ActivityModel.fromFirestore(doc)).toList();
+      final activities = query.docs.map(ActivityModel.fromFirestore).toList();
       activities.sort((a, b) {
-        int categoryComparison = a.category.compareTo(b.category);
+        final int categoryComparison = (a.category ?? '').compareTo(b.category ?? '');
         if (categoryComparison != 0) return categoryComparison;
-        return a.name.compareTo(b.name);
+        return (a.name ?? '').compareTo(b.name ?? '');
       });
       
       return activities;
@@ -573,7 +573,7 @@ class FirestoreService {
   /// Real-time session updates stream
   static Stream<SessionModel> sessionStream(String sessionId) {
     return _sessionsCollection.doc(sessionId).snapshots().map(
-      (doc) => SessionModel.fromFirestore(doc),
+      SessionModel.fromFirestore,
     );
   }
 
@@ -585,7 +585,7 @@ class FirestoreService {
         .map((query) {
           // Filter and sort in memory to avoid index requirement
           final students = query.docs
-              .map((doc) => StudentModel.fromFirestore(doc))
+              .map(StudentModel.fromFirestore)
               .where((student) => student.isActive)
               .toList();
           
@@ -625,6 +625,11 @@ class FirestoreService {
     final now = DateTime.now();
     return [
       ActivityModel(
+        sessionId: '',
+        goalId: '',
+        activityName: 'Picture Exchange Communication',
+        status: 'available',
+        startTime: now,
         name: 'Picture Exchange Communication',
         description: 'Using visual cards to communicate basic needs and wants effectively',
         category: 'Communication Skills',
@@ -632,7 +637,7 @@ class FirestoreService {
         difficulty: 'easy',
         estimatedDuration: 15,
         iconName: 'chat_bubble_outline',
-        materials: ['Picture cards', 'Communication board', 'Velcro strips'],
+        materials: ['Picture cards', 'Communication board', 'Velcro strips'].join(', '),
         instructions: [
           'Show picture card to student',
           'Guide student to point to desired item',
@@ -644,6 +649,11 @@ class FirestoreService {
         updatedAt: now,
       ),
       ActivityModel(
+        sessionId: '',
+        goalId: '',
+        activityName: 'Social Story Reading',
+        status: 'available',
+        startTime: now,
         name: 'Social Story Reading',
         description: 'Interactive storytelling to teach social situations and appropriate responses',
         category: 'Social Skills',
@@ -651,7 +661,7 @@ class FirestoreService {
         difficulty: 'medium',
         estimatedDuration: 20,
         iconName: 'book',
-        materials: ['Social story books', 'Visual aids', 'Discussion cards'],
+        materials: ['Social story books', 'Visual aids', 'Discussion cards'].join(', '),
         instructions: [
           'Read story together',
           'Discuss characters and situations',
@@ -663,6 +673,11 @@ class FirestoreService {
         updatedAt: now,
       ),
       ActivityModel(
+        sessionId: '',
+        goalId: '',
+        activityName: 'Sensory Integration Play',
+        status: 'available',
+        startTime: now,
         name: 'Sensory Integration Play',
         description: 'Activities to help with sensory processing and regulation',
         category: 'Sensory',
@@ -670,7 +685,7 @@ class FirestoreService {
         difficulty: 'medium',
         estimatedDuration: 25,
         iconName: 'touch_app',
-        materials: ['Therapy balls', 'Textured materials', 'Weighted blankets'],
+        materials: ['Therapy balls', 'Textured materials', 'Weighted blankets'].join(', '),
         instructions: [
           'Assess sensory needs',
           'Introduce materials gradually',

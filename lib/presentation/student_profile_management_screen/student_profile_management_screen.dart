@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../core/app_export.dart';
-import './widgets/basic_info_section_widget.dart';
-import './widgets/emergency_contact_widget.dart';
-import './widgets/goals_section_widget.dart';
-import './widgets/notes_section_widget.dart';
-import './widgets/parent_collaboration_widget.dart';
-import './widgets/session_history_widget.dart';
-import './widgets/student_photo_widget.dart';
-import './widgets/therapy_details_section_widget.dart';
+import 'package:thriveers/core/app_export.dart';
+import 'package:thriveers/presentation/student_profile_management_screen/widgets/basic_info_section_widget.dart';
+import 'package:thriveers/presentation/student_profile_management_screen/widgets/emergency_contact_widget.dart';
+import 'package:thriveers/presentation/student_profile_management_screen/widgets/goals_section_widget.dart';
+import 'package:thriveers/presentation/student_profile_management_screen/widgets/notes_section_widget.dart';
+import 'package:thriveers/presentation/student_profile_management_screen/widgets/parent_collaboration_widget.dart';
+import 'package:thriveers/presentation/student_profile_management_screen/widgets/session_history_widget.dart';
+import 'package:thriveers/presentation/student_profile_management_screen/widgets/student_photo_widget.dart';
+import 'package:thriveers/presentation/student_profile_management_screen/widgets/therapy_details_section_widget.dart';
 
 class StudentProfileManagementScreen extends StatefulWidget {
   const StudentProfileManagementScreen({super.key});
@@ -57,10 +57,10 @@ class _StudentProfileManagementScreenState
       TextEditingController();
 
   // Dynamic Data Lists
-  List<Map<String, dynamic>> _goals = [];
-  List<Map<String, dynamic>> _sessionHistory = [];
-  List<Map<String, dynamic>> _notes = [];
-  List<Map<String, dynamic>> _parentAccess = [];
+  final List<Map<String, dynamic>> _goals = [];
+  final List<Map<String, dynamic>> _sessionHistory = [];
+  final List<Map<String, dynamic>> _notes = [];
+  final List<Map<String, dynamic>> _parentAccess = [];
   final Map<String, bool> _communicationPreferences = {
     'emailNotifications': true,
     'weeklyReports': true,
@@ -369,7 +369,6 @@ class _StudentProfileManagementScreenState
                 leading: CustomIconWidget(
                   iconName: 'edit',
                   color: Theme.of(context).colorScheme.primary,
-                  size: 24,
                 ),
                 title: const Text('Edit Profile'),
                 onTap: () {
@@ -381,7 +380,6 @@ class _StudentProfileManagementScreenState
                 leading: CustomIconWidget(
                   iconName: 'share',
                   color: Theme.of(context).colorScheme.primary,
-                  size: 24,
                 ),
                 title: const Text('Share with Team'),
                 onTap: () {
@@ -398,7 +396,6 @@ class _StudentProfileManagementScreenState
                 leading: CustomIconWidget(
                   iconName: 'download',
                   color: Theme.of(context).colorScheme.primary,
-                  size: 24,
                 ),
                 title: const Text('Export Data'),
                 onTap: () {
@@ -451,7 +448,6 @@ class _StudentProfileManagementScreenState
               icon: CustomIconWidget(
                 iconName: 'more_vert',
                 color: Theme.of(context).colorScheme.onSurface,
-                size: 24,
               ),
             ),
           ],

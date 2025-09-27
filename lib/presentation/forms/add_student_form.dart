@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../core/app_export.dart';
+import 'package:thriveers/core/app_export.dart';
 
 class AddStudentForm extends StatefulWidget {
   const AddStudentForm({super.key});
@@ -106,7 +106,7 @@ class _AddStudentFormState extends State<AddStudentForm> {
       AppLogger.info('Creating student for therapist: ${currentUser.uid}', name: 'AddStudentForm');
 
       // Find parent user ID by email if provided
-      List<String> parentIds = [];
+      final List<String> parentIds = [];
       if (_parentEmailController.text.trim().isNotEmpty) {
         try {
           final parentEmail = _parentEmailController.text.trim().toLowerCase();
@@ -122,7 +122,6 @@ class _AddStudentFormState extends State<AddStudentForm> {
                 SnackBar(
                   content: Text('Warning: Parent account not found for $parentEmail. Student will be created without parent link.'),
                   backgroundColor: Theme.of(context).colorScheme.secondary,
-                  duration: const Duration(seconds: 4),
                 ),
               );
             }
@@ -197,7 +196,6 @@ class _AddStudentFormState extends State<AddStudentForm> {
           SnackBar(
             content: Text(successMessage),
             backgroundColor: Theme.of(context).colorScheme.tertiary,
-            duration: const Duration(seconds: 4),
           ),
         );
         Navigator.pop(context, true); // Return true to indicate success

@@ -128,6 +128,7 @@ class AsyncUtils {
         lastError = e;
         if (i == maxRetries) break;
         
+        // ignore: inference_failure_on_instance_creation
         await Future.delayed(delay);
         delay = Duration(milliseconds: (delay.inMilliseconds * backoffFactor).round());
       }

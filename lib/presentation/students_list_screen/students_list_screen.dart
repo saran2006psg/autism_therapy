@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../core/app_export.dart';
+import 'package:thriveers/core/app_export.dart';
 
 class StudentsListScreen extends StatefulWidget {
   const StudentsListScreen({super.key});
@@ -207,6 +207,7 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
       }
 
       // Close loading dialog
+      // ignore: use_build_context_synchronously
       Navigator.of(context).pop();
 
       // Show success message
@@ -433,7 +434,6 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
               icon: CustomIconWidget(
                 iconName: 'delete_sweep',
                 color: Theme.of(context).colorScheme.error,
-                size: 24,
               ),
               tooltip: 'Delete All Students',
             ),
@@ -449,7 +449,6 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
             icon: CustomIconWidget(
               iconName: 'person_add',
               color: Theme.of(context).colorScheme.primary,
-              size: 24,
             ),
             tooltip: 'Add Student',
           ),

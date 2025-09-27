@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../core/app_export.dart';
+import 'package:thriveers/core/app_export.dart';
 
 class CommunicationCardWidget extends StatelessWidget {
   final Map<String, dynamic> communicationData;
@@ -54,7 +54,7 @@ class CommunicationCardWidget extends StatelessWidget {
                       ),
                       SizedBox(width: 1.w),
                       Text(
-                        "Messages",
+                        'Messages',
                         style:
                             AppTheme.lightTheme.textTheme.labelMedium?.copyWith(
                           color: AppTheme.lightTheme.primaryColor,
@@ -85,7 +85,7 @@ class CommunicationCardWidget extends StatelessWidget {
             ),
             SizedBox(height: 2.h),
             Text(
-              "Quick Communication",
+              'Quick Communication',
               style: AppTheme.lightTheme.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.w600,
               ),
@@ -98,15 +98,15 @@ class CommunicationCardWidget extends StatelessWidget {
               ),
             ),
             SizedBox(height: 2.h),
-            if ((communicationData["recentMessages"] as List).isNotEmpty) ...[
+            if ((communicationData['recentMessages'] as List).isNotEmpty) ...[
               Text(
-                "Recent Messages",
+                'Recent Messages',
                 style: AppTheme.lightTheme.textTheme.titleSmall?.copyWith(
                   fontWeight: FontWeight.w600,
                 ),
               ),
               SizedBox(height: 1.h),
-              ...(communicationData["recentMessages"] as List)
+              ...(communicationData['recentMessages'] as List)
                   .take(2)
                   .map((message) {
                 final messageData = message as Map<String, dynamic>;
@@ -125,7 +125,7 @@ class CommunicationCardWidget extends StatelessWidget {
                       size: 18,
                     ),
                     label: Text(
-                      "Send Message",
+                      'Send Message',
                       style: AppTheme.lightTheme.textTheme.labelLarge?.copyWith(
                         color: AppTheme.lightTheme.colorScheme.onPrimary,
                         fontWeight: FontWeight.w600,
@@ -171,7 +171,7 @@ class CommunicationCardWidget extends StatelessWidget {
                 ),
                 SizedBox(width: 1.w),
                 Text(
-                  "HIPAA compliant secure messaging",
+                  'HIPAA compliant secure messaging',
                   style: AppTheme.lightTheme.textTheme.bodySmall?.copyWith(
                     color: AppTheme.lightTheme.colorScheme.tertiary,
                     fontWeight: FontWeight.w500,
@@ -202,14 +202,14 @@ class CommunicationCardWidget extends StatelessWidget {
           Row(
             children: [
               Text(
-                messageData["sender"] as String,
+                messageData['sender'] as String,
                 style: AppTheme.lightTheme.textTheme.labelMedium?.copyWith(
                   fontWeight: FontWeight.w600,
                 ),
               ),
               const Spacer(),
               Text(
-                messageData["time"] as String,
+                messageData['time'] as String,
                 style: AppTheme.lightTheme.textTheme.bodySmall?.copyWith(
                   color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
                 ),
@@ -218,7 +218,7 @@ class CommunicationCardWidget extends StatelessWidget {
           ),
           SizedBox(height: 0.5.h),
           Text(
-            messageData["preview"] as String,
+            messageData['preview'] as String,
             style: AppTheme.lightTheme.textTheme.bodySmall,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,

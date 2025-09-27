@@ -64,19 +64,19 @@ class GoalModel {
     final data = doc.data() as Map<String, dynamic>;
     return GoalModel(
       id: doc.id,
-      studentId: data['studentId'] ?? '',
-      therapistId: data['therapistId'] ?? '',
-      title: data['title'] ?? '',
-      description: data['description'] ?? '',
-      category: data['category'] ?? '',
-      priority: data['priority'] ?? 'medium',
-      status: data['status'] ?? 'active',
+      studentId: (data['studentId'] as String?) ?? '',
+      therapistId: (data['therapistId'] as String?) ?? '',
+      title: (data['title'] as String?) ?? '',
+      description: (data['description'] as String?) ?? '',
+      category: (data['category'] as String?) ?? '',
+      priority: (data['priority'] as String?) ?? 'medium',
+      status: (data['status'] as String?) ?? 'active',
       targetDate: (data['targetDate'] as Timestamp?)?.toDate() ?? DateTime.now(),
-      progressPercentage: (data['progressPercentage'] ?? 0.0).toDouble(),
+      progressPercentage: (data['progressPercentage'] as num?)?.toDouble() ?? 0.0,
       milestones: _convertToMapList(data['milestones']),
       strategies: _convertToStringList(data['strategies']),
       measurementCriteria: _convertToMap(data['measurementCriteria']),
-      notes: data['notes'],
+      notes: data['notes'] as String?,
       createdAt: (data['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
       updatedAt: (data['updatedAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
     );
@@ -121,7 +121,7 @@ class GoalModel {
     );
   }
 
-  /// Helper method to safely convert data to List<String>
+  /// Helper method to safely convert data to List&lt;String&gt;
   static List<String> _convertToStringList(dynamic data) {
     if (data == null) return [];
     if (data is List) {
@@ -130,7 +130,7 @@ class GoalModel {
     return [];
   }
 
-  /// Helper method to safely convert data to List<Map<String, dynamic>>
+  /// Helper method to safely convert data to List&lt;Map&lt;String, dynamic&gt;&gt;
   static List<Map<String, dynamic>> _convertToMapList(dynamic data) {
     if (data == null) return [];
     if (data is List) {
@@ -144,7 +144,7 @@ class GoalModel {
     return [];
   }
 
-  /// Helper method to safely convert data to Map<String, dynamic>
+  /// Helper method to safely convert data to Map&lt;String, dynamic&gt;
   static Map<String, dynamic> _convertToMap(dynamic data) {
     if (data == null) return {};
     if (data is Map) {

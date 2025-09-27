@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../core/app_export.dart';
+import 'package:thriveers/core/app_export.dart';
 
 class UpcomingSessionCardWidget extends StatelessWidget {
   final Map<String, dynamic> sessionData;
@@ -31,7 +31,6 @@ class UpcomingSessionCardWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: AppTheme.lightTheme.primaryColor.transparent30,
-          width: 1,
         ),
       ),
       child: Column(
@@ -55,7 +54,7 @@ class UpcomingSessionCardWidget extends StatelessWidget {
                     ),
                     SizedBox(width: 1.w),
                     Text(
-                      "Upcoming",
+                      'Upcoming',
                       style:
                           AppTheme.lightTheme.textTheme.labelMedium?.copyWith(
                         color: AppTheme.lightTheme.colorScheme.onPrimary,
@@ -69,11 +68,11 @@ class UpcomingSessionCardWidget extends StatelessWidget {
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 0.5.h),
                 decoration: BoxDecoration(
-                  color: _getUrgencyColor(sessionData["daysUntil"] as int),
+                  color: _getUrgencyColor(sessionData['daysUntil'] as int),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
-                  _getUrgencyText(sessionData["daysUntil"] as int),
+                  _getUrgencyText(sessionData['daysUntil'] as int),
                   style: AppTheme.lightTheme.textTheme.labelSmall?.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.w600,
@@ -84,7 +83,7 @@ class UpcomingSessionCardWidget extends StatelessWidget {
           ),
           SizedBox(height: 2.h),
           Text(
-            sessionData["title"] as String,
+            sessionData['title'] as String,
             style: AppTheme.lightTheme.textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.w700,
             ),
@@ -141,7 +140,7 @@ class UpcomingSessionCardWidget extends StatelessWidget {
               SizedBox(width: 2.w),
               Expanded(
                 child: Text(
-                  sessionData["location"] as String,
+                  sessionData['location'] as String,
                   style: AppTheme.lightTheme.textTheme.bodyMedium?.copyWith(
                     color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
                   ),
@@ -151,8 +150,8 @@ class UpcomingSessionCardWidget extends StatelessWidget {
             ],
           ),
           SizedBox(height: 2.h),
-          if (sessionData["notes"] != null &&
-              (sessionData["notes"] as String).isNotEmpty) ...[
+          if (sessionData['notes'] != null &&
+              (sessionData['notes'] as String).isNotEmpty) ...[
             Container(
               padding: EdgeInsets.all(3.w),
               decoration: BoxDecoration(
@@ -172,7 +171,7 @@ class UpcomingSessionCardWidget extends StatelessWidget {
                       ),
                       SizedBox(width: 1.w),
                       Text(
-                        "Session Notes",
+                        'Session Notes',
                         style:
                             AppTheme.lightTheme.textTheme.labelMedium?.copyWith(
                           fontWeight: FontWeight.w600,
@@ -183,7 +182,7 @@ class UpcomingSessionCardWidget extends StatelessWidget {
                   ),
                   SizedBox(height: 1.h),
                   Text(
-                    sessionData["notes"] as String,
+                    sessionData['notes'] as String,
                     style: AppTheme.lightTheme.textTheme.bodySmall,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
@@ -204,7 +203,7 @@ class UpcomingSessionCardWidget extends StatelessWidget {
                     size: 18,
                   ),
                   label: Text(
-                    "Add to Calendar",
+                    'Add to Calendar',
                     style: AppTheme.lightTheme.textTheme.labelMedium?.copyWith(
                       color: AppTheme.lightTheme.primaryColor,
                       fontWeight: FontWeight.w500,
@@ -232,7 +231,7 @@ class UpcomingSessionCardWidget extends StatelessWidget {
                     size: 18,
                   ),
                   label: Text(
-                    "Remind Me",
+                    'Remind Me',
                     style: AppTheme.lightTheme.textTheme.labelMedium?.copyWith(
                       color: AppTheme.lightTheme.colorScheme.onSecondary,
                       fontWeight: FontWeight.w500,
@@ -262,8 +261,8 @@ class UpcomingSessionCardWidget extends StatelessWidget {
   }
 
   String _getUrgencyText(int daysUntil) {
-    if (daysUntil == 0) return "Today";
-    if (daysUntil == 1) return "Tomorrow";
-    return "In $daysUntil days";
+    if (daysUntil == 0) return 'Today';
+    if (daysUntil == 1) return 'Tomorrow';
+    return 'In $daysUntil days';
   }
 }

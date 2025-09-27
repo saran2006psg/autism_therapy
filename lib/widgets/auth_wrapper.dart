@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../core/app_export.dart';
-import '../presentation/login_screen/login_screen.dart';
-import '../presentation/parent_dashboard/parent_dashboard.dart';
-import '../presentation/therapist_dashboard/therapist_dashboard.dart';
+import 'package:thriveers/core/app_export.dart';
+import 'package:thriveers/presentation/login_screen/login_screen.dart';
+import 'package:thriveers/presentation/parent_dashboard/parent_dashboard.dart';
+import 'package:thriveers/presentation/therapist_dashboard/therapist_dashboard.dart';
 
 /// Authentication wrapper that determines which screen to show based on auth state
 class AuthWrapper extends StatelessWidget {

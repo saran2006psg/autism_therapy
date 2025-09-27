@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
-import '../../core/app_export.dart';
+import 'package:thriveers/core/app_export.dart';
 
 class AddSessionForm extends StatefulWidget {
   const AddSessionForm({super.key});
@@ -208,7 +208,6 @@ class _AddSessionFormState extends State<AddSessionForm> {
         startTime: startDateTime,
         endTime: endDateTime,
         estimatedDuration: _estimatedDuration,
-        status: 'scheduled',
         sessionData: _objectivesController.text.trim().isEmpty ? [] : [
           {
             'type': 'objectives',

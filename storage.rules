@@ -1,0 +1,53 @@
+rules_version = '2';
+
+// Firebase Storage Security Rules
+service firebase.storage {
+  match /b/{bucket}/o {
+    // User avatars - authenticated users can upload their own
+    match /user_avatars/{userId}_{timestamp}.jpg {
+      allow read: if true; // Public read access for avatars
+      allow write: if request.auth != null 
+                   && request.auth.uid == userId
+                   && resource == null // Only allow new uploads, not overwrites
+                   && request.resource.size < 5 * 1024 * 1024 // 5MB limit
+                   && request.resource.contentType.matches('image/.*');
+    }
+    
+    // Legacy user avatars (for backward compatibility)
+    match /user_avatars/{userId}.jpg {
+      allow read: if true; // Public read access
+      allow write: if request.auth != null 
+                   && request.auth.uid == userId
+                   && request.resource.size < 5 * 1024 * 1024 // 5MB limit
+                   && request.resource.contentType.matches('image/.*');
+      allow delete: if request.auth != null 
+                    && request.auth.uid == userId;
+    }
+    
+    // Student avatars - therapists can upload for their students
+    match /student_avatars/{studentId}_{timestamp}.jpg {
+      allow read: if true; // Public read access
+      allow write: if request.auth != null
+                   && request.resource.size < 5 * 1024 * 1024 // 5MB limit
+                   && request.resource.contentType.matches('image/.*');
+    }
+    
+    // Session recordings - authenticated users only
+    match /session_recordings/{sessionId}/{filename} {
+      allow read, write: if request.auth != null;
+    }
+    
+    // Default deny all other access
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}
+
+// Note: To deploy these rules:
+// 1. Save this file as 'storage.rules' in your project root
+// 2. Update firebase.json to include:
+//    "storage": {
+//      "rules": "storage.rules"
+//    }
+// 3. Run: firebase deploy --only storage

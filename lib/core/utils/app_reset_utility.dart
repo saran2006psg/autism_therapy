@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:developer' as developer;
 
-import '../services/auth_service.dart';
-import '../services/data_service.dart';
+import 'package:thriveers/core/services/auth_service.dart';
+import 'package:thriveers/core/services/data_service.dart';
 
 /// Utility class to reset the app and clear all login data
 class AppResetUtility {
@@ -129,6 +129,7 @@ class AppResetUtility {
       }
 
       // Show loading indicator
+      // ignore: use_build_context_synchronously
       _showLoadingDialog(context);
 
       // Perform the reset
@@ -190,6 +191,7 @@ class AppResetUtility {
 
   /// Show loading dialog
   static void _showLoadingDialog(BuildContext context) {
+    // ignore: inference_failure_on_function_invocation
     showDialog(
       context: context,
       barrierDismissible: false,

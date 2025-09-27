@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../core/app_export.dart';
+import 'package:thriveers/core/app_export.dart';
 
 class QuickActionSheetWidget extends StatelessWidget {
   final VoidCallback onCreateSession;
@@ -110,7 +110,6 @@ class QuickActionSheetWidget extends StatelessWidget {
                 child: CustomIconWidget(
                   iconName: icon,
                   color: Theme.of(context).colorScheme.primary,
-                  size: 24,
                 ),
               ),
             ),

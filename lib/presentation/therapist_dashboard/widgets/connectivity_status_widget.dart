@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../core/app_export.dart';
+import 'package:thriveers/core/app_export.dart';
 
 class ConnectivityStatusWidget extends StatelessWidget {
   final bool isOnline;
@@ -24,7 +24,6 @@ class ConnectivityStatusWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
           color: _getStatusColor(context).withValues(alpha: 0.3),
-          width: 1,
         ),
       ),
       child: Row(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
-import '../../widgets/theme_toggle_widget.dart';
+import 'package:thriveers/widgets/theme_toggle_widget.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -108,10 +108,10 @@ class SettingsScreen extends StatelessWidget {
     return Card(
       child: Column(
         children: [
-          ListTile(
-            leading: const Icon(Icons.info_outlined),
-            title: const Text('App Version'),
-            subtitle: const Text('1.0.0'),
+          const ListTile(
+            leading: Icon(Icons.info_outlined),
+            title: Text('App Version'),
+            subtitle: Text('1.0.0'),
           ),
           const Divider(height: 1),
           ListTile(

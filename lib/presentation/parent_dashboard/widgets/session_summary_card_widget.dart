@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../core/app_export.dart';
+import 'package:thriveers/core/app_export.dart';
 
 class SessionSummaryCardWidget extends StatelessWidget {
   final Map<String, dynamic> sessionData;
@@ -44,7 +44,7 @@ class SessionSummaryCardWidget extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
-                    sessionData["type"] as String,
+                    sessionData['type'] as String,
                     style: AppTheme.lightTheme.textTheme.labelMedium?.copyWith(
                       color: AppTheme.lightTheme.primaryColor,
                       fontWeight: FontWeight.w600,
@@ -53,7 +53,7 @@ class SessionSummaryCardWidget extends StatelessWidget {
                 ),
                 const Spacer(),
                 Text(
-                  sessionData["date"] as String,
+                  sessionData['date'] as String,
                   style: AppTheme.lightTheme.textTheme.bodySmall?.copyWith(
                     color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
                   ),
@@ -69,13 +69,13 @@ class SessionSummaryCardWidget extends StatelessWidget {
             ),
             SizedBox(height: 1.h),
             Text(
-              sessionData["summary"] as String,
+              sessionData['summary'] as String,
               style: AppTheme.lightTheme.textTheme.bodyMedium,
               maxLines: 3,
               overflow: TextOverflow.ellipsis,
             ),
             SizedBox(height: 2.h),
-            if ((sessionData["achievements"] as List).isNotEmpty) ...[
+            if ((sessionData['achievements'] as List).isNotEmpty) ...[
               Row(
                 children: [
                   CustomIconWidget(
@@ -85,7 +85,7 @@ class SessionSummaryCardWidget extends StatelessWidget {
                   ),
                   SizedBox(width: 2.w),
                   Text(
-                    "Achievements",
+                    'Achievements',
                     style: AppTheme.lightTheme.textTheme.titleSmall?.copyWith(
                       fontWeight: FontWeight.w600,
                       color: AppTheme.lightTheme.colorScheme.secondary,
@@ -94,7 +94,7 @@ class SessionSummaryCardWidget extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 1.h),
-              ...(sessionData["achievements"] as List)
+              ...(sessionData['achievements'] as List)
                   .take(2)
                   .map((achievement) {
                 return Padding(
@@ -123,7 +123,7 @@ class SessionSummaryCardWidget extends StatelessWidget {
               }),
               SizedBox(height: 2.h),
             ],
-            if ((sessionData["areasForImprovement"] as List).isNotEmpty) ...[
+            if ((sessionData['areasForImprovement'] as List).isNotEmpty) ...[
               Row(
                 children: [
                   CustomIconWidget(
@@ -133,7 +133,7 @@ class SessionSummaryCardWidget extends StatelessWidget {
                   ),
                   SizedBox(width: 2.w),
                   Text(
-                    "Areas for Improvement",
+                    'Areas for Improvement',
                     style: AppTheme.lightTheme.textTheme.titleSmall?.copyWith(
                       fontWeight: FontWeight.w600,
                       color: AppTheme.lightTheme.primaryColor,
@@ -142,7 +142,7 @@ class SessionSummaryCardWidget extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 1.h),
-              ...(sessionData["areasForImprovement"] as List)
+              ...(sessionData['areasForImprovement'] as List)
                   .take(2)
                   .map((area) {
                 return Padding(
@@ -190,11 +190,11 @@ class SessionSummaryCardWidget extends StatelessWidget {
                   padding:
                       EdgeInsets.symmetric(horizontal: 2.w, vertical: 0.5.h),
                   decoration: BoxDecoration(
-                    color: _getStatusColor(sessionData["status"] as String),
+                    color: _getStatusColor(sessionData['status'] as String),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
-                    sessionData["status"] as String,
+                    sessionData['status'] as String,
                     style: AppTheme.lightTheme.textTheme.labelSmall?.copyWith(
                       color: Colors.white,
                       fontWeight: FontWeight.w600,

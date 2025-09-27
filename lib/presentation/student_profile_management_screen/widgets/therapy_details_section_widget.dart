@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../core/app_export.dart';
+import 'package:thriveers/core/app_export.dart';
 
 class TherapyDetailsSectionWidget extends StatefulWidget {
   final TextEditingController diagnosisController;
@@ -46,7 +46,6 @@ class _TherapyDetailsSectionWidgetState
           leading: CustomIconWidget(
             iconName: 'psychology',
             color: Theme.of(context).colorScheme.primary,
-            size: 24,
           ),
           title: Text(
             'Therapy-Specific Details',

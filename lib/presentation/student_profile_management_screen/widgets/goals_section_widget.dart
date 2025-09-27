@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../core/app_export.dart';
+import 'package:thriveers/core/app_export.dart';
 
 class GoalsSectionWidget extends StatefulWidget {
   final List<Map<String, dynamic>> goals;
@@ -210,7 +210,6 @@ class _GoalsSectionWidgetState extends State<GoalsSectionWidget> {
           leading: CustomIconWidget(
             iconName: 'flag',
             color: Theme.of(context).colorScheme.primary,
-            size: 24,
           ),
           title: Text(
             'Therapy Goals (${widget.goals.length})',
@@ -224,13 +223,11 @@ class _GoalsSectionWidgetState extends State<GoalsSectionWidget> {
                 icon: CustomIconWidget(
                   iconName: 'add',
                   color: Theme.of(context).colorScheme.primary,
-                  size: 24,
                 ),
               ),
               CustomIconWidget(
                 iconName: _isExpanded ? 'expand_less' : 'expand_more',
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
-                size: 24,
               ),
             ],
           ),
@@ -277,7 +274,7 @@ class _GoalsSectionWidgetState extends State<GoalsSectionWidget> {
                           SizedBox(height: 2.h),
                       itemBuilder: (context, index) {
                         final goal = widget.goals[index];
-                        final progress = (goal['progress'] as double? ?? 0.0);
+                        final progress = goal['progress'] as double? ?? 0.0;
 
                         return Container(
                           padding: EdgeInsets.all(3.w),
@@ -296,7 +293,7 @@ class _GoalsSectionWidgetState extends State<GoalsSectionWidget> {
                                 children: [
                                   Expanded(
                                     child: Text(
-                                      goal['title'] ?? '',
+                                      (goal['title'] as String?) ?? '',
                                       style: AppTheme
                                           .lightTheme.textTheme.titleMedium,
                                       maxLines: 2,
@@ -308,17 +305,17 @@ class _GoalsSectionWidgetState extends State<GoalsSectionWidget> {
                                         horizontal: 2.w, vertical: 0.5.h),
                                     decoration: BoxDecoration(
                                       color: _getPriorityColor(
-                                              goal['priority'] ?? 'Medium')
+                                              (goal['priority'] as String?) ?? 'Medium')
                                           .withValues(alpha: 0.1),
                                       borderRadius: BorderRadius.circular(8),
                                     ),
                                     child: Text(
-                                      goal['priority'] ?? 'Medium',
+                                      (goal['priority'] as String?) ?? 'Medium',
                                       style: AppTheme
                                           .lightTheme.textTheme.labelSmall
                                           ?.copyWith(
                                         color: _getPriorityColor(
-                                            goal['priority'] ?? 'Medium'),
+                                            (goal['priority'] as String?) ?? 'Medium'),
                                         fontWeight: FontWeight.w600,
                                       ),
                                     ),
@@ -330,7 +327,7 @@ class _GoalsSectionWidgetState extends State<GoalsSectionWidget> {
                                       .isNotEmpty) ...[
                                 SizedBox(height: 1.h),
                                 Text(
-                                  goal['description'],
+                                  (goal['description'] as String?) ?? '',
                                   style: AppTheme
                                       .lightTheme.textTheme.bodyMedium
                                       ?.copyWith(
@@ -385,7 +382,7 @@ class _GoalsSectionWidgetState extends State<GoalsSectionWidget> {
                                   ),
                                   SizedBox(width: 4.w),
                                   Text(
-                                    goal['category'] ?? '',
+                                    (goal['category'] as String?) ?? '',
                                     style: AppTheme
                                         .lightTheme.textTheme.bodySmall
                                         ?.copyWith(

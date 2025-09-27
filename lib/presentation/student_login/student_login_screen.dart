@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../core/app_export.dart';
+import 'package:thriveers/core/app_export.dart';
 
 class StudentLoginScreen extends StatefulWidget {
   const StudentLoginScreen({super.key});
@@ -71,6 +71,7 @@ class _StudentLoginScreenState extends State<StudentLoginScreen> {
       }
 
       // Navigate to student dashboard
+      // ignore: use_build_context_synchronously
       Navigator.pushReplacementNamed(context, '/student_dashboard');
 
     } catch (e) {
@@ -300,7 +301,7 @@ class _StudentLoginScreenState extends State<StudentLoginScreen> {
                   width: double.infinity,
                   padding: EdgeInsets.all(4.w),
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.surfaceVariant,
+                    color: Theme.of(context).colorScheme.surfaceContainerHighest,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Column(

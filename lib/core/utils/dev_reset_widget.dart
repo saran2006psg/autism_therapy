@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../utils/app_reset_utility.dart';
+import 'package:thriveers/core/utils/app_reset_utility.dart';
 
 /// Development utility widget to quickly reset app data
 /// This should only be used during development and testing
@@ -63,7 +63,6 @@ class DevResetWidget extends StatelessWidget {
                 onPressed: () {
                   AppResetUtility.resetAndNavigateToLogin(
                     context,
-                    preserveTheme: true,
                     showConfirmationDialog: false,
                   );
                 },
@@ -90,6 +89,7 @@ class DevResetFAB extends StatelessWidget {
   Widget build(BuildContext context) {
     return FloatingActionButton.extended(
       onPressed: () {
+        // ignore: inference_failure_on_function_invocation
         showDialog(
           context: context,
           builder: (context) => AlertDialog(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../core/app_export.dart';
+import 'package:thriveers/core/app_export.dart';
 
 class EmptyStateWidget extends StatelessWidget {
   final String title;
@@ -43,7 +43,7 @@ class EmptyStateWidget extends StatelessWidget {
               child: CustomIconWidget(
                 iconName: iconName,
                 color: AppTheme.lightTheme.primaryColor.transparent60,
-                size: (15.w).clamp(40.0, 60.0),
+                size: 15.w.clamp(40.0, 60.0),
               ),
             ),
           ),

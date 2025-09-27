@@ -85,25 +85,25 @@ class SessionModel {
     final data = doc.data() as Map<String, dynamic>;
     return SessionModel(
       id: doc.id,
-      studentId: data['studentId'] ?? '',
-      therapistId: data['therapistId'] ?? '',
-      type: data['type'] ?? '',
-      title: data['title'] ?? '',
-      description: data['description'],
+      studentId: (data['studentId'] as String?) ?? '',
+      therapistId: (data['therapistId'] as String?) ?? '',
+      type: (data['type'] as String?) ?? '',
+      title: (data['title'] as String?) ?? '',
+      description: data['description'] as String?,
       scheduledDate: (data['scheduledDate'] as Timestamp?)?.toDate() ?? DateTime.now(),
       startTime: (data['startTime'] as Timestamp?)?.toDate(),
       endTime: (data['endTime'] as Timestamp?)?.toDate(),
-      estimatedDuration: data['estimatedDuration'] ?? 60,
-      actualDuration: data['actualDuration'],
-      status: data['status'] ?? 'scheduled',
+      estimatedDuration: (data['estimatedDuration'] as int?) ?? 60,
+      actualDuration: data['actualDuration'] as int?,
+      status: (data['status'] as String?) ?? 'scheduled',
       goalIds: _convertToStringList(data['goalIds']),
       activities: _convertToMapList(data['activities']),
       sessionData: _convertToMapList(data['sessionData']),
       mediaFiles: _convertToStringList(data['mediaFiles']),
-      summary: data['summary'],
+      summary: data['summary'] as String?,
       achievements: _convertToStringList(data['achievements']),
-      homeworkAssigned: data['homeworkAssigned'],
-      nextSessionFocus: data['nextSessionFocus'],
+      homeworkAssigned: data['homeworkAssigned'] as String?,
+      nextSessionFocus: data['nextSessionFocus'] as String?,
       progress: _convertToMap(data['progress']),
       createdAt: (data['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
       updatedAt: (data['updatedAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
@@ -163,7 +163,7 @@ class SessionModel {
     );
   }
 
-  /// Helper method to safely convert data to List<String>
+  /// Helper method to safely convert data to List&lt;String&gt;
   static List<String> _convertToStringList(dynamic data) {
     if (data == null) return [];
     if (data is List) {
@@ -172,7 +172,7 @@ class SessionModel {
     return [];
   }
 
-  /// Helper method to safely convert data to List<Map<String, dynamic>>
+  /// Helper method to safely convert data to List&lt;Map&lt;String, dynamic&gt;&gt;
   static List<Map<String, dynamic>> _convertToMapList(dynamic data) {
     if (data == null) return [];
     if (data is List) {
@@ -186,7 +186,7 @@ class SessionModel {
     return [];
   }
 
-  /// Helper method to safely convert data to Map<String, dynamic>
+  /// Helper method to safely convert data to Map&lt;String, dynamic&gt;
   static Map<String, dynamic> _convertToMap(dynamic data) {
     if (data == null) return {};
     if (data is Map) {

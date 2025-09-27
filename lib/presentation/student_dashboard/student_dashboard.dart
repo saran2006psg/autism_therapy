@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../core/app_export.dart';
+import 'package:thriveers/core/app_export.dart';
 
 class StudentDashboard extends StatefulWidget {
   const StudentDashboard({super.key});
@@ -14,7 +14,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
   late DataService _dataService;
   StudentModel? _currentStudent;
   List<SessionModel> _mySessions = [];
-  List<Map<String, dynamic>> _myActivities = [];
+  final List<Map<String, dynamic>> _myActivities = [];
   bool _isLoading = true;
   String? _errorMessage;
   int _selectedIndex = 0;
@@ -141,7 +141,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
       });
 
       // Update in Firebase
-      await _dataService.updateActivityStatus(sessionId, activity['id'], newStatus, notes);
+  await _dataService.updateActivityStatus(sessionId, activity['id'] as String, newStatus, notes);
       
       // Refresh the sessions to ensure parent and therapist have latest data
       if (_currentStudent?.id != null) {
@@ -395,7 +395,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
                 SizedBox(width: 2.w),
                 Expanded(
                   child: Text(
-                    activity['sessionTitle'] as String,
+                    (activity['sessionTitle'] as String?) ?? '',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       color: Theme.of(context).colorScheme.onPrimaryContainer,
                       fontWeight: FontWeight.w600,
@@ -434,14 +434,14 @@ class _StudentDashboardState extends State<StudentDashboard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  activity['name'] as String,
+                  (activity['name'] as String?) ?? '',
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
                 ),
                 SizedBox(height: 1.h),
                 Text(
-                  activity['description'] as String,
+                  (activity['description'] as String?) ?? '',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
@@ -459,7 +459,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
                     SizedBox(width: 2.w),
                     _buildInfoChip(
                       icon: Icons.bar_chart,
-                      label: activity['difficulty'],
+                      label: (activity['difficulty'] as String?) ?? 'Unknown',
                       color: Theme.of(context).colorScheme.tertiary,
                     ),
                   ],
@@ -470,7 +470,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
                   Container(
                     padding: EdgeInsets.all(3.w),
                     decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.surfaceVariant,
+                      color: Theme.of(context).colorScheme.surfaceContainerHighest,
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Column(
@@ -484,7 +484,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
                         ),
                         SizedBox(height: 0.5.h),
                         Text(
-                          activity['studentNotes'],
+                          (activity['studentNotes'] as String?) ?? '',
                           style: Theme.of(context).textTheme.bodyMedium,
                         ),
                       ],
@@ -576,7 +576,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
   }
 
   void _showActivityDialog(Map<String, dynamic> activity) {
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (context) => ActivityDetailDialog(
         activity: activity,
@@ -590,9 +590,9 @@ class _StudentDashboardState extends State<StudentDashboard> {
   }
 
   void _showCompletionDialog(Map<String, dynamic> activity) {
-    final notesController = TextEditingController(text: activity['studentNotes'] ?? '');
+    final notesController = TextEditingController(text: (activity['studentNotes'] as String?) ?? '');
     
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
         title: Text(
@@ -630,7 +630,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
             onPressed: () {
               Navigator.of(context).pop();
               _updateActivityStatus(
-                activity['id'],
+                activity['id'] as String,
                 'completed',
                 notes: notesController.text.trim(),
               );
@@ -710,7 +710,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
           ...(_myActivities
               .where((a) => a['status'] == 'completed')
               .take(5)
-              .map((activity) => _buildAchievementCard(activity))),
+              .map(_buildAchievementCard)),
         ],
       ),
     );
@@ -746,14 +746,14 @@ class _StudentDashboardState extends State<StudentDashboard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  activity['name'],
+                  (activity['name'] as String?) ?? '',
                   style: Theme.of(context).textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
                 ),
                 if (activity['completedAt'] != null)
                   Text(
-                    'Completed ${_formatDate(activity['completedAt'])}',
+                    'Completed ${_formatDate(activity['completedAt'] as DateTime)}',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
@@ -908,15 +908,15 @@ class _ActivityDetailDialogState extends State<ActivityDetailDialog> {
   @override
   void initState() {
     super.initState();
-    _notesController = TextEditingController(text: widget.activity['studentNotes'] ?? '');
-    _currentStatus = widget.activity['status'];
+    _notesController = TextEditingController(text: (widget.activity['studentNotes'] as String?) ?? '');
+    _currentStatus = widget.activity['status'] as String;
   }
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text(
-        widget.activity['name'],
+        (widget.activity['name'] as String?) ?? 'Activity',
         style: Theme.of(context).textTheme.titleLarge?.copyWith(
           fontWeight: FontWeight.w600,
         ),
@@ -927,7 +927,7 @@ class _ActivityDetailDialogState extends State<ActivityDetailDialog> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              widget.activity['description'],
+              (widget.activity['description'] as String?) ?? '',
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             SizedBox(height: 2.h),
@@ -986,7 +986,7 @@ class _ActivityDetailDialogState extends State<ActivityDetailDialog> {
         ElevatedButton(
           onPressed: () {
             widget.onStatusUpdate(
-              widget.activity['id'],
+              widget.activity['id'] as String,
               _currentStatus,
               notes: _notesController.text.trim(),
             );

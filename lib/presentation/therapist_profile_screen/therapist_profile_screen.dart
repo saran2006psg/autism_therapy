@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 
-import '../../core/app_export.dart';
+import 'package:thriveers/core/app_export.dart';
+import 'package:thriveers/core/services/image_upload_service.dart';
 
 class TherapistProfileScreen extends StatefulWidget {
   const TherapistProfileScreen({super.key});
@@ -12,17 +16,68 @@ class TherapistProfileScreen extends StatefulWidget {
 
 class _TherapistProfileScreenState extends State<TherapistProfileScreen> {
   bool _isLoading = false;
+  final DataService _dataService = DataService();
+  bool _isInitialized = false;
 
   @override
   void initState() {
     super.initState();
+    _initializeDataService();
+  }
+
+  Future<void> _initializeDataService() async {
+    try {
+      if (!_dataService.isInitialized) {
+        await _dataService.initialize();
+      }
+      if (mounted) {
+        setState(() {
+          _isInitialized = true;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isInitialized = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to initialize: $e')),
+        );
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final currentUser = AuthService.currentUser;
+    // Show loading if not initialized
+    if (!_isInitialized) {
+      return Scaffold(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          title: Text(
+            'My Profile',
+            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+              fontWeight: FontWeight.w600,
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
+          ),
+        ),
+        body: const Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
     
-    return Scaffold(
+    return Consumer<DataService>(
+      builder: (context, dataService, child) {
+        final currentUserProfile = dataService.currentUserProfile;
+        final displayName = currentUserProfile?['displayName'] as String? ?? 'Dr. Therapist';
+        final avatarUrl = dataService.currentUserAvatarUrl;
+        final email = currentUserProfile?['email'] as String? ?? 'therapist@example.com';
+        
+        return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         elevation: 0,
@@ -36,14 +91,20 @@ class _TherapistProfileScreenState extends State<TherapistProfileScreen> {
         ),
         actions: [
           IconButton(
-            onPressed: () {
-              // Navigate to edit profile
-            },
-            icon: CustomIconWidget(
-              iconName: 'edit',
-              color: Theme.of(context).colorScheme.primary,
-              size: 24,
-            ),
+            onPressed: _isLoading ? null : _onEditMyProfile,
+            icon: _isLoading 
+                ? SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  )
+                : CustomIconWidget(
+                    iconName: 'edit',
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
           ),
         ],
       ),
@@ -78,25 +139,37 @@ class _TherapistProfileScreenState extends State<TherapistProfileScreen> {
                   CircleAvatar(
                     radius: 12.w,
                     backgroundColor: Colors.white.transparent20,
-                    child: currentUser?.photoURL != null
-                        ? ClipRRect(
-                            borderRadius: BorderRadius.circular(12.w),
-                            child: Image.network(
-                              currentUser!.photoURL!,
-                              width: 24.w,
-                              height: 24.w,
-                              fit: BoxFit.cover,
-                            ),
-                          )
-                        : const CustomIconWidget(
-                            iconName: 'person',
+                    child: _isLoading
+                        ? const CircularProgressIndicator(
                             color: Colors.white,
-                            size: 48,
-                          ),
+                            strokeWidth: 2,
+                          )
+                        : avatarUrl != null
+                            ? ClipRRect(
+                                borderRadius: BorderRadius.circular(12.w),
+                                child: Image.network(
+                                  avatarUrl,
+                                  width: 24.w,
+                                  height: 24.w,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return const CustomIconWidget(
+                                      iconName: 'person',
+                                      color: Colors.white,
+                                      size: 48,
+                                    );
+                                  },
+                                ),
+                              )
+                            : const CustomIconWidget(
+                                iconName: 'person',
+                                color: Colors.white,
+                                size: 48,
+                              ),
                   ),
                   SizedBox(height: 2.h),
                   Text(
-                    currentUser?.displayName ?? 'Dr. Therapist',
+                    displayName,
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -104,7 +177,7 @@ class _TherapistProfileScreenState extends State<TherapistProfileScreen> {
                   ),
                   SizedBox(height: 1.h),
                   Text(
-                    currentUser?.email ?? 'therapist@example.com',
+                    email,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       color: Colors.white.transparent90,
                     ),
@@ -174,10 +247,7 @@ class _TherapistProfileScreenState extends State<TherapistProfileScreen> {
               icon: 'info',
               title: 'About',
               subtitle: 'App version and information',
-              onTap: () {
-                // Show about dialog
-                _showAboutDialog();
-              },
+              onTap: _showAboutDialog,
             ),
             
             SizedBox(height: 4.h),
@@ -221,6 +291,8 @@ class _TherapistProfileScreenState extends State<TherapistProfileScreen> {
           ],
         ),
       ),
+        );
+      },
     );
   }
 
@@ -257,7 +329,6 @@ class _TherapistProfileScreenState extends State<TherapistProfileScreen> {
           child: CustomIconWidget(
             iconName: icon,
             color: Theme.of(context).colorScheme.onPrimaryContainer,
-            size: 24,
           ),
         ),
         title: Text(
@@ -284,7 +355,7 @@ class _TherapistProfileScreenState extends State<TherapistProfileScreen> {
   }
 
   void _showAboutDialog() {
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('About Thriveers'),
@@ -307,12 +378,177 @@ class _TherapistProfileScreenState extends State<TherapistProfileScreen> {
     );
   }
 
+  Future<void> _onEditMyProfile() async {
+    if (!_isInitialized || _dataService.currentUserId == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Profile service not ready. Please try again.')),
+      );
+      return;
+    }
+
+    final currentName = _dataService.currentUserProfile?['displayName'] as String? ?? '';
+    final controller = TextEditingController(text: currentName);
+
+    await showDialog<void>(
+      context: context,
+      builder: (ctx) {
+        return AlertDialog(
+          title: const Text('Edit Profile'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: controller,
+                decoration: const InputDecoration(
+                  labelText: 'Display name',
+                ),
+              ),
+              SizedBox(height: 1.5.h),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: TextButton.icon(
+                  onPressed: _onChangeAvatarTapped,
+                  icon: const CustomIconWidget(iconName: 'photo_camera'),
+                  label: const Text('Change photo'),
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(),
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                final newName = controller.text.trim();
+                Navigator.of(ctx).pop();
+                if (newName.isEmpty) return;
+                
+                setState(() {
+                  _isLoading = true;
+                });
+                
+                try {
+                  // Update Firestore/profile store
+                  await _dataService.updateMyProfile({'displayName': newName});
+                  // Update Firebase Auth for immediate UI reflection
+                  await FirebaseAuth.instance.currentUser?.updateDisplayName(newName);
+                  await FirebaseAuth.instance.currentUser?.reload();
+                  if (!mounted) return;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Profile updated successfully!'),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                } catch (e) {
+                  if (!mounted) return;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Failed to update: $e'),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                } finally {
+                  if (mounted) {
+                    setState(() {
+                      _isLoading = false;
+                    });
+                  }
+                }
+              },
+              child: const Text('Save'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _onChangeAvatarTapped() async {
+    if (!_isInitialized || _dataService.currentUserId == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Profile service not ready. Please try again.')),
+      );
+      return;
+    }
+
+    try {
+      setState(() {
+        _isLoading = true;
+      });
+
+      final picker = ImagePicker();
+      final picked = await picker.pickImage(
+        source: ImageSource.gallery, 
+        imageQuality: 85,
+        maxWidth: 800,
+        maxHeight: 800,
+      );
+      
+      if (picked == null) {
+        setState(() {
+          _isLoading = false;
+        });
+        return;
+      }
+
+      final uid = _dataService.currentUserId!;
+      
+      // Show uploading message
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Uploading photo...'),
+          duration: Duration(seconds: 3),
+        ),
+      );
+
+      // Use the new web-compatible upload service
+      final downloadUrl = await ImageUploadService.uploadUserAvatar(
+        userId: uid,
+        imageFile: picked,
+      );
+
+      // Update both Firestore and Firebase Auth
+      await Future.wait([
+        _dataService.updateMyProfile({'avatarUrl': downloadUrl}),
+        FirebaseAuth.instance.currentUser?.updatePhotoURL(downloadUrl) ?? Future<void>.value(),
+      ]);
+      
+      // Reload user to get updated data
+      await FirebaseAuth.instance.currentUser?.reload();
+
+      if (!mounted) return;
+      
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Profile photo updated successfully!'),
+          backgroundColor: Colors.green,
+        ),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to update photo: $e'),
+          backgroundColor: Colors.red,
+          duration: const Duration(seconds: 5),
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
   Future<void> _logout() async {
     try {
       await AppResetUtility.resetAndNavigateToLogin(
         context,
-        preserveTheme: true,
-        showConfirmationDialog: true,
       );
     } catch (e) {
       if (mounted) {

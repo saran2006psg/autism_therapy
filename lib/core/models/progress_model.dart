@@ -6,9 +6,9 @@ class ProgressModel {
   final String studentId;
   final String? goalId;
   final String? sessionId;
-  final String type; // 'weekly', 'monthly', 'session', 'goal_milestone'
+  final String type;
   final DateTime date;
-  final Map<String, dynamic> metrics; // scores, observations, measurements
+  final Map<String, dynamic> metrics;
   final String? notes;
   final List<String> mediaFiles;
   final String therapistId;
@@ -25,10 +25,27 @@ class ProgressModel {
     this.notes,
     this.mediaFiles = const [],
     required this.therapistId,
-    required this.createdAt,
-  });
+    DateTime? createdAt,
+  }) : createdAt = createdAt ?? DateTime.now();
 
-  /// Convert to Firestore document
+  factory ProgressModel.fromFirestore(DocumentSnapshot doc) {
+    final data = doc.data() as Map<String, dynamic>? ?? {};
+    
+    return ProgressModel(
+      id: doc.id,
+      studentId: (data['studentId'] as String?) ?? '',
+      goalId: data['goalId'] as String?,
+      sessionId: data['sessionId'] as String?,
+      type: (data['type'] as String?) ?? '',
+      date: (data['date'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      metrics: _convertToMap(data['metrics']) ?? {},
+      notes: data['notes'] as String?,
+      mediaFiles: _convertToStringList(data['mediaFiles']) ?? [],
+      therapistId: (data['therapistId'] as String?) ?? '',
+      createdAt: (data['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
+    );
+  }
+
   Map<String, dynamic> toFirestore() {
     return {
       'studentId': studentId,
@@ -44,23 +61,35 @@ class ProgressModel {
     };
   }
 
-  /// Create from Firestore document
-  factory ProgressModel.fromFirestore(DocumentSnapshot doc) {
-    final data = doc.data() as Map<String, dynamic>;
-    return ProgressModel(
-      id: doc.id,
-      studentId: data['studentId'] ?? '',
-      goalId: data['goalId'],
-      sessionId: data['sessionId'],
-      type: data['type'] ?? '',
-      date: (data['date'] as Timestamp?)?.toDate() ?? DateTime.now(),
-      metrics: _convertToMap(data['metrics']),
-      notes: data['notes'],
-      mediaFiles: _convertToStringList(data['mediaFiles']),
-      therapistId: data['therapistId'] ?? '',
-      createdAt: (data['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
-    );
+  static List<String>? _convertToStringList(dynamic data) {
+    if (data == null) return null;
+    if (data is List) {
+      return data.map((item) => item.toString()).toList();
+    }
+    return null;
   }
+
+  static Map<String, dynamic>? _convertToMap(dynamic data) {
+    if (data == null) return null;
+    if (data is Map) {
+      return Map<String, dynamic>.from(data);
+    }
+    return null;
+  }
+
+  @override
+  String toString() {
+    return 'ProgressModel(id: $id, studentId: $studentId, type: $type)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is ProgressModel && other.id == id;
+  }
+
+  @override
+  int get hashCode => id.hashCode;
 
   /// Create a copy with updated fields
   ProgressModel copyWith({
@@ -90,156 +119,191 @@ class ProgressModel {
       createdAt: createdAt ?? this.createdAt,
     );
   }
-
-  /// Helper method to safely convert data to List<String>
-  static List<String> _convertToStringList(dynamic data) {
-    if (data == null) return [];
-    if (data is List) {
-      return data.map((item) => item.toString()).toList();
-    }
-    return [];
-  }
-
-  /// Helper method to safely convert data to Map<String, dynamic>
-  static Map<String, dynamic> _convertToMap(dynamic data) {
-    if (data == null) return {};
-    if (data is Map) {
-      return Map<String, dynamic>.from(data);
-    }
-    return {};
-  }
 }
 
-/// Activity data model for therapy sessions
 class ActivityModel {
   final String? id;
-  final String name;
-  final String description;
-  final String category;
-  final String type; // 'communication', 'social', 'behavioral', 'sensory', etc.
-  final String difficulty; // 'easy', 'medium', 'hard'
-  final int estimatedDuration; // in minutes
-  final String iconName;
-  final List<String> materials;
+  final String sessionId;
+  final String goalId;
+  final String activityName;
+  final String status;
+  final DateTime startTime;
+  final DateTime? endTime;
+  final String? difficulty;
+  final int? score;
+  final String? materials;
   final List<String> instructions;
   final Map<String, dynamic> goals;
-  final bool isCustom; // user-created vs predefined
-  final String? createdBy; // therapist id if custom
-  final DateTime createdAt;
-  final DateTime updatedAt;
+  final String? observations;
+  // Additional fields required by the service
+  final String? name;
+  final String? description;
+  final String? category;
+  final String? type;
+  final int? estimatedDuration;
+  final String? iconName;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final bool? isCustom;
+  final String? createdBy;
 
   ActivityModel({
     this.id,
-    required this.name,
-    required this.description,
-    required this.category,
-    required this.type,
-    this.difficulty = 'medium',
-    required this.estimatedDuration,
-    this.iconName = 'activity',
-    this.materials = const [],
+    required this.sessionId,
+    required this.goalId,
+    required this.activityName,
+    required this.status,
+    required this.startTime,
+    this.endTime,
+    this.difficulty,
+    this.score,
+    this.materials,
     this.instructions = const [],
     this.goals = const {},
-    this.isCustom = false,
+    this.observations,
+    // Additional parameters
+    this.name,
+    this.description,
+    this.category,
+    this.type,
+    this.estimatedDuration,
+    this.iconName,
+    this.createdAt,
+    this.updatedAt,
+    this.isCustom,
     this.createdBy,
-    required this.createdAt,
-    required this.updatedAt,
   });
 
-  /// Convert to Firestore document
+  factory ActivityModel.fromFirestore(DocumentSnapshot doc) {
+    final data = doc.data() as Map<String, dynamic>? ?? {};
+    
+    return ActivityModel(
+      id: doc.id,
+      sessionId: (data['sessionId'] as String?) ?? '',
+      goalId: (data['goalId'] as String?) ?? '',
+      activityName: (data['activityName'] as String?) ?? '',
+      status: (data['status'] as String?) ?? '',
+      startTime: (data['startTime'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      endTime: (data['endTime'] as Timestamp?)?.toDate(),
+      difficulty: data['difficulty'] as String?,
+      score: data['score'] as int?,
+      materials: data['materials'] as String?,
+      instructions: _convertToStringList(data['instructions']) ?? [],
+      goals: _convertToMap(data['goals']) ?? {},
+      observations: data['observations'] as String?,
+      // Additional fields
+      name: data['name'] as String?,
+      description: data['description'] as String?,
+      category: data['category'] as String?,
+      type: data['type'] as String?,
+      estimatedDuration: data['estimatedDuration'] as int?,
+      iconName: data['iconName'] as String?,
+      createdAt: (data['createdAt'] as Timestamp?)?.toDate(),
+      updatedAt: (data['updatedAt'] as Timestamp?)?.toDate(),
+      isCustom: data['isCustom'] as bool?,
+      createdBy: data['createdBy'] as String?,
+    );
+  }
+
   Map<String, dynamic> toFirestore() {
     return {
+      'sessionId': sessionId,
+      'goalId': goalId,
+      'activityName': activityName,
+      'status': status,
+      'startTime': Timestamp.fromDate(startTime),
+      'endTime': endTime != null ? Timestamp.fromDate(endTime!) : null,
+      'difficulty': difficulty,
+      'score': score,
+      'materials': materials,
+      'instructions': instructions,
+      'goals': goals,
+      'observations': observations,
+      // Additional fields
       'name': name,
       'description': description,
       'category': category,
       'type': type,
-      'difficulty': difficulty,
       'estimatedDuration': estimatedDuration,
       'iconName': iconName,
-      'materials': materials,
-      'instructions': instructions,
-      'goals': goals,
+      'createdAt': createdAt != null ? Timestamp.fromDate(createdAt!) : null,
+      'updatedAt': updatedAt != null ? Timestamp.fromDate(updatedAt!) : null,
       'isCustom': isCustom,
       'createdBy': createdBy,
-      'createdAt': Timestamp.fromDate(createdAt),
-      'updatedAt': Timestamp.fromDate(updatedAt),
     };
   }
 
-  /// Create from Firestore document
-  factory ActivityModel.fromFirestore(DocumentSnapshot doc) {
-    final data = doc.data() as Map<String, dynamic>;
-    return ActivityModel(
-      id: doc.id,
-      name: data['name'] ?? '',
-      description: data['description'] ?? '',
-      category: data['category'] ?? '',
-      type: data['type'] ?? '',
-      difficulty: data['difficulty'] ?? 'medium',
-      estimatedDuration: data['estimatedDuration'] ?? 15,
-      iconName: data['iconName'] ?? 'activity',
-      materials: _convertToStringList(data['materials']),
-      instructions: _convertToStringList(data['instructions']),
-      goals: _convertToMap(data['goals']),
-      isCustom: data['isCustom'] ?? false,
-      createdBy: data['createdBy'],
-      createdAt: (data['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
-      updatedAt: (data['updatedAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
-    );
+  static List<String>? _convertToStringList(dynamic data) {
+    if (data == null) return null;
+    if (data is List) {
+      return data.map((item) => item.toString()).toList();
+    }
+    return null;
+  }
+
+  static Map<String, dynamic>? _convertToMap(dynamic data) {
+    if (data == null) return null;
+    if (data is Map) {
+      return Map<String, dynamic>.from(data);
+    }
+    return null;
+  }
+
+  @override
+  String toString() {
+    return 'ActivityModel(id: $id, activityName: $activityName, status: $status)';
   }
 
   /// Create a copy with updated fields
   ActivityModel copyWith({
     String? id,
+    String? sessionId,
+    String? goalId,
+    String? activityName,
+    String? status,
+    DateTime? startTime,
+    DateTime? endTime,
+    String? difficulty,
+    int? score,
+    String? materials,
+    List<String>? instructions,
+    Map<String, dynamic>? goals,
+    String? observations,
     String? name,
     String? description,
     String? category,
     String? type,
-    String? difficulty,
     int? estimatedDuration,
     String? iconName,
-    List<String>? materials,
-    List<String>? instructions,
-    Map<String, dynamic>? goals,
-    bool? isCustom,
-    String? createdBy,
     DateTime? createdAt,
     DateTime? updatedAt,
+    bool? isCustom,
+    String? createdBy,
   }) {
     return ActivityModel(
       id: id ?? this.id,
+      sessionId: sessionId ?? this.sessionId,
+      goalId: goalId ?? this.goalId,
+      activityName: activityName ?? this.activityName,
+      status: status ?? this.status,
+      startTime: startTime ?? this.startTime,
+      endTime: endTime ?? this.endTime,
+      difficulty: difficulty ?? this.difficulty,
+      score: score ?? this.score,
+      materials: materials ?? this.materials,
+      instructions: instructions ?? this.instructions,
+      goals: goals ?? this.goals,
+      observations: observations ?? this.observations,
       name: name ?? this.name,
       description: description ?? this.description,
       category: category ?? this.category,
       type: type ?? this.type,
-      difficulty: difficulty ?? this.difficulty,
       estimatedDuration: estimatedDuration ?? this.estimatedDuration,
       iconName: iconName ?? this.iconName,
-      materials: materials ?? this.materials,
-      instructions: instructions ?? this.instructions,
-      goals: goals ?? this.goals,
-      isCustom: isCustom ?? this.isCustom,
-      createdBy: createdBy ?? this.createdBy,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      isCustom: isCustom ?? this.isCustom,
+      createdBy: createdBy ?? this.createdBy,
     );
-  }
-
-  /// Helper method to safely convert data to List<String>
-  static List<String> _convertToStringList(dynamic data) {
-    if (data == null) return [];
-    if (data is List) {
-      return data.map((item) => item.toString()).toList();
-    }
-    return [];
-  }
-
-  /// Helper method to safely convert data to Map<String, dynamic>
-  static Map<String, dynamic> _convertToMap(dynamic data) {
-    if (data == null) return {};
-    if (data is Map) {
-      return Map<String, dynamic>.from(data);
-    }
-    return {};
   }
 }

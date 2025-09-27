@@ -1,10 +1,10 @@
-import '../models/student_model.dart';
-import '../models/goal_model.dart';
-import '../models/session_model.dart';
-import '../models/progress_model.dart';
-import '../services/firestore_service.dart';
-import '../services/auth_service.dart';
-import '../utils/app_logger.dart';
+import 'package:thriveers/core/models/student_model.dart';
+import 'package:thriveers/core/models/goal_model.dart';
+import 'package:thriveers/core/models/session_model.dart';
+import 'package:thriveers/core/models/progress_model.dart';
+import 'package:thriveers/core/services/firestore_service.dart';
+import 'package:thriveers/core/services/auth_service.dart';
+import 'package:thriveers/core/utils/app_logger.dart';
 
 /// Test Data Initialization Service
 /// Creates sample data for testing and demonstration purposes

@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../core/app_export.dart';
-import './widgets/activity_card_widget.dart';
-import './widgets/activity_category_widget.dart';
-import './widgets/custom_activity_bottom_sheet.dart';
-import './widgets/session_header_widget.dart';
-import './widgets/session_timeline_widget.dart';
+import 'package:thriveers/core/app_export.dart';
+import 'package:thriveers/presentation/session_planning_screen/widgets/activity_card_widget.dart';
+import 'package:thriveers/presentation/session_planning_screen/widgets/activity_category_widget.dart';
+import 'package:thriveers/presentation/session_planning_screen/widgets/custom_activity_bottom_sheet.dart';
+import 'package:thriveers/presentation/session_planning_screen/widgets/session_header_widget.dart';
+import 'package:thriveers/presentation/session_planning_screen/widgets/session_timeline_widget.dart';
 
 class SessionPlanningScreen extends StatefulWidget {
   const SessionPlanningScreen({super.key});
@@ -185,7 +185,7 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
             .listen(
           (students) {
             AppLogger.debug('Received ${students.length} students from stream', name: 'SessionPlanning');
-            for (var student in students) {
+            for (final student in students) {
               AppLogger.debug('Student: ${student.firstName} ${student.lastName} (ID: ${student.id})', name: 'SessionPlanning');
             }
             if (mounted) {
@@ -236,11 +236,11 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
       _selectedStudent = student;
       if (student.id != null && student.id!.isNotEmpty) {
         // Load sessions for the selected student if not already loaded
-        if (!_studentSessionsMap.containsKey(student.id!)) {
+        if (!_studentSessionsMap.containsKey(student.id)) {
           _studentSessionsMap[student.id!] = _dataService.getSessionsForStudent(student.id!);
         }
         // Initialize activities map for the student if not already done
-        if (!_studentActivitiesMap.containsKey(student.id!)) {
+        if (!_studentActivitiesMap.containsKey(student.id)) {
           _studentActivitiesMap[student.id!] = [];
         }
       } else {
@@ -694,9 +694,7 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
         body: RefreshIndicator(
           onRefresh: () async {
             await Future.delayed(const Duration(seconds: 1));
-            setState(() {
-              _filterActivities();
-            });
+            setState(_filterActivities);
           },
           child: CustomScrollView(
             controller: _scrollController,
@@ -854,9 +852,7 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
             ),
             suffixIcon: _searchQuery.isNotEmpty
                 ? IconButton(
-                    onPressed: () {
-                      _searchController.clear();
-                    },
+                    onPressed: _searchController.clear,
                     icon: CustomIconWidget(
                       iconName: 'clear',
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -945,7 +941,6 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.1),
-          width: 1,
         ),
         boxShadow: [
           BoxShadow(
@@ -1135,7 +1130,7 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
                                         decoration: BoxDecoration(
                                           color: Theme.of(context).colorScheme.secondary,
                                           shape: BoxShape.circle,
-                                          border: Border.all(color: Colors.white, width: 1),
+                                          border: Border.all(color: Colors.white),
                                         ),
                                         child: Center(
                                           child: Text(
@@ -1208,10 +1203,7 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
           SizedBox(width: 3.w),
           Expanded(
             child: OutlinedButton.icon(
-              onPressed: _selectedStudent != null ? () {
-                // Schedule session for existing student
-                _saveSession();
-              } : null,
+              onPressed: _selectedStudent != null ? _saveSession : null,
               icon: const Icon(Icons.schedule, size: 20),
               label: const Text('Schedule Session'),
               style: OutlinedButton.styleFrom(
@@ -1239,7 +1231,6 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.2),
-          width: 1,
         ),
       ),
       child: Column(
@@ -1275,7 +1266,6 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
                   CustomIconWidget(
                     iconName: 'event_available',
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    size: 24,
                   ),
                   SizedBox(width: 3.w),
                   Text(
@@ -1419,7 +1409,6 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: Theme.of(context).colorScheme.secondary.withValues(alpha: 0.2),
-          width: 1,
         ),
       ),
       child: Column(
@@ -1490,7 +1479,7 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: CustomIconWidget(
-                      iconName: activity['icon'] ?? 'task',
+                      iconName: (activity['icon'] as String?) ?? 'task',
                       color: Theme.of(context).colorScheme.primary,
                       size: 16,
                     ),
@@ -1501,7 +1490,7 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          activity['name'] ?? 'Unknown Activity',
+                          (activity['name'] as String?) ?? 'Unknown Activity',
                           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             fontWeight: FontWeight.w500,
                             color: Theme.of(context).colorScheme.onSurface,
@@ -1524,7 +1513,7 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: Text(
-                      activity['category'] ?? 'General',
+                      (activity['category'] as String?) ?? 'General',
                       style: Theme.of(context).textTheme.labelSmall?.copyWith(
                         color: Theme.of(context).colorScheme.onPrimaryContainer,
                         fontWeight: FontWeight.w500,
@@ -1994,7 +1983,6 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
         sensoryNeeds: _notesController.text.trim().isNotEmpty 
             ? _notesController.text.trim() 
             : 'To be assessed',
-        severity: 'moderate',
         triggers: [],
       );
 
@@ -2044,7 +2032,6 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
         SnackBar(
           content: Text('Student created and session scheduled for ${_getDateTimeString(sessionDate)}!'),
           backgroundColor: Colors.green,
-          duration: const Duration(seconds: 4),
           action: SnackBarAction(
             label: 'View Dashboard',
             textColor: Colors.white,

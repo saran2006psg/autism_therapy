@@ -6,8 +6,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:provider/provider.dart';
 
-import 'firebase_options.dart';
-import 'core/app_export.dart';
+import 'package:thriveers/firebase_options.dart';
+import 'package:thriveers/core/app_export.dart';
 
 // Global theme manager instance
 late ThemeManager themeManager;
@@ -55,8 +55,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider.value(
-      value: themeManager,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(value: themeManager),
+        ChangeNotifierProvider(create: (_) => DataService()),
+      ],
       child: Consumer<ThemeManager>(
         builder: (context, themeManager, child) {
           return Sizer(builder: (context, orientation, screenType) {

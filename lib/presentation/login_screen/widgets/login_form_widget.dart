@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../core/app_export.dart';
+import 'package:thriveers/core/app_export.dart';
 
 class LoginFormWidget extends StatefulWidget {
   final Function(String email, String password) onLogin;
@@ -75,8 +75,12 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
   }
 
   void _handleLogin() {
+    print('DEBUG: _handleLogin called - Form valid: $_isFormValid');
     if (_formKey.currentState?.validate() ?? false) {
+      print('DEBUG: Form validation passed, calling widget.onLogin');
       widget.onLogin(_emailController.text.trim(), _passwordController.text);
+    } else {
+      print('DEBUG: Form validation failed');
     }
   }
 
@@ -366,7 +370,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
           Container(
             padding: EdgeInsets.all(4.w),
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
+              color: Theme.of(context).colorScheme.surfaceContainerHighest.withOpacity(0.3),
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
                 color: Theme.of(context).colorScheme.outline.withOpacity(0.2),
@@ -440,11 +444,13 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
               setState(() {
                 _emailController.text = email;
                 _passwordController.text = password;
-                _isFormValid = true;
               });
+              // Trigger form validation
+              _validateForm();
               // Auto-login after setting credentials
               Future.delayed(const Duration(milliseconds: 500), () {
                 if (mounted) {
+                  print('DEBUG: Quick login for $role - Form valid: $_isFormValid');
                   _handleLogin();
                 }
               });

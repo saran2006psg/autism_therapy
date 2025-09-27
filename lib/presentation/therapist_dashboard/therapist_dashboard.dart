@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'dart:async';
 
-import '../../core/app_export.dart';
-import '../../widgets/theme_toggle_widget.dart';
-import '../session_planning_screen/session_planning_screen.dart';
-import './widgets/connectivity_status_widget.dart';
-import './widgets/metric_card_widget.dart';
-import './widgets/quick_action_sheet_widget.dart';
-import './widgets/session_overview_card_widget.dart';
-import './widgets/student_progress_card_widget.dart';
+import 'package:thriveers/core/app_export.dart';
+import 'package:thriveers/widgets/theme_toggle_widget.dart';
+import 'package:thriveers/presentation/session_planning_screen/session_planning_screen.dart';
+import 'package:thriveers/presentation/therapist_dashboard/widgets/connectivity_status_widget.dart';
+import 'package:thriveers/presentation/therapist_dashboard/widgets/metric_card_widget.dart';
+import 'package:thriveers/presentation/therapist_dashboard/widgets/quick_action_sheet_widget.dart';
+import 'package:thriveers/presentation/therapist_dashboard/widgets/session_overview_card_widget.dart';
+import 'package:thriveers/presentation/therapist_dashboard/widgets/student_progress_card_widget.dart';
 
 class TherapistDashboard extends StatefulWidget {
   const TherapistDashboard({super.key});
@@ -32,6 +32,7 @@ class _TherapistDashboardState extends State<TherapistDashboard>
   List<StudentModel> _students = [];
   List<SessionModel> _upcomingSessions = [];
   List<SessionModel> _completedSessions = [];
+  List<SessionModel> _allSessions = []; // Keep track of all sessions before filtering
   bool _isLoading = true;
   
   // Stream subscriptions for real-time updates
@@ -79,12 +80,12 @@ class _TherapistDashboardState extends State<TherapistDashboard>
     );
     
     return {
-      "id": session.id,
-      "studentName": student.fullName,
-      "sessionType": session.type,
-      "time": _formatSessionTime(session),
-      "status": session.status,
-      "date": _getDateDescription(session.scheduledDate),
+      'id': session.id,
+      'studentName': student.fullName,
+      'sessionType': session.type,
+      'time': _formatSessionTime(session),
+      'status': session.status,
+      'date': _getDateDescription(session.scheduledDate),
     };
   }
 
@@ -104,14 +105,14 @@ class _TherapistDashboardState extends State<TherapistDashboard>
   // Convert StudentModel to Map for widgets that expect Map format
   Map<String, dynamic> _studentToMap(StudentModel student) {
     return {
-      "id": student.id,
-      "name": student.fullName,
-      "age": student.age,
-      "diagnosis": student.diagnosis,
-      "avatar": student.avatarUrl ?? "https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=400",
-      "progress": _calculateStudentProgress(student),
-      "goals": student.goalIds, // We would need to fetch actual goals, using IDs for now
-      "recentAchievements": _getRecentAchievements(student),
+      'id': student.id,
+      'name': student.fullName,
+      'age': student.age,
+      'diagnosis': student.diagnosis,
+      'avatar': student.avatarUrl ?? 'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=400',
+      'progress': _calculateStudentProgress(student),
+      'goals': student.goalIds, // We would need to fetch actual goals, using IDs for now
+      'recentAchievements': _getRecentAchievements(student),
     };
   }
 
@@ -121,13 +122,13 @@ class _TherapistDashboardState extends State<TherapistDashboard>
     final sessionDate = DateTime(date.year, date.month, date.day);
     
     if (sessionDate == today) {
-      return "Today";
+      return 'Today';
     } else if (sessionDate == today.add(const Duration(days: 1))) {
-      return "Tomorrow";
+      return 'Tomorrow';
     } else if (sessionDate == today.subtract(const Duration(days: 1))) {
-      return "Yesterday";
+      return 'Yesterday';
     } else {
-      return "${sessionDate.day}/${sessionDate.month}";
+      return '${sessionDate.day}/${sessionDate.month}';
     }
   }
 
@@ -141,8 +142,8 @@ class _TherapistDashboardState extends State<TherapistDashboard>
     // This would normally fetch recent achievements from progress entries
     // For now, return placeholder achievements
     return [
-      "Completed recent session",
-      "Showing improvement",
+      'Completed recent session',
+      'Showing improvement',
     ];
   }
 
@@ -168,17 +169,29 @@ class _TherapistDashboardState extends State<TherapistDashboard>
   }
 
   String _getCompletionRate() {
-    if (_upcomingSessions.isEmpty) return "0%";
+    if (_upcomingSessions.isEmpty) return '0%';
     final completed = _upcomingSessions.where((s) => s.status == 'completed').length;
     final rate = (completed / _upcomingSessions.length * 100).round();
-    return "$rate%";
+    return '$rate%';
   }
 
   String _getAverageProgress() {
-    if (_students.isEmpty) return "0%";
+    if (_students.isEmpty) return '0%';
     final totalProgress = _students.map(_calculateStudentProgress).reduce((a, b) => a + b);
     final avgProgress = (totalProgress / _students.length * 100).round();
-    return "$avgProgress%";
+    return '$avgProgress%';
+  }
+
+  /// Filter sessions to only include those with existing students
+  void _filterValidSessions(List<SessionModel> sessions) {
+    final validSessions = sessions.where((s) => 
+      _students.any((student) => student.id == s.studentId)).toList();
+    
+    _upcomingSessions = validSessions.where((s) => 
+      (s.status == 'scheduled' || s.status == 'in_progress') &&
+      s.scheduledDate.isAfter(DateTime.now())).toList();
+    _completedSessions = validSessions.where((s) => 
+      s.status == 'completed').toList();
   }
 
   Future<void> _loadDashboardData() async {
@@ -205,34 +218,43 @@ class _TherapistDashboardState extends State<TherapistDashboard>
             _students = students;
             _isLoading = false;
           });
+          // Filter sessions whenever students are updated
+          if (_allSessions.isNotEmpty) {
+            setState(() {
+              _filterValidSessions(_allSessions);
+            });
+          }
         },
-        onError: (error) {
+        onError: (Object error) {
           AppLogger.error('Error streaming students: $error', name: 'TherapistDashboard', error: error);
           // Fallback to DataService if streams fail
           setState(() {
             _students = _dataService.getMyStudents();
             _isLoading = false;
           });
+          // Filter sessions with fallback data
+          if (_allSessions.isNotEmpty) {
+            setState(() {
+              _filterValidSessions(_allSessions);
+            });
+          }
         },
       );
       
       // Set up real-time streams for sessions
       _sessionsSubscription = FirestoreService.streamSessionsForTherapist(userId).listen(
         (sessions) {
+          _allSessions = sessions;
           setState(() {
-            _upcomingSessions = sessions.where((s) => 
-              (s.status == 'scheduled' || s.status == 'in_progress') &&
-              s.scheduledDate.isAfter(DateTime.now())).toList();
-            _completedSessions = sessions.where((s) => 
-              s.status == 'completed').toList();
+            _filterValidSessions(_allSessions);
           });
         },
-        onError: (error) {
+        onError: (Object error) {
           AppLogger.error('Error streaming sessions: $error', name: 'TherapistDashboard', error: error);
           // Fallback to DataService if streams fail
+          _allSessions = _dataService.getUpcomingSessions() + _dataService.getCompletedSessions();
           setState(() {
-            _upcomingSessions = _dataService.getUpcomingSessions();
-            _completedSessions = _dataService.getCompletedSessions();
+            _filterValidSessions(_allSessions);
           });
         },
       );
@@ -241,7 +263,11 @@ class _TherapistDashboardState extends State<TherapistDashboard>
       AppLogger.error('Error loading dashboard data: $e', name: 'TherapistDashboard', error: e);
       // Fallback to DataService if real-time fails
       _students = _dataService.getMyStudents();
-      _upcomingSessions = _dataService.getUpcomingSessions();
+      
+      // Filter sessions to only include those with existing students
+      _allSessions = _dataService.getUpcomingSessions() + _dataService.getCompletedSessions();
+      _filterValidSessions(_allSessions);
+      
       setState(() {
         _isLoading = false;
       });
@@ -332,7 +358,6 @@ class _TherapistDashboardState extends State<TherapistDashboard>
               leading: CustomIconWidget(
                 iconName: 'visibility',
                 color: Theme.of(context).colorScheme.primary,
-                size: 24,
               ),
               title: const Text('View Details'),
               onTap: () {
@@ -344,7 +369,6 @@ class _TherapistDashboardState extends State<TherapistDashboard>
               leading: CustomIconWidget(
                 iconName: 'file_download',
                 color: Theme.of(context).colorScheme.primary,
-                size: 24,
               ),
               title: const Text('Export Data'),
               onTap: () {
@@ -356,7 +380,6 @@ class _TherapistDashboardState extends State<TherapistDashboard>
               leading: CustomIconWidget(
                 iconName: 'share',
                 color: Theme.of(context).colorScheme.primary,
-                size: 24,
               ),
               title: const Text('Share Progress'),
               onTap: () {
@@ -451,8 +474,8 @@ class _TherapistDashboardState extends State<TherapistDashboard>
                               Expanded(
                                 child: MetricCardWidget(
                                   title: "Today's Sessions",
-                                  value: "${_getTodaySessionsCount()}",
-                                  subtitle: "${_getCompletedTodaySessionsCount()} completed",
+                                  value: '${_getTodaySessionsCount()}',
+                                  subtitle: '${_getCompletedTodaySessionsCount()} completed',
                                   color: Theme.of(context).colorScheme.primary,
                                   onTap: () => Navigator.pushNamed(
                                       context, '/session-planning-screen'),
@@ -462,9 +485,9 @@ class _TherapistDashboardState extends State<TherapistDashboard>
                               ),
                               Expanded(
                                 child: MetricCardWidget(
-                                  title: "Active Students",
-                                  value: "${_students.length}",
-                                  subtitle: "All progressing",
+                                  title: 'Active Students',
+                                  value: '${_students.length}',
+                                  subtitle: 'All progressing',
                                   color: Theme.of(context).colorScheme.secondary,
                                   onTap: () => Navigator.pushNamed(context,
                                       '/students-list'),
@@ -479,9 +502,9 @@ class _TherapistDashboardState extends State<TherapistDashboard>
                             children: [
                               Expanded(
                                 child: MetricCardWidget(
-                                  title: "Completion Rate",
+                                  title: 'Completion Rate',
                                   value: _getCompletionRate(),
-                                  subtitle: "This week",
+                                  subtitle: 'This week',
                                   color: Theme.of(context).colorScheme.tertiary,
                                   onLongPress: () =>
                                       _showMetricContextMenu('completion'),
@@ -489,9 +512,9 @@ class _TherapistDashboardState extends State<TherapistDashboard>
                               ),
                               Expanded(
                                 child: MetricCardWidget(
-                                  title: "Avg Progress",
+                                  title: 'Avg Progress',
                                   value: _getAverageProgress(),
-                                  subtitle: "All students",
+                                  subtitle: 'All students',
                                   color: Colors.deepPurple,
                                   onLongPress: () =>
                                       _showMetricContextMenu('progress'),
@@ -521,7 +544,6 @@ class _TherapistDashboardState extends State<TherapistDashboard>
                         borderRadius: BorderRadius.circular(16),
                         border: Border.all(
                           color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.1),
-                          width: 1,
                         ),
                         boxShadow: [
                           BoxShadow(
@@ -592,7 +614,6 @@ class _TherapistDashboardState extends State<TherapistDashboard>
                                     child: const CustomIconWidget(
                                       iconName: 'trending_up',
                                       color: Colors.white,
-                                      size: 24,
                                     ),
                                   ),
                                 ],
@@ -602,7 +623,6 @@ class _TherapistDashboardState extends State<TherapistDashboard>
                               child: LineChart(
                                 LineChartData(
                                   gridData: FlGridData(
-                                    show: true,
                                     drawVerticalLine: false,
                                     horizontalInterval: 10,
                                     getDrawingHorizontalLine: (value) {
@@ -615,13 +635,10 @@ class _TherapistDashboardState extends State<TherapistDashboard>
                                     },
                                   ),
                                   titlesData: FlTitlesData(
-                                    show: true,
                                     rightTitles: const AxisTitles(
-                                        sideTitles:
-                                            SideTitles(showTitles: false)),
+                                        ),
                                     topTitles: const AxisTitles(
-                                        sideTitles:
-                                            SideTitles(showTitles: false)),
+                                        ),
                                     bottomTitles: AxisTitles(
                                       sideTitles: SideTitles(
                                         showTitles: true,
@@ -713,7 +730,6 @@ class _TherapistDashboardState extends State<TherapistDashboard>
                                       barWidth: 3,
                                       isStrokeCapRound: true,
                                       dotData: FlDotData(
-                                        show: true,
                                         getDotPainter:
                                             (spot, percent, barData, index) {
                                           return FlDotCirclePainter(
@@ -744,7 +760,6 @@ class _TherapistDashboardState extends State<TherapistDashboard>
                                     ),
                                   ],
                                   lineTouchData: LineTouchData(
-                                    enabled: true,
                                     touchTooltipData: LineTouchTooltipData(
                                       getTooltipItems:
                                           (List<LineBarSpot> touchedBarSpots) {
@@ -776,7 +791,7 @@ class _TherapistDashboardState extends State<TherapistDashboard>
                       upcomingSessions: _upcomingSessions.map(_sessionToMap).toList(),
                       onSessionTap: (session) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
+                          const SnackBar(
                             content: Text('Only parents can run tests. Ask the parent to use their app.'),
                           ),
                         );
@@ -933,7 +948,6 @@ class _TherapistDashboardState extends State<TherapistDashboard>
                   color: _currentTabIndex == 0
                       ? Theme.of(context).colorScheme.primary
                       : Theme.of(context).colorScheme.onSurfaceVariant,
-                  size: 24,
                 ),
               ),
               label: 'Sessions',
@@ -952,7 +966,6 @@ class _TherapistDashboardState extends State<TherapistDashboard>
                   color: _currentTabIndex == 1
                       ? Theme.of(context).colorScheme.primary
                       : Theme.of(context).colorScheme.onSurfaceVariant,
-                  size: 24,
                 ),
               ),
               label: 'Students',
@@ -971,7 +984,6 @@ class _TherapistDashboardState extends State<TherapistDashboard>
                   color: _currentTabIndex == 2
                       ? Theme.of(context).colorScheme.primary
                       : Theme.of(context).colorScheme.onSurfaceVariant,
-                  size: 24,
                 ),
               ),
               label: 'Profile',
@@ -1077,7 +1089,7 @@ class _TherapistDashboardState extends State<TherapistDashboard>
                   allActivities.where((a) => 
                     a['status'] == 'completed' && 
                     a['completedAt'] != null &&
-                    _isToday(a['completedAt'])
+                    _isToday(a['completedAt'] as DateTime?)
                   ).length.toString(),
                   Icons.check_circle,
                   Colors.green,
@@ -1177,7 +1189,7 @@ class _TherapistDashboardState extends State<TherapistDashboard>
         
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Activity status refreshed'),
+            content: const Text('Activity status refreshed'),
             backgroundColor: Theme.of(context).colorScheme.tertiary,
             duration: const Duration(seconds: 2),
           ),
@@ -1219,7 +1231,7 @@ class _TherapistDashboardState extends State<TherapistDashboard>
       margin: EdgeInsets.only(bottom: 2.h),
       padding: EdgeInsets.all(3.w),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
+        color: Theme.of(context).colorScheme.surfaceContainerHighest.withOpacity(0.3),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: statusColor.withOpacity(0.3),
@@ -1274,7 +1286,7 @@ class _TherapistDashboardState extends State<TherapistDashboard>
           ),
           if (activity['completedAt'] != null)
             Text(
-              _formatShortDate(activity['completedAt']),
+              _formatShortDate(activity['completedAt'] as DateTime),
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
               ),

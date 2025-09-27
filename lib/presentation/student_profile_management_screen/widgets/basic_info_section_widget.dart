@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../core/app_export.dart';
+import 'package:thriveers/core/app_export.dart';
 
 class BasicInfoSectionWidget extends StatelessWidget {
   final TextEditingController firstNameController;
@@ -37,7 +37,6 @@ class BasicInfoSectionWidget extends StatelessWidget {
                 CustomIconWidget(
                   iconName: 'person',
                   color: Theme.of(context).colorScheme.primary,
-                  size: 24,
                 ),
                 SizedBox(width: 2.w),
                 Text(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../core/app_export.dart';
+import 'package:thriveers/core/app_export.dart';
 
 class SessionTimelineWidget extends StatelessWidget {
   final List<Map<String, dynamic>> plannedActivities;

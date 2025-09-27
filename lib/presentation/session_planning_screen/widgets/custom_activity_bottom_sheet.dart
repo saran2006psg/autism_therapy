@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../core/app_export.dart';
+import 'package:thriveers/core/app_export.dart';
 
 class CustomActivityBottomSheet extends StatefulWidget {
   final Function(Map<String, dynamic>) onActivityCreated;
@@ -340,7 +340,6 @@ class _CustomActivityBottomSheetState extends State<CustomActivityBottomSheet> {
             crossAxisCount: 6,
             crossAxisSpacing: 2.w,
             mainAxisSpacing: 1.h,
-            childAspectRatio: 1,
           ),
           itemCount: _icons.length,
           itemBuilder: (context, index) {

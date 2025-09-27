@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../core/app_export.dart';
+import 'package:thriveers/core/app_export.dart';
 
 class SessionOverviewCardWidget extends StatelessWidget {
   final String? title;
@@ -36,7 +36,6 @@ class SessionOverviewCardWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.1),
-          width: 1,
         ),
         boxShadow: [
           BoxShadow(
@@ -205,7 +204,6 @@ class SessionOverviewCardWidget extends StatelessWidget {
                           color: isCompletedSection 
                               ? Theme.of(context).colorScheme.tertiary
                               : Theme.of(context).colorScheme.secondary,
-                          size: 24,
                         ),
                       ),
                       onDismissed: (direction) => onReschedule(session),
@@ -216,7 +214,6 @@ class SessionOverviewCardWidget extends StatelessWidget {
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
                             color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.1),
-                            width: 1,
                           ),
                         ),
                         child: ListTile(

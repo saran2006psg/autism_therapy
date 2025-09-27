@@ -10,13 +10,13 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:record/record.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../core/app_export.dart';
-import './widgets/activity_card_widget.dart';
-import './widgets/activity_progress_indicator_widget.dart';
-import './widgets/data_collection_widget.dart';
-import './widgets/session_controls_overlay_widget.dart';
-import './widgets/session_navigation_widget.dart';
-import './widgets/session_timer_widget.dart';
+import 'package:thriveers/core/app_export.dart';
+import 'package:thriveers/presentation/session_execution_screen/widgets/activity_card_widget.dart';
+import 'package:thriveers/presentation/session_execution_screen/widgets/activity_progress_indicator_widget.dart';
+import 'package:thriveers/presentation/session_execution_screen/widgets/data_collection_widget.dart';
+import 'package:thriveers/presentation/session_execution_screen/widgets/session_controls_overlay_widget.dart';
+import 'package:thriveers/presentation/session_execution_screen/widgets/session_navigation_widget.dart';
+import 'package:thriveers/presentation/session_execution_screen/widgets/session_timer_widget.dart';
 
 class SessionExecutionScreen extends StatefulWidget {
   const SessionExecutionScreen({super.key});
@@ -297,7 +297,7 @@ class _SessionExecutionScreenState extends State<SessionExecutionScreen>
               path: 'recording_${DateTime.now().millisecondsSinceEpoch}.wav');
         } else {
           final dir = await getTemporaryDirectory();
-          String path =
+          final String path =
               '${dir.path}/recording_${DateTime.now().millisecondsSinceEpoch}.m4a';
           await _audioRecorder.start(const RecordConfig(), path: path);
         }
@@ -437,7 +437,6 @@ class _SessionExecutionScreenState extends State<SessionExecutionScreen>
             CustomIconWidget(
               iconName: 'check_circle',
               color: AppTheme.lightTheme.colorScheme.tertiary,
-              size: 24,
             ),
             SizedBox(width: 3.w),
             Text(_activityTitleArg?.isNotEmpty == true ? '${_activityTitleArg!} Complete' : 'Session Complete'),
@@ -495,7 +494,6 @@ class _SessionExecutionScreenState extends State<SessionExecutionScreen>
             CustomIconWidget(
               iconName: 'warning',
               color: AppTheme.lightTheme.colorScheme.error,
-              size: 24,
             ),
             SizedBox(width: 3.w),
             const Text('Emergency Stop'),
@@ -567,7 +565,6 @@ class _SessionExecutionScreenState extends State<SessionExecutionScreen>
             CustomIconWidget(
               iconName: 'phone',
               color: AppTheme.lightTheme.colorScheme.error,
-              size: 24,
             ),
             SizedBox(width: 3.w),
             const Text('Emergency Contact'),
@@ -622,7 +619,6 @@ class _SessionExecutionScreenState extends State<SessionExecutionScreen>
                     icon: CustomIconWidget(
                       iconName: 'close',
                       color: AppTheme.lightTheme.colorScheme.onSurface,
-                      size: 24,
                     ),
                   ),
                 ],
@@ -776,9 +772,8 @@ class _SessionExecutionScreenState extends State<SessionExecutionScreen>
                               child: SessionTimerWidget(
                                 initialDuration: Duration(
                                   minutes: int.tryParse(
-                                          _sessionActivities[index]
-                                                  ['duration'] ??
-                                              '5') ??
+                                          (_sessionActivities[index]
+                                                  ['duration'] ?? '5').toString()) ??
                                       5,
                                 ),
                                 isPaused: _isSessionPaused,
@@ -845,7 +840,7 @@ class _SessionExecutionScreenState extends State<SessionExecutionScreen>
             bottom: 20.h,
             left: 4.w,
             child: FloatingActionButton(
-              heroTag: "data_collection",
+              heroTag: 'data_collection',
               onPressed: () {
                 setState(() {
                   _showDataCollection = !_showDataCollection;
@@ -859,7 +854,6 @@ class _SessionExecutionScreenState extends State<SessionExecutionScreen>
                     ? 'keyboard_arrow_down'
                     : 'keyboard_arrow_up',
                 color: AppTheme.lightTheme.colorScheme.onPrimary,
-                size: 24,
               ),
             ),
           ),

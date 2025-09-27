@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 
-import '../core/app_export.dart';
+import 'package:thriveers/core/app_export.dart';
 
 // custom_error_widget.dart
 
@@ -25,7 +25,6 @@ class CustomErrorWidget extends StatelessWidget {
           padding: const EdgeInsets.all(24.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // Use a simple icon instead of SVG that might not exist
               Container(
@@ -43,7 +42,7 @@ class CustomErrorWidget extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               const Text(
-                "Something went wrong",
+                'Something went wrong',
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.w500,
@@ -85,7 +84,7 @@ class CustomErrorWidget extends StatelessWidget {
               const SizedBox(height: 24),
               ElevatedButton.icon(
                 onPressed: () {
-                  bool canBeBack = Navigator.canPop(context);
+                  final bool canBeBack = Navigator.canPop(context);
                   if (canBeBack) {
                     Navigator.of(context).pop();
                   } else {

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../core/app_export.dart';
-import './activity_card_widget.dart';
+import 'package:thriveers/core/app_export.dart';
+import 'package:thriveers/presentation/session_planning_screen/widgets/activity_card_widget.dart';
 
 class ActivityCategoryWidget extends StatefulWidget {
   final String categoryName;

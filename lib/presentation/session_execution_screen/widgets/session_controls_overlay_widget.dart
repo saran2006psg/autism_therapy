@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../../core/app_export.dart';
+import 'package:thriveers/core/app_export.dart';
 
 class SessionControlsOverlayWidget extends StatelessWidget {
   final bool isSessionPaused;
@@ -27,7 +27,7 @@ class SessionControlsOverlayWidget extends StatelessWidget {
       child: Column(
         children: [
           FloatingActionButton(
-            heroTag: "pause_resume",
+            heroTag: 'pause_resume',
             onPressed: onPauseResume,
             backgroundColor: isSessionPaused
                 ? AppTheme.lightTheme.colorScheme.tertiary
@@ -35,40 +35,36 @@ class SessionControlsOverlayWidget extends StatelessWidget {
             child: CustomIconWidget(
               iconName: isSessionPaused ? 'play_arrow' : 'pause',
               color: AppTheme.lightTheme.colorScheme.onSecondary,
-              size: 24,
             ),
           ),
           SizedBox(height: 2.h),
           FloatingActionButton(
-            heroTag: "quick_notes",
+            heroTag: 'quick_notes',
             onPressed: onQuickNotes,
             backgroundColor: AppTheme.lightTheme.colorScheme.primary,
             child: CustomIconWidget(
               iconName: 'note_add',
               color: AppTheme.lightTheme.colorScheme.onPrimary,
-              size: 24,
             ),
           ),
           SizedBox(height: 2.h),
           FloatingActionButton(
-            heroTag: "emergency_stop",
+            heroTag: 'emergency_stop',
             onPressed: onEmergencyStop,
             backgroundColor: AppTheme.lightTheme.colorScheme.error,
             child: CustomIconWidget(
               iconName: 'stop',
               color: AppTheme.lightTheme.colorScheme.onError,
-              size: 24,
             ),
           ),
           SizedBox(height: 2.h),
           FloatingActionButton(
-            heroTag: "emergency_contact",
+            heroTag: 'emergency_contact',
             onPressed: onEmergencyContact,
             backgroundColor: AppTheme.lightTheme.colorScheme.error,
             child: CustomIconWidget(
               iconName: 'phone',
               color: AppTheme.lightTheme.colorScheme.onError,
-              size: 24,
             ),
           ),
         ],

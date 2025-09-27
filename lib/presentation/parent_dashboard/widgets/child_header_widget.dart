@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../core/app_export.dart';
+import 'package:thriveers/core/app_export.dart';
 
 class ChildHeaderWidget extends StatelessWidget {
   final Map<String, dynamic> childData;
@@ -49,10 +49,9 @@ class ChildHeaderWidget extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: CustomImageWidget(
-                    imageUrl: childData["photo"] as String?,
+                    imageUrl: childData['photo'] as String?,
                     width: 15.w,
                     height: 15.w,
-                    fit: BoxFit.cover,
                   ),
                 ),
               ),
@@ -62,7 +61,7 @@ class ChildHeaderWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      childData["name"] as String,
+                      childData['name'] as String,
                       style: AppTheme.lightTheme.textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
@@ -84,7 +83,6 @@ class ChildHeaderWidget extends StatelessWidget {
                 icon: CustomIconWidget(
                   iconName: 'refresh',
                   color: AppTheme.lightTheme.primaryColor,
-                  size: 24,
                 ),
               ),
             ],
@@ -100,14 +98,14 @@ class ChildHeaderWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Current Therapy Goals",
+                  'Current Therapy Goals',
                   style: AppTheme.lightTheme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w600,
                     color: AppTheme.lightTheme.primaryColor,
                   ),
                 ),
                 SizedBox(height: 1.h),
-                ...(childData["currentGoals"] as List).map((goal) {
+                ...(childData['currentGoals'] as List).map((goal) {
                   final goalData = goal as Map<String, dynamic>;
                   return Padding(
                     padding: EdgeInsets.only(bottom: 1.h),
@@ -124,7 +122,7 @@ class ChildHeaderWidget extends StatelessWidget {
                         SizedBox(width: 2.w),
                         Expanded(
                           child: Text(
-                            goalData["title"] as String,
+                            goalData['title'] as String,
                             style: AppTheme.lightTheme.textTheme.bodyMedium,
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -134,7 +132,7 @@ class ChildHeaderWidget extends StatelessWidget {
                               horizontal: 2.w, vertical: 0.5.h),
                           decoration: BoxDecoration(
                             color: _getProgressColor(
-                                goalData["progress"] as double),
+                                goalData['progress'] as double),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Text(
@@ -163,7 +161,7 @@ class ChildHeaderWidget extends StatelessWidget {
               ),
               SizedBox(width: 1.w),
               Text(
-                "Last synced: $lastSyncTime",
+                'Last synced: $lastSyncTime',
                 style: AppTheme.lightTheme.textTheme.bodySmall?.copyWith(
                   color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
                 ),

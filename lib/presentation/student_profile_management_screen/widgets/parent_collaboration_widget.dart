@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../core/app_export.dart';
+import 'package:thriveers/core/app_export.dart';
 
 class ParentCollaborationWidget extends StatefulWidget {
   final List<Map<String, dynamic>> parentAccess;
   final Map<String, bool> communicationPreferences;
-  final Function(Map<String, dynamic>) onParentAdded;
-  final Function(String, bool) onPreferenceChanged;
+  final void Function(Map<String, dynamic>) onParentAdded;
+  final void Function(String, bool) onPreferenceChanged;
 
   const ParentCollaborationWidget({
     super.key,
@@ -30,9 +30,9 @@ class _ParentCollaborationWidgetState extends State<ParentCollaborationWidget> {
     final emailController = TextEditingController();
     final phoneController = TextEditingController();
     String selectedRelation = 'Parent';
-    List<String> selectedPermissions = ['View Progress', 'View Session Notes'];
+    final List<String> selectedPermissions = ['View Progress', 'View Session Notes'];
 
-    showModalBottomSheet(
+    showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Theme.of(context).colorScheme.surface,
@@ -226,7 +226,6 @@ class _ParentCollaborationWidgetState extends State<ParentCollaborationWidget> {
           leading: CustomIconWidget(
             iconName: 'family_restroom',
             color: Theme.of(context).colorScheme.primary,
-            size: 24,
           ),
           title: Text(
             'Parent Collaboration',
@@ -240,13 +239,11 @@ class _ParentCollaborationWidgetState extends State<ParentCollaborationWidget> {
                 icon: CustomIconWidget(
                   iconName: 'person_add',
                   color: Theme.of(context).colorScheme.primary,
-                  size: 24,
                 ),
               ),
               CustomIconWidget(
                 iconName: _isExpanded ? 'expand_less' : 'expand_more',
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
-                size: 24,
               ),
             ],
           ),
@@ -423,7 +420,6 @@ class _ParentCollaborationWidgetState extends State<ParentCollaborationWidget> {
                                           iconName: 'person',
                                           color: AppTheme
                                               .lightTheme.colorScheme.primary,
-                                          size: 24,
                                         ),
                                       ),
                                       SizedBox(width: 3.w),
@@ -433,14 +429,14 @@ class _ParentCollaborationWidgetState extends State<ParentCollaborationWidget> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              parent['name'] ?? '',
+                                              (parent['name'] ?? '').toString(),
                                               style: AppTheme.lightTheme
                                                   .textTheme.titleMedium,
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
                                             ),
                                             Text(
-                                              parent['relationship'] ?? '',
+                                              (parent['relationship'] as String?) ?? '',
                                               style: AppTheme.lightTheme
                                                   .textTheme.bodySmall
                                                   ?.copyWith(
@@ -458,18 +454,18 @@ class _ParentCollaborationWidgetState extends State<ParentCollaborationWidget> {
                                             horizontal: 2.w, vertical: 0.5.h),
                                         decoration: BoxDecoration(
                                           color: _getStatusColor(
-                                                  parent['status'] ?? '')
+                                                  (parent['status'] as String?) ?? '')
                                               .withValues(alpha: 0.1),
                                           borderRadius:
                                               BorderRadius.circular(8),
                                         ),
                                         child: Text(
-                                          parent['status'] ?? '',
+                                          (parent['status'] as String?) ?? '',
                                           style: AppTheme
                                               .lightTheme.textTheme.labelSmall
                                               ?.copyWith(
                                             color: _getStatusColor(
-                                                parent['status'] ?? ''),
+                                                (parent['status'] as String?) ?? ''),
                                             fontWeight: FontWeight.w600,
                                           ),
                                         ),
@@ -488,7 +484,7 @@ class _ParentCollaborationWidgetState extends State<ParentCollaborationWidget> {
                                       SizedBox(width: 1.w),
                                       Expanded(
                                         child: Text(
-                                          parent['email'] ?? '',
+                                          (parent['email'] as String?) ?? '',
                                           style: AppTheme
                                               .lightTheme.textTheme.bodySmall
                                               ?.copyWith(
@@ -501,9 +497,7 @@ class _ParentCollaborationWidgetState extends State<ParentCollaborationWidget> {
                                       ),
                                     ],
                                   ),
-                                  if (parent['phone'] != null &&
-                                      (parent['phone'] as String)
-                                          .isNotEmpty) ...[
+                                  if (parent['phone']?.toString().isNotEmpty ?? false) ...[
                                     SizedBox(height: 0.5.h),
                                     Row(
                                       children: [
@@ -515,7 +509,7 @@ class _ParentCollaborationWidgetState extends State<ParentCollaborationWidget> {
                                         ),
                                         SizedBox(width: 1.w),
                                         Text(
-                                          parent['phone'],
+                                          (parent['phone'] as String?) ?? '',
                                           style: AppTheme
                                               .lightTheme.textTheme.bodySmall
                                               ?.copyWith(

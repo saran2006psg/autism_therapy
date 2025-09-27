@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
+import 'package:image_picker/image_picker.dart';
 
-import '../../core/app_export.dart';
+import 'package:thriveers/core/app_export.dart';
+import 'package:thriveers/core/services/image_upload_service.dart';
 
 class ProfileBuddyScreen extends StatefulWidget {
   final String? studentId;
@@ -88,11 +90,8 @@ class _ProfileBuddyScreenState extends State<ProfileBuddyScreen> {
             icon: const CustomIconWidget(
               iconName: 'edit',
               color: Colors.white,
-              size: 24,
             ),
-            onPressed: () {
-              Navigator.pushNamed(context, '/student-profile-management-screen');
-            },
+            onPressed: _onEditMyProfile,
           ),
         ],
       ),
@@ -106,6 +105,111 @@ class _ProfileBuddyScreenState extends State<ProfileBuddyScreen> {
               ? _buildNoStudentView()
               : _buildProfileView(),
     );
+  }
+
+  Future<void> _onEditMyProfile() async {
+    final nameController = TextEditingController(
+      text: (_dataService.currentUserProfile?['displayName'] as String?) ?? '',
+    );
+    await showDialog<void>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Edit Profile'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: nameController,
+              decoration: const InputDecoration(labelText: 'Display Name'),
+            ),
+            const SizedBox(height: 12),
+            ElevatedButton.icon(
+              onPressed: _onChangeAvatarTapped,
+              icon: const Icon(Icons.photo_camera),
+              label: const Text('Change Photo'),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              final newName = nameController.text.trim();
+              if (newName.isNotEmpty) {
+                await _dataService.updateMyProfile({'displayName': newName});
+                if (mounted) setState(() {});
+              }
+              if (mounted) Navigator.of(context).pop();
+            },
+            child: const Text('Save'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _onChangeAvatarTapped() async {
+    try {
+      final picker = ImagePicker();
+      final picked = await picker.pickImage(
+        source: ImageSource.gallery,
+        maxWidth: 800,
+        maxHeight: 800,
+        imageQuality: 85,
+      );
+      if (picked == null) return;
+
+      final uid = _dataService.currentUserId;
+      if (uid == null) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('User not logged in')),
+          );
+        }
+        return;
+      }
+
+      // Show uploading message
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Uploading photo...'),
+            duration: Duration(seconds: 3),
+          ),
+        );
+      }
+
+      // Use the new web-compatible upload service
+      final downloadUrl = await ImageUploadService.uploadUserAvatar(
+        userId: uid,
+        imageFile: picked,
+      );
+
+      await _dataService.updateMyProfile({'avatarUrl': downloadUrl});
+      
+      if (mounted) {
+        setState(() {});
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Profile photo updated successfully!'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to update photo: $e'),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 5),
+          ),
+        );
+      }
+    }
   }
 
   Widget _buildNoStudentView() {
@@ -363,7 +467,6 @@ class _ProfileBuddyScreenState extends State<ProfileBuddyScreen> {
                 CustomIconWidget(
                   iconName: 'info',
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  size: 24,
                 ),
                 SizedBox(width: 3.w),
                 Text(
@@ -472,7 +575,6 @@ class _ProfileBuddyScreenState extends State<ProfileBuddyScreen> {
                 CustomIconWidget(
                   iconName: 'event_available',
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  size: 24,
                 ),
                 SizedBox(width: 3.w),
                 Text(
@@ -568,7 +670,6 @@ class _ProfileBuddyScreenState extends State<ProfileBuddyScreen> {
                   CustomIconWidget(
                     iconName: 'trending_up',
                     color: Theme.of(context).colorScheme.primary,
-                    size: 24,
                   ),
                   SizedBox(width: 3.w),
                   Expanded(

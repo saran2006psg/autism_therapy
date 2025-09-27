@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../core/app_export.dart';
+import 'package:thriveers/core/app_export.dart';
 
 class SessionHistoryWidget extends StatefulWidget {
   final List<Map<String, dynamic>> sessions;
@@ -57,7 +57,7 @@ class _SessionHistoryWidgetState extends State<SessionHistoryWidget> {
                 children: [
                   Expanded(
                     child: Text(
-                      session['title'] ?? 'Session Details',
+                      (session['title'] as String?) ?? 'Session Details',
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                   ),
@@ -66,7 +66,6 @@ class _SessionHistoryWidgetState extends State<SessionHistoryWidget> {
                     icon: CustomIconWidget(
                       iconName: 'share',
                       color: Theme.of(context).colorScheme.primary,
-                      size: 24,
                     ),
                   ),
                 ],
@@ -104,28 +103,28 @@ class _SessionHistoryWidgetState extends State<SessionHistoryWidget> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _buildDetailSection('Session Type',
-                          session['type'] ?? 'Individual Therapy'),
+                          (session['type'] as String?) ?? 'Individual Therapy'),
                       _buildDetailSection('Therapist',
-                          session['therapist'] ?? 'Current Therapist'),
+                          (session['therapist'] as String?) ?? 'Current Therapist'),
                       _buildDetailSection(
                           'Goals Addressed',
-                          session['goals'] ??
+                          (session['goals'] as String?) ??
                               'Communication skills, Social interaction'),
                       _buildDetailSection(
                           'Activities',
-                          session['activities'] ??
+                          (session['activities'] as String?) ??
                               'Role-playing exercises, Communication board practice, Social story reading'),
                       _buildDetailSection(
                           'Progress Notes',
-                          session['notes'] ??
+                          (session['notes'] as String?) ??
                               'Student showed improved eye contact during activities. Responded well to visual cues. Demonstrated better turn-taking skills during group activities.'),
                       _buildDetailSection(
                           'Homework Assigned',
-                          session['homework'] ??
+                          (session['homework'] as String?) ??
                               'Practice greeting phrases with family members. Complete emotion identification worksheet.'),
                       _buildDetailSection(
                           'Next Session Focus',
-                          session['nextFocus'] ??
+                          (session['nextFocus'] as String?) ??
                               'Continue working on conversation starters and maintaining dialogue.'),
                     ],
                   ),
@@ -197,7 +196,6 @@ class _SessionHistoryWidgetState extends State<SessionHistoryWidget> {
           leading: CustomIconWidget(
             iconName: 'history',
             color: Theme.of(context).colorScheme.primary,
-            size: 24,
           ),
           title: Text(
             'Session History (${widget.sessions.length})',
@@ -268,7 +266,7 @@ class _SessionHistoryWidgetState extends State<SessionHistoryWidget> {
                                   children: [
                                     Expanded(
                                       child: Text(
-                                        session['title'] ?? 'Therapy Session',
+                                        (session['title'] as String?) ?? 'Therapy Session',
                                         style: AppTheme
                                             .lightTheme.textTheme.titleMedium,
                                         maxLines: 1,
@@ -280,17 +278,17 @@ class _SessionHistoryWidgetState extends State<SessionHistoryWidget> {
                                           horizontal: 2.w, vertical: 0.5.h),
                                       decoration: BoxDecoration(
                                         color: _getSessionTypeColor(
-                                                session['type'] ?? 'Individual')
+                                                (session['type'] as String?) ?? 'Individual')
                                             .withValues(alpha: 0.1),
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       child: Text(
-                                        session['type'] ?? 'Individual',
+                                        (session['type'] as String?) ?? 'Individual',
                                         style: AppTheme
                                             .lightTheme.textTheme.labelSmall
                                             ?.copyWith(
                                           color: _getSessionTypeColor(
-                                              session['type'] ?? 'Individual'),
+                                              (session['type'] as String?) ?? 'Individual'),
                                           fontWeight: FontWeight.w600,
                                         ),
                                       ),
@@ -308,7 +306,7 @@ class _SessionHistoryWidgetState extends State<SessionHistoryWidget> {
                                     ),
                                     SizedBox(width: 1.w),
                                     Text(
-                                      session['date'] ?? '',
+                                      (session['date'] as String?) ?? '',
                                       style: AppTheme
                                           .lightTheme.textTheme.bodySmall
                                           ?.copyWith(
@@ -338,7 +336,7 @@ class _SessionHistoryWidgetState extends State<SessionHistoryWidget> {
                                 if (session['summary'] != null) ...[
                                   SizedBox(height: 1.h),
                                   Text(
-                                    session['summary'],
+                                    (session['summary'] as String?) ?? '',
                                     style: AppTheme
                                         .lightTheme.textTheme.bodyMedium
                                         ?.copyWith(

@@ -1,36 +1,80 @@
-# This file configures the analyzer, which statically analyzes Dart code to
-# check for errors, warnings, and lints.
-#
-# The issues identified by the analyzer are surfaced in the UI of Dart-enabled
-# IDEs (https://dart.dev/tools#ides-and-editors). The analyzer can also be
-# invoked from the command line by running `flutter analyze`.
+# Analysis Options for ThrivEers
+# Comprehensive linting rules for mobile and web Flutter development
 
-# The following line activates a set of recommended lints for Flutter apps,
-# packages, and plugins designed to encourage good coding practices.
 include: package:flutter_lints/flutter.yaml
 
 analyzer:
   exclude:
     - scripts/**
+    - build/**
+    - .dart_tool/**
+    - android/**
+    - ios/**
+    - web/**
+    - test/mocks/**
+
+  language:
+    strict-casts: true
+    strict-raw-types: true
+    strict-inference: true
+
+  strong-mode:
+    implicit-casts: false
+    implicit-dynamic: false
 
 linter:
-  # The lint rules applied to this project can be customized in the
-  # section below to disable rules from the `package:flutter_lints/flutter.yaml`
-  # included above or to enable additional rules. A list of all available lints
-  # and their documentation is published at https://dart.dev/lints.
-  #
-  # Instead of disabling a lint rule for the entire project in the
-  # section below, it can also be suppressed for a single line of code
-  # or a specific dart file by using the `// ignore: name_of_lint` and
-  # `// ignore_for_file: name_of_lint` syntax on the line or in the file
-  # producing the lint.
   rules:
-    # avoid_print: false  # Uncomment to disable the `avoid_print` rule
-    # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
+    # Style Rules
+    prefer_single_quotes: true
     prefer_const_constructors: true
     prefer_const_constructors_in_immutables: true
     prefer_const_literals_to_create_immutables: true
-    use_key_in_widget_constructors: true
+    prefer_const_declarations: true
+    prefer_final_fields: true
+    prefer_final_locals: true
+    prefer_final_in_for_each: true
 
-# Additional information about this file can be found at
-# https://dart.dev/guides/language/analysis-options
+    # Widget & Layout Rules
+    use_key_in_widget_constructors: true
+    sort_child_properties_last: true
+    sized_box_for_whitespace: true
+    avoid_unnecessary_containers: true
+
+    # Import & Export Rules
+    always_use_package_imports: true
+    avoid_relative_lib_imports: true
+
+    # Performance Rules
+    avoid_function_literals_in_foreach_calls: true
+    prefer_foreach: true
+
+    # Error Prevention
+    avoid_print: true
+    avoid_web_libraries_in_flutter: true
+    use_build_context_synchronously: true
+
+    # Documentation Rules
+    public_member_api_docs: false # Disabled for now
+
+    # Null Safety Rules
+    prefer_null_aware_operators: true
+    unnecessary_null_checks: true
+    unnecessary_null_in_if_null_operators: true
+
+    # Code Quality Rules
+    avoid_redundant_argument_values: true
+    avoid_unused_constructor_parameters: true
+    prefer_is_empty: true
+    prefer_is_not_empty: true
+    prefer_collection_literals: true
+    unnecessary_lambdas: true
+    unnecessary_parenthesis: true
+    unnecessary_string_interpolations: true
+
+    # Formatting Rules
+    curly_braces_in_flow_control_structures: true
+    empty_catches: true
+    empty_constructor_bodies: true
+
+    # Security Rules
+    avoid_catching_errors: true

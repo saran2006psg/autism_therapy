@@ -35,6 +35,10 @@ class AuthService {
         if (userDoc.exists) {
           final userData = userDoc.data() as Map<String, dynamic>;
           await updateLastLogin();
+          
+          // Debug logging
+          developer.log('User profile found: ${userData['email']}, role: ${userData['role']}', name: 'AuthService');
+          
           return AuthResult(
             success: true,
             user: credential.user,
@@ -42,13 +46,22 @@ class AuthService {
             userName: userData['name'] as String?,
           );
         } else {
-          // Create user profile if doesn't exist
-          await _createUserProfile(credential.user!);
+          // Debug logging for missing profile
+          developer.log('User profile not found for ${credential.user?.email}, creating default profile', name: 'AuthService');
+          
+          // Create user profile if doesn't exist - try to determine role from email
+          String defaultRole = 'Therapist';
+          if (credential.user?.email?.contains('parent') == true || 
+              credential.user?.email == 'muni@gmail.com') {
+            defaultRole = 'Parent';
+          }
+          
+          await _createUserProfile(credential.user!, role: defaultRole);
           return AuthResult(
             success: true,
             user: credential.user,
-            userRole: 'Therapist', // Default role
-            userName: credential.user!.displayName,
+            userRole: defaultRole,
+            userName: credential.user!.displayName ?? credential.user!.email?.split('@')[0],
           );
         }
       }

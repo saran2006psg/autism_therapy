@@ -7,7 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../core/app_export.dart';
+import 'package:thriveers/core/app_export.dart';
 
 class StudentPhotoWidget extends StatefulWidget {
   final String? currentImageUrl;
@@ -160,7 +160,6 @@ class _StudentPhotoWidgetState extends State<StudentPhotoWidget> {
                 leading: CustomIconWidget(
                   iconName: 'camera_alt',
                   color: Theme.of(context).colorScheme.primary,
-                  size: 24,
                 ),
                 title: Text(
                   'Camera',
@@ -180,7 +179,6 @@ class _StudentPhotoWidgetState extends State<StudentPhotoWidget> {
                 leading: CustomIconWidget(
                   iconName: 'photo_library',
                   color: Theme.of(context).colorScheme.primary,
-                  size: 24,
                 ),
                 title: Text(
                   'Gallery',
@@ -196,7 +194,6 @@ class _StudentPhotoWidgetState extends State<StudentPhotoWidget> {
                   leading: CustomIconWidget(
                     iconName: 'delete',
                     color: Theme.of(context).colorScheme.error,
-                    size: 24,
                   ),
                   title: Text(
                     'Remove Photo',
@@ -304,10 +301,9 @@ class _StudentPhotoWidgetState extends State<StudentPhotoWidget> {
                   borderRadius: BorderRadius.circular(15.w),
                   child: _selectedImagePath!.startsWith('http')
                       ? CustomImageWidget(
-                          imageUrl: _selectedImagePath!,
+                          imageUrl: _selectedImagePath,
                           width: 30.w,
                           height: 30.w,
-                          fit: BoxFit.cover,
                         )
                       : kIsWeb
                           ? Image.network(

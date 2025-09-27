@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../core/app_export.dart';
+import 'package:thriveers/core/app_export.dart';
 
 class NotesSectionWidget extends StatefulWidget {
   final List<Map<String, dynamic>> notes;
@@ -39,7 +39,7 @@ class _NotesSectionWidgetState extends State<NotesSectionWidget> {
   void _showAddNoteDialog() {
     final titleController = TextEditingController();
     final contentController = TextEditingController();
-    List<String> selectedTags = [];
+    final List<String> selectedTags = [];
 
     showModalBottomSheet(
       context: context,
@@ -96,7 +96,6 @@ class _NotesSectionWidgetState extends State<NotesSectionWidget> {
                         icon: CustomIconWidget(
                           iconName: 'mic',
                           color: Theme.of(context).colorScheme.primary,
-                          size: 24,
                         ),
                         tooltip: 'Voice to Text',
                       ),
@@ -230,7 +229,7 @@ class _NotesSectionWidgetState extends State<NotesSectionWidget> {
                 children: [
                   Expanded(
                     child: Text(
-                      note['title'] ?? 'Note Details',
+                      (note['title'] ?? 'Note Details').toString(),
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                   ),
@@ -364,7 +363,7 @@ class _NotesSectionWidgetState extends State<NotesSectionWidget> {
               Expanded(
                 child: SingleChildScrollView(
                   child: Text(
-                    note['content'] ?? '',
+                    (note['content'] ?? '').toString(),
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       height: 1.5,
                     ),
@@ -410,7 +409,6 @@ class _NotesSectionWidgetState extends State<NotesSectionWidget> {
           leading: CustomIconWidget(
             iconName: 'note',
             color: Theme.of(context).colorScheme.primary,
-            size: 24,
           ),
           title: Text(
             'Notes (${widget.notes.length})',
@@ -424,13 +422,11 @@ class _NotesSectionWidgetState extends State<NotesSectionWidget> {
                 icon: CustomIconWidget(
                   iconName: 'add',
                   color: Theme.of(context).colorScheme.primary,
-                  size: 24,
                 ),
               ),
               CustomIconWidget(
                 iconName: _isExpanded ? 'expand_less' : 'expand_more',
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
-                size: 24,
               ),
             ],
           ),
@@ -494,7 +490,7 @@ class _NotesSectionWidgetState extends State<NotesSectionWidget> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  note['title'] ?? 'Untitled Note',
+                                  (note['title'] ?? 'Untitled Note').toString(),
                                   style:
                                       Theme.of(context).textTheme.titleMedium,
                                   maxLines: 1,
@@ -502,7 +498,7 @@ class _NotesSectionWidgetState extends State<NotesSectionWidget> {
                                 ),
                                 SizedBox(height: 1.h),
                                 Text(
-                                  note['content'] ?? '',
+                                  (note['content'] ?? '').toString(),
                                   style: AppTheme
                                       .lightTheme.textTheme.bodyMedium
                                       ?.copyWith(

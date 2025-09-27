@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../core/app_export.dart';
+import 'package:thriveers/core/app_export.dart';
 
 class StudentProgressCardWidget extends StatelessWidget {
   final Map<String, dynamic> student;
@@ -128,7 +128,7 @@ class StudentProgressCardWidget extends StatelessWidget {
                     )
                   : Column(
                       children:
-                          (goals.take(2).toList()).map((goal) {
+                          goals.take(2).toList().map((goal) {
                         return Padding(
                           padding: EdgeInsets.only(bottom: 0.5.h),
                           child: Row(
@@ -186,7 +186,7 @@ class StudentProgressCardWidget extends StatelessWidget {
                     )
                   : Column(
                       children:
-                          (recentAchievements.take(2).toList())
+                          recentAchievements.take(2).toList()
                               .map((achievement) {
                         return Padding(
                           padding: EdgeInsets.only(bottom: 0.5.h),

@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
-import '../presentation/session_planning_screen/session_planning_screen.dart';
-import '../presentation/login_screen/login_screen.dart';
-import '../presentation/student_profile_management_screen/student_profile_management_screen.dart';
-import '../presentation/therapist_dashboard/therapist_dashboard.dart';
-import '../presentation/parent_dashboard/parent_dashboard.dart';
-import '../presentation/session_execution_screen/session_execution_screen.dart';
-import '../presentation/profile_buddy_screen/profile_buddy_screen.dart';
-import '../presentation/students_list_screen/students_list_screen.dart';
-import '../presentation/therapist_profile_screen/therapist_profile_screen.dart';
-import '../presentation/forms/add_student_form.dart';
-import '../presentation/settings_screen/settings_screen.dart';
-import '../presentation/student_login/student_login_screen.dart';
-import '../presentation/student_dashboard/student_dashboard.dart';
+import 'package:thriveers/presentation/session_planning_screen/session_planning_screen.dart';
+import 'package:thriveers/presentation/login_screen/login_screen.dart';
+import 'package:thriveers/presentation/student_profile_management_screen/student_profile_management_screen.dart';
+import 'package:thriveers/presentation/therapist_dashboard/therapist_dashboard.dart';
+import 'package:thriveers/presentation/parent_dashboard/parent_dashboard.dart';
+import 'package:thriveers/presentation/session_execution_screen/session_execution_screen.dart';
+import 'package:thriveers/presentation/profile_buddy_screen/profile_buddy_screen.dart';
+import 'package:thriveers/presentation/students_list_screen/students_list_screen.dart';
+import 'package:thriveers/presentation/therapist_profile_screen/therapist_profile_screen.dart';
+import 'package:thriveers/presentation/forms/add_student_form.dart';
+import 'package:thriveers/presentation/settings_screen/settings_screen.dart';
+import 'package:thriveers/presentation/student_login/student_login_screen.dart';
+import 'package:thriveers/presentation/student_dashboard/student_dashboard.dart';
+import 'package:thriveers/presentation/admin_screen/admin_screen.dart';
 
 class AppRoutes {
   // Route constants for navigation throughout the app
@@ -30,6 +31,7 @@ class AppRoutes {
   static const String settings = '/settings';
   static const String studentLogin = '/student-login';
   static const String studentDashboard = '/student-dashboard';
+  static const String admin = '/admin';
 
   static Map<String, WidgetBuilder> routes = {
     initial: (context) => const LoginScreen(),
@@ -47,6 +49,7 @@ class AppRoutes {
     settings: (context) => const SettingsScreen(),
     studentLogin: (context) => const StudentLoginScreen(),
     studentDashboard: (context) => const StudentDashboard(),
+    admin: (context) => const AdminScreen(),
     // Additional routes can be added here as the app expands
   };
 }

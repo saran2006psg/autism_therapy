@@ -1,13 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'dart:developer' as developer;
 
-import '../models/student_model.dart';
-import '../models/session_model.dart';
-import '../models/goal_model.dart';
-import '../models/progress_model.dart';
-import 'firestore_service.dart';
-import 'auth_service.dart';
-import 'test_data_service.dart';
+import 'package:thriveers/core/models/student_model.dart';
+import 'package:thriveers/core/models/session_model.dart';
+import 'package:thriveers/core/models/goal_model.dart';
+import 'package:thriveers/core/models/progress_model.dart';
+import 'package:thriveers/core/services/firestore_service.dart';
+import 'package:thriveers/core/services/auth_service.dart';
+import 'package:thriveers/core/services/test_data_service.dart';
 
 /// Comprehensive Data Management Service
 /// Centralized service for all app data operations with Firestore integration
@@ -501,6 +501,11 @@ class DataService extends ChangeNotifier {
   }) async {
     try {
       final activity = ActivityModel(
+        sessionId: '',
+        goalId: '',
+        activityName: name,
+        status: 'created',
+        startTime: DateTime.now(),
         name: name,
         description: description,
         category: category,
@@ -508,7 +513,7 @@ class DataService extends ChangeNotifier {
         difficulty: difficulty,
         estimatedDuration: estimatedDuration,
         iconName: iconName,
-        materials: materials,
+        materials: materials.join(', '),
         instructions: instructions,
         goals: goals,
         createdAt: DateTime.now(),
@@ -631,20 +636,20 @@ class DataService extends ChangeNotifier {
 
   Future<void> _loadParentData() async {
     try {
+      developer.log('Loading parent data for user: $_currentUserId', name: 'DataService');
+      
       // Load children
       _students = await FirestoreService.getStudentsForParent(_currentUserId!);
+      developer.log('Found ${_students.length} students for parent', name: 'DataService');
       
-      // If no students found, initialize test data for testing
+      // If no students found, this is normal for a parent - they might not have children assigned yet
       if (_students.isEmpty) {
-        developer.log('No students found for parent, initializing test data', name: 'DataService');
-        await TestDataService.initializeTherapistTestData();
-        // Reload students after creating test data - fetch those created under this user
-        final uid = AuthService.currentUser?.uid;
-        if (uid != null) {
-          _students = await FirestoreService.getStudentsForTherapist(uid);
-        }
+        developer.log('No students found for parent - this is normal', name: 'DataService');
+        // Don't initialize test data for parents - they should have students assigned by therapists
+        return;
       }
       
+      developer.log('Loading sessions for ${_students.length} students', name: 'DataService');
       // Load sessions for children
       _sessions.clear();
       for (final student in _students) {
@@ -652,6 +657,7 @@ class DataService extends ChangeNotifier {
         _sessions.addAll(studentSessions);
       }
 
+      developer.log('Loading goals for ${_students.length} students', name: 'DataService');
       // Load goals for children
       _goals.clear();
       for (final student in _students) {
@@ -659,6 +665,7 @@ class DataService extends ChangeNotifier {
         _goals.addAll(studentGoals);
       }
 
+      developer.log('Loading progress for ${_students.length} students', name: 'DataService');
       // Load progress for children
       _progressEntries.clear();
       for (final student in _students) {
@@ -710,7 +717,7 @@ class DataService extends ChangeNotifier {
         .toList();
 
     return recentSessions.map((s) {
-      final progress = s.progress['completion_rate'] ?? 0.0;
+      final progress = (s.progress['completion_rate'] as num?) ?? 0.0;
       if (progress > 80) return 'high';
       if (progress > 60) return 'medium';
       return 'low';

@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:developer' as developer;
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../models/session_model.dart';
-import '../models/progress_model.dart';
-import 'firestore_service.dart';
-import 'auth_service.dart';
+import 'package:thriveers/core/models/session_model.dart';
+import 'package:thriveers/core/models/progress_model.dart';
+import 'package:thriveers/core/services/firestore_service.dart';
+import 'package:thriveers/core/services/auth_service.dart';
 
 /// Session Execution Service
 /// Handles real-time session data collection and Firestore integration
@@ -432,7 +432,7 @@ class SessionExecutionService {
   static double _calculateGoalImprovement(dynamic goal, Map<String, dynamic> sessionProgress) {
     // Calculate goal improvement based on session data
     // This is a simplified calculation - in reality, this would be more sophisticated
-    final completionRate = sessionProgress['completion_rate'] ?? 0.0;
+    final completionRate = (sessionProgress['completion_rate'] as num?) ?? 0.0;
     return completionRate > 70 ? 5.0 : 2.0; // Increase by 5% or 2% based on performance
   }
 

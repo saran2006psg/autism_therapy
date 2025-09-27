@@ -2,7 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../core/app_export.dart';
+import 'package:thriveers/core/app_export.dart';
 
 class ProgressChartWidget extends StatefulWidget {
   final List<Map<String, dynamic>> progressData;
@@ -48,7 +48,7 @@ class _ProgressChartWidgetState extends State<ProgressChartWidget> {
           Row(
             children: [
               Text(
-                "Progress Visualization",
+                'Progress Visualization',
                 style: AppTheme.lightTheme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.w600,
                 ),
@@ -112,7 +112,6 @@ class _ProgressChartWidgetState extends State<ProgressChartWidget> {
             child: LineChart(
               LineChartData(
                 gridData: FlGridData(
-                  show: true,
                   drawVerticalLine: false,
                   horizontalInterval: 20,
                   getDrawingHorizontalLine: (value) {
@@ -124,12 +123,11 @@ class _ProgressChartWidgetState extends State<ProgressChartWidget> {
                   },
                 ),
                 titlesData: FlTitlesData(
-                  show: true,
                   rightTitles: const AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
+                    
                   ),
                   topTitles: const AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
+                    
                   ),
                   bottomTitles: AxisTitles(
                     sideTitles: SideTitles(
@@ -232,7 +230,6 @@ class _ProgressChartWidgetState extends State<ProgressChartWidget> {
                     barWidth: 3,
                     isStrokeCapRound: true,
                     dotData: FlDotData(
-                      show: true,
                       getDotPainter: (spot, percent, barData, index) {
                         return FlDotCirclePainter(
                           radius: 4,
@@ -258,7 +255,6 @@ class _ProgressChartWidgetState extends State<ProgressChartWidget> {
                   ),
                 ],
                 lineTouchData: LineTouchData(
-                  enabled: true,
                   touchTooltipData: LineTouchTooltipData(
                     getTooltipItems: (List<LineBarSpot> touchedBarSpots) {
                       return touchedBarSpots.map((barSpot) {
@@ -280,11 +276,11 @@ class _ProgressChartWidgetState extends State<ProgressChartWidget> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _buildStatItem("Average", "${_calculateAverage().toInt()}%",
+              _buildStatItem('Average', '${_calculateAverage().toInt()}%',
                   AppTheme.lightTheme.primaryColor),
-              _buildStatItem("Best Day", "${_getBestScore().toInt()}%",
+              _buildStatItem('Best Day', '${_getBestScore().toInt()}%',
                   AppTheme.lightTheme.colorScheme.tertiary),
-              _buildStatItem("Improvement", "+${_getImprovement().toInt()}%",
+              _buildStatItem('Improvement', '+${_getImprovement().toInt()}%',
                   AppTheme.lightTheme.colorScheme.secondary),
             ],
           ),

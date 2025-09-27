@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../core/app_export.dart';
+import 'package:thriveers/core/app_export.dart';
 
 /// A widget that provides theme switching functionality
 /// Can be used as an icon button in app bars or as a list tile in settings

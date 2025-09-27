@@ -78,23 +78,23 @@ class StudentModel {
     final data = doc.data() as Map<String, dynamic>;
     return StudentModel(
       id: doc.id,
-      firstName: data['firstName'] ?? '',
-      lastName: data['lastName'] ?? '',
-      age: data['age'] ?? 0,
+      firstName: (data['firstName'] as String?) ?? '',
+      lastName: (data['lastName'] as String?) ?? '',
+      age: (data['age'] as int?) ?? 0,
       dateOfBirth: (data['dateOfBirth'] as Timestamp?)?.toDate() ?? DateTime.now(),
-      gender: data['gender'] ?? '',
-      avatarUrl: data['avatarUrl'],
-      diagnosis: data['diagnosis'] ?? '',
-      communicationLevel: data['communicationLevel'] ?? '',
-      sensoryNeeds: data['sensoryNeeds'] ?? '',
+      gender: (data['gender'] as String?) ?? '',
+      avatarUrl: data['avatarUrl'] as String?,
+      diagnosis: (data['diagnosis'] as String?) ?? '',
+      communicationLevel: (data['communicationLevel'] as String?) ?? '',
+      sensoryNeeds: (data['sensoryNeeds'] as String?) ?? '',
       triggers: _convertToStringList(data['triggers']),
-      severity: data['severity'] ?? '',
-      therapistId: data['therapistId'] ?? '',
+      severity: (data['severity'] as String?) ?? '',
+      therapistId: (data['therapistId'] as String?) ?? '',
       parentIds: _convertToStringList(data['parentIds']),
       goalIds: _convertToStringList(data['goalIds']),
       emergencyContacts: _convertToMap(data['emergencyContacts']),
       preferences: _convertToMap(data['preferences']),
-      isActive: data['isActive'] ?? true,
+      isActive: (data['isActive'] as bool?) ?? true,
       createdAt: (data['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
       updatedAt: (data['updatedAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
     );
@@ -147,7 +147,7 @@ class StudentModel {
     );
   }
 
-  /// Helper method to safely convert data to List<String>
+  /// Helper method to safely convert data to List&lt;String&gt;
   static List<String> _convertToStringList(dynamic data) {
     if (data == null) return [];
     if (data is List) {
@@ -156,7 +156,7 @@ class StudentModel {
     return [];
   }
 
-  /// Helper method to safely convert data to Map<String, dynamic>
+  /// Helper method to safely convert data to Map&lt;String, dynamic&gt;
   static Map<String, dynamic> _convertToMap(dynamic data) {
     if (data == null) return {};
     if (data is Map) {

@@ -23,7 +23,7 @@ class CustomImageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Handle null or empty imageUrl - use a more reliable fallback
-    String validImageUrl = imageUrl?.isNotEmpty == true 
+    final String validImageUrl = imageUrl?.isNotEmpty == true 
         ? imageUrl! 
         : 'https://robohash.org/default?set=set4&size=150x150'; // More reliable robot avatars
     
@@ -51,7 +51,7 @@ class CustomImageWidget extends StatelessWidget {
             decoration: BoxDecoration(
               color: Colors.grey[100],
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Colors.grey[300]!, width: 1),
+              border: Border.all(color: Colors.grey[300]!),
             ),
             child: Icon(
               Icons.person,

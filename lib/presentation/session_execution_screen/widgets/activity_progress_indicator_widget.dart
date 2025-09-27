@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../../core/app_export.dart';
-import '../../../theme/app_theme.dart';
+import 'package:thriveers/core/app_export.dart';
+import 'package:thriveers/theme/app_theme.dart';
 
 class ActivityProgressIndicatorWidget extends StatelessWidget {
   final int currentActivity;

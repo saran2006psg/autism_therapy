@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../core/app_export.dart';
-import './widgets/app_logo_widget.dart';
-import './widgets/login_form_widget.dart';
-import './widgets/signup_form_widget.dart';
-import './widgets/register_link_widget.dart';
-import './widgets/role_indicator_widget.dart';
+import 'package:thriveers/core/app_export.dart';
+import 'package:thriveers/presentation/login_screen/widgets/app_logo_widget.dart';
+import 'package:thriveers/presentation/login_screen/widgets/login_form_widget.dart';
+import 'package:thriveers/presentation/login_screen/widgets/signup_form_widget.dart';
+import 'package:thriveers/presentation/login_screen/widgets/register_link_widget.dart';
+import 'package:thriveers/presentation/login_screen/widgets/role_indicator_widget.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -57,6 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
           );
         }
 
+        // ignore: inference_failure_on_instance_creation
         await Future.delayed(const Duration(seconds: 1));
 
         final dataService = DataService();
@@ -131,10 +132,13 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     try {
+      print('DEBUG: Starting login for $email');
       final result = await AuthService.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
+
+      print('DEBUG: Login result - success: ${result.success}, role: ${result.userRole}');
 
       if (result.success && result.user != null) {
         setState(() {
@@ -157,6 +161,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
         await Future.delayed(const Duration(seconds: 1));
 
+        print('DEBUG: Initializing DataService...');
         final dataService = DataService();
         await dataService.initialize();
 
@@ -164,7 +169,21 @@ class _LoginScreenState extends State<LoginScreen> {
           final route = _userRole?.toLowerCase() == 'therapist'
               ? '/therapist-dashboard'
               : '/parent-dashboard';
-          Navigator.pushReplacementNamed(context, route);
+          print('DEBUG: User role: $_userRole, Route: $route');
+          
+          try {
+            Navigator.pushReplacementNamed(context, route);
+            print('DEBUG: Navigation successful');
+          } catch (e) {
+            print('DEBUG: Navigation error: $e');
+            // Show error message
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Navigation error: $e'),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
         }
       } else {
         setState(() {
@@ -242,9 +261,10 @@ class _LoginScreenState extends State<LoginScreen> {
           width: double.infinity,
           padding: EdgeInsets.all(4.w),
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surfaceVariant,
+            color: Theme.of(context).colorScheme.surfaceContainerHighest,
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
+              // ignore: deprecated_member_use
               color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
             ),
           ),
@@ -525,7 +545,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(
                           color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.1),
-                          width: 1,
                         ),
                         boxShadow: [
                           BoxShadow(
@@ -621,7 +640,22 @@ class _LoginScreenState extends State<LoginScreen> {
                         onRegisterTap: _toggleSignUpMode,
                       ),
 
-                    SizedBox(height: 4.h),
+                    SizedBox(height: 2.h),
+
+                    // Admin access button (for development)
+                    if (!_showRoleSelection)
+                      TextButton(
+                        onPressed: () => Navigator.pushNamed(context, '/admin'),
+                        child: Text(
+                          'Admin Panel',
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.onSurfaceVariant,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+
+                    SizedBox(height: 2.h),
                   ],
                 ),
               ),

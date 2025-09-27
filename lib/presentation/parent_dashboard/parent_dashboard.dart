@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:sizer/sizer.dart';
 import 'dart:developer' as developer;
 
-import '../../core/services/firestore_service.dart';
-
-import '../../core/app_export.dart';
-import '../../widgets/theme_toggle_widget.dart';
-import './widgets/progress_chart_widget.dart';
+import 'package:thriveers/core/app_export.dart';
+import 'package:thriveers/core/services/image_upload_service.dart';
+import 'package:thriveers/widgets/theme_toggle_widget.dart';
+import 'package:thriveers/presentation/parent_dashboard/widgets/progress_chart_widget.dart';
 
 class ParentDashboard extends StatefulWidget {
   const ParentDashboard({super.key});
@@ -21,7 +19,7 @@ class ParentDashboard extends StatefulWidget {
 class _ParentDashboardState extends State<ParentDashboard>
     with TickerProviderStateMixin {
   int _currentIndex = 0;
-  String _lastSyncTime = "Just now";
+  String _lastSyncTime = 'Just now';
   final int _unreadMessages = 3;
   
   // Real data from DataService
@@ -36,10 +34,6 @@ class _ParentDashboardState extends State<ParentDashboard>
     _initializeData();
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
 
   Future<void> _initializeData() async {
     try {
@@ -54,7 +48,7 @@ class _ParentDashboardState extends State<ParentDashboard>
       
       setState(() {
         _isLoading = false;
-        _lastSyncTime = "Just now";
+        _lastSyncTime = 'Just now';
       });
     } catch (e) {
       setState(() {
@@ -93,7 +87,7 @@ class _ParentDashboardState extends State<ParentDashboard>
       if (mounted) {
         setState(() {
           _isLoading = false;
-          _lastSyncTime = "Just now";
+          _lastSyncTime = 'Just now';
         });
       }
 
@@ -126,7 +120,7 @@ class _ParentDashboardState extends State<ParentDashboard>
 
   void _handleMessageTap() {
     Fluttertoast.showToast(
-      msg: "Opening secure messaging...",
+      msg: 'Opening secure messaging...',
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
       backgroundColor: Theme.of(context).colorScheme.primary,
@@ -136,7 +130,7 @@ class _ParentDashboardState extends State<ParentDashboard>
 
   void _handleCalendarIntegration() {
     Fluttertoast.showToast(
-      msg: "Adding to calendar...",
+      msg: 'Adding to calendar...',
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
       backgroundColor: Theme.of(context).colorScheme.secondary,
@@ -146,7 +140,7 @@ class _ParentDashboardState extends State<ParentDashboard>
 
   void _handleSessionShare(String sessionId) {
     Fluttertoast.showToast(
-      msg: "Sharing session summary...",
+      msg: 'Sharing session summary...',
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
       backgroundColor: Theme.of(context).colorScheme.primary,
@@ -160,7 +154,7 @@ class _ParentDashboardState extends State<ParentDashboard>
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(
-          "ThrivePath",
+          'ThrivePath',
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
             fontWeight: FontWeight.w700,
             color: Theme.of(context).colorScheme.primary,
@@ -175,7 +169,7 @@ class _ParentDashboardState extends State<ParentDashboard>
           GestureDetector(
             onTap: _onEditProfile,
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8.0),
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: CircleAvatar(
                 radius: 16,
                 backgroundImage: (_dataService.currentUserAvatarUrl != null && _dataService.currentUserAvatarUrl!.isNotEmpty)
@@ -206,7 +200,6 @@ class _ParentDashboardState extends State<ParentDashboard>
                     icon: CustomIconWidget(
                       iconName: 'notifications',
                       color: Theme.of(context).colorScheme.primary,
-                      size: 24,
                     ),
                   ),
                 ),
@@ -267,7 +260,6 @@ class _ParentDashboardState extends State<ParentDashboard>
               icon: CustomIconWidget(
                 iconName: 'logout',
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
-                size: 24,
               ),
             ),
           ),
@@ -331,7 +323,6 @@ class _ParentDashboardState extends State<ParentDashboard>
                   color: _currentIndex == 0
                       ? Theme.of(context).colorScheme.primary
                       : Theme.of(context).colorScheme.onSurfaceVariant,
-                  size: 24,
                 ),
               ),
               label: 'Activities',
@@ -352,7 +343,6 @@ class _ParentDashboardState extends State<ParentDashboard>
                       color: _currentIndex == 1
                           ? Theme.of(context).colorScheme.primary
                           : Theme.of(context).colorScheme.onSurfaceVariant,
-                      size: 24,
                     ),
                     if (_unreadMessages > 0)
                       Positioned(
@@ -386,7 +376,6 @@ class _ParentDashboardState extends State<ParentDashboard>
                   color: _currentIndex == 2
                       ? Theme.of(context).colorScheme.primary
                       : Theme.of(context).colorScheme.onSurfaceVariant,
-                  size: 24,
                 ),
               ),
               label: 'Profile',
@@ -478,7 +467,7 @@ class _ParentDashboardState extends State<ParentDashboard>
           // Keep a dedicated field for the original activity id inside the session
           'activityId': originalActivityId,
           // Use a separate composite id for UI uniqueness if needed
-          'compositeId': '${session.id}_${originalActivityId}',
+          'compositeId': '${session.id}_$originalActivityId',
           'sessionId': session.id,
           'sessionTitle': session.title,
           'sessionDate': session.scheduledDate,
@@ -679,7 +668,6 @@ class _ParentDashboardState extends State<ParentDashboard>
 
     return ProgressChartWidget(
       progressData: progressData,
-      chartType: 'weekly',
     );
   }
 
@@ -794,12 +782,16 @@ class _ParentDashboardState extends State<ParentDashboard>
 
   Widget _buildRecentActivities(List<Map<String, dynamic>> activities) {
     // Create a deep copy of the activities to ensure we don't share references
-    final activitiesCopy = activities.map((activity) => Map<String, dynamic>.from(activity)).toList();
+    final activitiesCopy = activities.map(Map<String, dynamic>.from).toList();
     
     // Sort by most recent based on completedAt or sessionDate
     activitiesCopy.sort((a, b) {
-      final aDate = a['completedAt'] ?? a['sessionDate'] ?? DateTime.now();
-      final bDate = b['completedAt'] ?? b['sessionDate'] ?? DateTime.now();
+      final DateTime aDate = _asDateTime(a['completedAt'])
+              ?? _asDateTime(a['sessionDate'])
+              ?? DateTime.fromMillisecondsSinceEpoch(0);
+      final DateTime bDate = _asDateTime(b['completedAt'])
+              ?? _asDateTime(b['sessionDate'])
+              ?? DateTime.fromMillisecondsSinceEpoch(0);
       return bDate.compareTo(aDate); // Most recent first
     });
     
@@ -871,7 +863,7 @@ class _ParentDashboardState extends State<ParentDashboard>
                 ),
               ),
               IconButton(
-                icon: Icon(Icons.refresh),
+                icon: const Icon(Icons.refresh),
                 tooltip: 'Refresh',
                 onPressed: _refreshData,
               ),
@@ -879,7 +871,7 @@ class _ParentDashboardState extends State<ParentDashboard>
           ),
           SizedBox(height: 2.h),
           
-          ...recentActivities.map((activity) => _buildActivityCard(activity)),
+          ...recentActivities.map(_buildActivityCard),
           
           if (activities.length > 5)
             Padding(
@@ -974,7 +966,7 @@ class _ParentDashboardState extends State<ParentDashboard>
                   color: statusColor.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12),
                   border: status == 'in_progress' 
-                    ? Border.all(color: statusColor, width: 1) 
+                    ? Border.all(color: statusColor) 
                     : null,
                 ),
                 child: Row(
@@ -1012,7 +1004,7 @@ class _ParentDashboardState extends State<ParentDashboard>
             Container(
               padding: EdgeInsets.all(2.w),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surfaceVariant,
+                color: Theme.of(context).colorScheme.surfaceContainerHighest,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Row(
@@ -1026,7 +1018,7 @@ class _ParentDashboardState extends State<ParentDashboard>
                   SizedBox(width: 2.w),
                   Expanded(
                     child: Text(
-                      activity['studentNotes'],
+                      activity['studentNotes']?.toString() ?? '',
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                   ),
@@ -1098,12 +1090,12 @@ class _ParentDashboardState extends State<ParentDashboard>
                             }
                           }
                         },
-                        icon: Icon(Icons.quiz, size: 18),
-                        label: Text('Take Test'),
+                        icon: const Icon(Icons.quiz, size: 18),
+                        label: const Text('Take Test'),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Theme.of(context).colorScheme.primary,
                           foregroundColor: Colors.white,
-                          padding: EdgeInsets.symmetric(vertical: 12),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
                         ),
                       ),
                     )
@@ -1111,42 +1103,42 @@ class _ParentDashboardState extends State<ParentDashboard>
                     Expanded(
                       child: ElevatedButton.icon(
                         onPressed: () => _showCompletionDialog(activity),
-                        icon: Icon(Icons.check_circle, size: 18),
-                        label: Text('Complete Activity'),
+                        icon: const Icon(Icons.check_circle, size: 18),
+                        label: const Text('Complete Activity'),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.green,
                           foregroundColor: Colors.white,
-                          padding: EdgeInsets.symmetric(vertical: 12),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
                         ),
                       ),
                     ),
                   SizedBox(width: 2.w),
                   OutlinedButton.icon(
                     onPressed: () => _showNotesDialog(activity),
-                    icon: Icon(Icons.note_add, size: 18),
-                    label: Text('Add Notes'),
+                    icon: const Icon(Icons.note_add, size: 18),
+                    label: const Text('Add Notes'),
                     style: OutlinedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                     ),
                   ),
                 ] else ...[
                   Expanded(
                     child: OutlinedButton.icon(
                       onPressed: () => _showNotesDialog(activity),
-                      icon: Icon(Icons.edit_note, size: 18),
-                      label: Text('Edit Notes'),
+                      icon: const Icon(Icons.edit_note, size: 18),
+                      label: const Text('Edit Notes'),
                       style: OutlinedButton.styleFrom(
-                        padding: EdgeInsets.symmetric(vertical: 12),
+                        padding: const EdgeInsets.symmetric(vertical: 12),
                       ),
                     ),
                   ),
                   SizedBox(width: 2.w),
                   OutlinedButton.icon(
                     onPressed: () => _updateActivityStatus(activity, 'not_started'),
-                    icon: Icon(Icons.refresh, size: 18),
-                    label: Text('Reset'),
+                    icon: const Icon(Icons.refresh, size: 18),
+                    label: const Text('Reset'),
                     style: OutlinedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                     ),
                   ),
                 ],
@@ -1157,14 +1149,28 @@ class _ParentDashboardState extends State<ParentDashboard>
     );
   }
 
-  String _formatDate(DateTime date) {
-    return '${date.day}/${date.month}/${date.year}';
+  DateTime? _asDateTime(dynamic value) {
+    if (value == null) return null;
+    if (value is DateTime) return value;
+    if (value is String) return DateTime.tryParse(value);
+    try {
+      // For Firestore Timestamp or similar types with toDate()
+      final dynamic converted = value.toDate();
+      if (converted is DateTime) return converted;
+    } catch (_) {}
+    return null;
+  }
+
+  String _formatDate(dynamic date) {
+    final dt = _asDateTime(date);
+    if (dt == null) return 'Unknown date';
+    return '${dt.day}/${dt.month}/${dt.year}';
   }
 
   Future<void> _updateActivityStatus(Map<String, dynamic> activity, String newStatus) async {
     try {
-      String? sessionId = activity['sessionId']?.toString();
-      String? currentNotes = activity['studentNotes']?.toString();
+      final String? sessionId = activity['sessionId']?.toString();
+      final String? currentNotes = activity['studentNotes']?.toString();
       // Prefer explicit activityId, else derive from composite id, else fallback to id
       String? activityId = activity['activityId']?.toString();
       final String? compositeId = activity['compositeId']?.toString() ?? activity['id']?.toString();
@@ -1244,31 +1250,31 @@ class _ParentDashboardState extends State<ParentDashboard>
 
   void _showCompletionDialog(Map<String, dynamic> activity) {
     final TextEditingController notesController = TextEditingController();
-    String currentNotes = activity['studentNotes'] ?? '';
+    final String currentNotes = (activity['studentNotes'] as String?) ?? '';
     notesController.text = currentNotes;
 
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Complete Activity'),
+          title: const Text('Complete Activity'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                activity['title'] ?? 'Activity',
+                (activity['title'] as String?) ?? 'Activity',
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
               ),
               SizedBox(height: 2.h),
-              Text('Add completion notes (optional):'),
+              const Text('Add completion notes (optional):'),
               SizedBox(height: 1.h),
               TextField(
                 controller: notesController,
                 maxLines: 3,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: 'Enter any notes about the activity completion...',
                   border: OutlineInputBorder(),
                 ),
@@ -1278,7 +1284,7 @@ class _ParentDashboardState extends State<ParentDashboard>
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
             ),
             ElevatedButton(
               onPressed: () async {
@@ -1289,11 +1295,11 @@ class _ParentDashboardState extends State<ParentDashboard>
                   notesController.text.trim().isEmpty ? null : notesController.text.trim()
                 );
               },
-              child: Text('Complete'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green,
                 foregroundColor: Colors.white,
               ),
+              child: const Text('Complete'),
             ),
           ],
         );
@@ -1303,31 +1309,31 @@ class _ParentDashboardState extends State<ParentDashboard>
 
   void _showNotesDialog(Map<String, dynamic> activity) {
     final TextEditingController notesController = TextEditingController();
-    String currentNotes = activity['studentNotes'] ?? '';
+    final String currentNotes = (activity['studentNotes'] as String?) ?? '';
     notesController.text = currentNotes;
 
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Activity Notes'),
+          title: const Text('Activity Notes'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                activity['title'] ?? 'Activity',
+                (activity['title'] as String?) ?? 'Activity',
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
               ),
               SizedBox(height: 2.h),
-              Text('Add or edit notes:'),
+              const Text('Add or edit notes:'),
               SizedBox(height: 1.h),
               TextField(
                 controller: notesController,
                 maxLines: 4,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: 'Enter notes about this activity...',
                   border: OutlineInputBorder(),
                 ),
@@ -1337,18 +1343,18 @@ class _ParentDashboardState extends State<ParentDashboard>
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
             ),
             ElevatedButton(
               onPressed: () async {
                 Navigator.of(context).pop();
                 await _updateActivityStatusWithNotes(
                   activity, 
-                  activity['status'] ?? 'not_started', 
+                  activity['status']?.toString() ?? 'not_started', 
                   notesController.text.trim().isEmpty ? null : notesController.text.trim()
                 );
               },
-              child: Text('Save Notes'),
+              child: const Text('Save Notes'),
             ),
           ],
         );
@@ -1358,7 +1364,7 @@ class _ParentDashboardState extends State<ParentDashboard>
 
   Future<void> _updateActivityStatusWithNotes(Map<String, dynamic> activity, String newStatus, String? notes) async {
     try {
-      String? sessionId = activity['sessionId']?.toString();
+      final String? sessionId = activity['sessionId']?.toString();
       // Prefer explicit activityId, else derive from composite id, else fallback to id
       String? activityId = activity['activityId']?.toString();
       final String? compositeId = activity['compositeId']?.toString() ?? activity['id']?.toString();
@@ -1512,32 +1518,32 @@ class _ParentDashboardState extends State<ParentDashboard>
             ),
             SizedBox(height: 3.h),
             Text(
-              "Communication Features",
+              'Communication Features',
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.w600,
               ),
             ),
             SizedBox(height: 2.h),
             _buildFeatureCard(
-              "Secure Messaging",
-              "Direct communication with therapy team",
-              "chat",
+              'Secure Messaging',
+              'Direct communication with therapy team',
+              'chat',
               Theme.of(context).colorScheme.primary,
               _handleMessageTap,
             ),
             SizedBox(height: 2.h),
             _buildFeatureCard(
-              "Progress Sharing",
-              "Share session summaries with family",
-              "share",
+              'Progress Sharing',
+              'Share session summaries with family',
+              'share',
               Theme.of(context).colorScheme.secondary,
-              () => _handleSessionShare("general"),
+              () => _handleSessionShare('general'),
             ),
             SizedBox(height: 2.h),
             _buildFeatureCard(
-              "Appointment Scheduling",
-              "Request or reschedule therapy sessions",
-              "schedule",
+              'Appointment Scheduling',
+              'Request or reschedule therapy sessions',
+              'schedule',
               Theme.of(context).colorScheme.tertiary,
               _handleCalendarIntegration,
             ),
@@ -1606,7 +1612,7 @@ class _ParentDashboardState extends State<ParentDashboard>
                         ),
                         SizedBox(height: 1.h),
                         Text(
-                          "Age ${currentChild.age} • ${currentChild.diagnosis}",
+                          'Age ${currentChild.age} • ${currentChild.diagnosis}',
                           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             color: Theme.of(context).colorScheme.onSurfaceVariant,
                           ),
@@ -1630,7 +1636,7 @@ class _ParentDashboardState extends State<ParentDashboard>
                         ),
                         SizedBox(height: 1.h),
                         Text(
-                          "No children associated with this account",
+                          'No children associated with this account',
                           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             color: Theme.of(context).colorScheme.onSurfaceVariant,
                           ),
@@ -1643,28 +1649,28 @@ class _ParentDashboardState extends State<ParentDashboard>
             ),
             SizedBox(height: 3.h),
             Text(
-              "Account Settings",
+              'Account Settings',
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.w600,
               ),
             ),
             SizedBox(height: 2.h),
-            _buildSettingsItem("Edit Profile", "settings", _onEditProfile),
+            _buildSettingsItem('Edit Profile', 'settings', _onEditProfile),
             _buildSettingsItem(
-                "Notification Preferences", "notifications", () {}),
-            _buildSettingsItem("Privacy Settings", "security", () {}),
-            _buildSettingsItem("Data Export", "download", () {}),
+                'Notification Preferences', 'notifications', () {}),
+            _buildSettingsItem('Privacy Settings', 'security', () {}),
+            _buildSettingsItem('Data Export', 'download', () {}),
             SizedBox(height: 3.h),
             Text(
-              "Support",
+              'Support',
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.w600,
               ),
             ),
             SizedBox(height: 2.h),
-            _buildSettingsItem("Help Center", "help", () {}),
-            _buildSettingsItem("Contact Support", "support", () {}),
-            _buildSettingsItem("App Feedback", "feedback", () {}),
+            _buildSettingsItem('Help Center', 'help', () {}),
+            _buildSettingsItem('Contact Support', 'support', () {}),
+            _buildSettingsItem('App Feedback', 'feedback', () {}),
             SizedBox(height: 3.h),
             Container(
               width: double.infinity,
@@ -1682,7 +1688,7 @@ class _ParentDashboardState extends State<ParentDashboard>
                   ),
                   SizedBox(height: 2.h),
                   Text(
-                    "HIPAA Compliant",
+                    'HIPAA Compliant',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.w600,
                       color: Theme.of(context).colorScheme.primary,
@@ -1733,7 +1739,6 @@ class _ParentDashboardState extends State<ParentDashboard>
               child: CustomIconWidget(
                 iconName: iconName,
                 color: color,
-                size: 24,
               ),
             ),
             SizedBox(width: 4.w),
@@ -1772,6 +1777,7 @@ class _ParentDashboardState extends State<ParentDashboard>
     final nameController = TextEditingController(
       text: (_dataService.currentUserProfile?['displayName'] as String?) ?? '',
     );
+    // ignore: inference_failure_on_function_invocation
     await showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -1815,28 +1821,59 @@ class _ParentDashboardState extends State<ParentDashboard>
   Future<void> _onChangeAvatarTapped() async {
     try {
       final picker = ImagePicker();
-      final picked = await picker.pickImage(source: ImageSource.gallery, maxWidth: 1024, imageQuality: 85);
+      final picked = await picker.pickImage(
+        source: ImageSource.gallery,
+        maxWidth: 800,
+        maxHeight: 800,
+        imageQuality: 85,
+      );
       if (picked == null) return;
 
-      final uid = DataService().currentUserId;
-      if (uid == null) return;
+      final uid = _dataService.currentUserId;
+      if (uid == null) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('User not logged in')),
+          );
+        }
+        return;
+      }
 
-      final storage = FirebaseStorage.instance;
-      final ref = storage.ref().child('user_avatars').child('$uid.jpg');
-      await ref.putData(await picked.readAsBytes(), SettableMetadata(contentType: 'image/jpeg'));
-      final url = await ref.getDownloadURL();
-
-      await _dataService.updateMyProfile({'avatarUrl': url});
-      if (mounted) setState(() {});
+      // Show uploading message
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Profile photo updated')),
+          const SnackBar(
+            content: Text('Uploading photo...'),
+            duration: Duration(seconds: 3),
+          ),
+        );
+      }
+
+      // Use the new web-compatible upload service
+      final downloadUrl = await ImageUploadService.uploadUserAvatar(
+        userId: uid,
+        imageFile: picked,
+      );
+
+      await _dataService.updateMyProfile({'avatarUrl': downloadUrl});
+      
+      if (mounted) {
+        setState(() {});
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Profile photo updated successfully!'),
+            backgroundColor: Colors.green,
+          ),
         );
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to update photo: $e')),
+          SnackBar(
+            content: Text('Failed to update photo: $e'),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 5),
+          ),
         );
       }
     }
@@ -1888,10 +1925,10 @@ class _ParentDashboardState extends State<ParentDashboard>
 
   Widget _buildCompletedActivities(List<Map<String, dynamic>> activities) {
     // Create deep copies of completed activities to avoid reference issues
-    List<Map<String, dynamic>> completedActivities = [];
+    final List<Map<String, dynamic>> completedActivities = [];
     
     // Process each activity
-    for (var activity in activities) {
+    for (final activity in activities) {
       final status = activity['status'] as String? ?? '';
       final completedAt = activity['completedAt'];
       
@@ -1958,7 +1995,7 @@ class _ParentDashboardState extends State<ParentDashboard>
               ),
             )
           else
-            ...completedActivities.take(3).map((activity) => _buildActivityCard(activity)),
+            ...completedActivities.take(3).map(_buildActivityCard),
             
           if (completedActivities.length > 3)
             Padding(
@@ -1980,11 +2017,11 @@ class _ParentDashboardState extends State<ParentDashboard>
 
   Widget _buildNotCompletedActivities(List<Map<String, dynamic>> activities) {
     // Create deep copies of activities to avoid reference issues
-    List<Map<String, dynamic>> notStartedActivities = [];
-    List<Map<String, dynamic>> inProgressActivities = [];
+    final List<Map<String, dynamic>> notStartedActivities = [];
+    final List<Map<String, dynamic>> inProgressActivities = [];
     
     // Process each activity and ensure it appears in only one category
-    for (var activity in activities) {
+    for (final activity in activities) {
       final status = activity['status'] as String? ?? 'not_started';
       final completedAt = activity['completedAt'];
       
@@ -2061,7 +2098,7 @@ class _ParentDashboardState extends State<ParentDashboard>
               ),
             )
           else
-            ...notCompletedActivities.take(3).map((activity) => _buildActivityCard(activity)),
+            ...notCompletedActivities.take(3).map(_buildActivityCard),
             
           if (notCompletedActivities.length > 3)
             Padding(
@@ -2082,7 +2119,7 @@ class _ParentDashboardState extends State<ParentDashboard>
   }
 
   void _showAllActivitiesDialog(List<Map<String, dynamic>> activities, String title) {
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
@@ -2095,9 +2132,9 @@ class _ParentDashboardState extends State<ParentDashboard>
               itemBuilder: (context, index) {
                 final activity = activities[index];
                 return ListTile(
-                  title: Text(activity['name'] as String),
-                  subtitle: Text(activity['sessionTitle'] as String),
-                  leading: _getActivityStatusIcon(activity['status'] as String),
+                  title: Text((activity['name'] as String?) ?? ''),
+                  subtitle: Text((activity['sessionTitle'] as String?) ?? ''),
+                  leading: _getActivityStatusIcon((activity['status'] as String?) ?? 'not_started'),
                   trailing: activity['completedAt'] != null 
                       ? Text(_formatDate(activity['completedAt'])) 
                       : null,
@@ -2112,7 +2149,7 @@ class _ParentDashboardState extends State<ParentDashboard>
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text('Close'),
+              child: const Text('Close'),
             ),
           ],
         );
@@ -2123,29 +2160,29 @@ class _ParentDashboardState extends State<ParentDashboard>
   Widget _getActivityStatusIcon(String status) {
     switch (status) {
       case 'completed':
-        return Icon(Icons.check_circle, color: Colors.green);
+        return const Icon(Icons.check_circle, color: Colors.green);
       case 'in_progress':
-        return Icon(Icons.play_circle_filled, color: Colors.orange);
+        return const Icon(Icons.play_circle_filled, color: Colors.orange);
       default:
-        return Icon(Icons.radio_button_unchecked, color: Colors.grey);
+        return const Icon(Icons.radio_button_unchecked, color: Colors.grey);
     }
   }
 
   void _showActivityDetailsDialog(Map<String, dynamic> activity) {
     final bool isCompleted = activity['status'] == 'completed';
     
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(activity['name'] as String),
+          title: Text((activity['name'] as String?) ?? ''),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Session: ${activity['sessionTitle']}'),
+              Text('Session: ${activity['sessionTitle'] ?? ''}') ,
               SizedBox(height: 1.h),
-              Text('Status: ${_getStatusText(activity['status'] as String)}'),
+              Text('Status: ${_getStatusText((activity['status'] as String?) ?? 'not_started')}'),
               if (isCompleted && activity['completedAt'] != null)
                 Padding(
                   padding: EdgeInsets.only(top: 0.5.h),
@@ -2154,16 +2191,16 @@ class _ParentDashboardState extends State<ParentDashboard>
               if (activity['studentNotes']?.isNotEmpty == true)
                 Padding(
                   padding: EdgeInsets.only(top: 1.h),
-                  child: Text('Notes: ${activity['studentNotes']}'),
+                  child: Text('Notes: ${activity['studentNotes']?.toString() ?? ''}'),
                 ),
               SizedBox(height: 1.h),
-              Text(activity['description'] ?? 'No description available'),
+              Text((activity['description'] as String?) ?? 'No description available'),
             ],
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text('Close'),
+              child: const Text('Close'),
             ),
             if (!isCompleted)
               ElevatedButton(
@@ -2171,7 +2208,7 @@ class _ParentDashboardState extends State<ParentDashboard>
                   Navigator.of(context).pop();
                   _completeActivity(activity);
                 },
-                child: Text('Mark Complete'),
+                child: const Text('Mark Complete'),
               ),
           ],
         );
@@ -2192,13 +2229,13 @@ class _ParentDashboardState extends State<ParentDashboard>
   
   void _completeActivity(Map<String, dynamic> activity) {
     final TextEditingController notesController = TextEditingController();
-    notesController.text = activity['studentNotes'] ?? '';
+    notesController.text = (activity['studentNotes'] as String?) ?? '';
     
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Complete Activity'),
+          title: const Text('Complete Activity'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -2210,7 +2247,7 @@ class _ParentDashboardState extends State<ParentDashboard>
               TextField(
                 controller: notesController,
                 maxLines: 4,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: 'Enter notes (optional)',
                   border: OutlineInputBorder(),
                 ),
@@ -2220,7 +2257,7 @@ class _ParentDashboardState extends State<ParentDashboard>
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
             ),
             ElevatedButton(
               onPressed: () async {
@@ -2231,7 +2268,7 @@ class _ParentDashboardState extends State<ParentDashboard>
                   notesController.text.trim().isEmpty ? null : notesController.text.trim()
                 );
               },
-              child: Text('Complete'),
+              child: const Text('Complete'),
             ),
           ],
         );
@@ -2261,21 +2298,21 @@ class _ParentDashboardState extends State<ParentDashboard>
       }
       
       // Step 4: Force a complete rebuild of data from backend
-      await Future.delayed(Duration(milliseconds: 500)); // Longer delay to ensure backend sync is complete
+      await Future<void>.delayed(const Duration(milliseconds: 500)); // Longer delay to ensure backend sync is complete
       await _dataService.refreshData();
       
       // Force rebuild UI
       if (mounted) {
         setState(() {
           // Force rebuild to ensure updated data shows correctly
-          _lastSyncTime = "Just now";
+          _lastSyncTime = 'Just now';
           // Reset loading state
           _isLoading = false;
         });
         
         // Show a subtle confirmation toast
         Fluttertoast.showToast(
-          msg: "Data refreshed",
+          msg: 'Data refreshed',
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.BOTTOM,
           backgroundColor: Colors.black54,
