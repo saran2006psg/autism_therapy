@@ -86,119 +86,72 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final bool isCompact = MediaQuery.of(context).size.width < 420;
+
     return Form(
       key: _formKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Email Field
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.05),
-                  blurRadius: 10,
-                  offset: const Offset(0, 2),
-                ),
-              ],
+          Text(
+            'Sign in to continue',
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.w600,
+              letterSpacing: 0.1,
             ),
+          ),
+          SizedBox(height: 0.8.h),
+          Text(
+            'Use the credentials provided by the ThrivePath team to access your dashboard.',
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: colorScheme.onSurfaceVariant,
+              height: 1.4,
+            ),
+          ),
+          SizedBox(height: 3.h),
+
+          _buildFieldContainer(
+            context: context,
             child: TextFormField(
               controller: _emailController,
               keyboardType: TextInputType.emailAddress,
               textInputAction: TextInputAction.next,
               enabled: !widget.isLoading,
-              decoration: InputDecoration(
-                labelText: 'Email Address',
-                hintText: 'Enter your professional email',
-                prefixIcon: Container(
-                  padding: EdgeInsets.all(3.w),
-                  child: CustomIconWidget(
-                    iconName: 'email',
-                    color: _isFormValid 
-                        ? AppTheme.lightTheme.colorScheme.primary
-                        : AppTheme.lightTheme.colorScheme.onSurfaceVariant,
-                    size: 20,
-                  ),
-                ),
-                filled: true,
-                fillColor: AppTheme.lightTheme.colorScheme.surface,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(
-                    color: AppTheme.lightTheme.colorScheme.outline.withValues(alpha: 0.2),
-                  ),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(
-                    color: AppTheme.lightTheme.colorScheme.outline.withValues(alpha: 0.2),
-                  ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(
-                    color: AppTheme.lightTheme.colorScheme.primary,
-                    width: 2,
-                  ),
-                ),
-                errorBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(
-                    color: AppTheme.lightTheme.colorScheme.error,
-                    width: 2,
-                  ),
-                ),
-                focusedErrorBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(
-                    color: AppTheme.lightTheme.colorScheme.error,
-                    width: 2,
-                  ),
-                ),
-                contentPadding: EdgeInsets.symmetric(
-                  horizontal: 4.w,
-                  vertical: 3.h,
-                ),
+              decoration: _inputDecoration(
+                context: context,
+                label: 'Work Email',
+                hint: 'your.name@careteam.com',
+                iconName: 'email',
+                accentColor: _isFormValid
+                    ? colorScheme.primary
+                    : colorScheme.onSurfaceVariant,
               ),
               validator: _validateEmail,
               onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
-              style: AppTheme.lightTheme.textTheme.bodyMedium?.copyWith(
-                color: AppTheme.lightTheme.colorScheme.onSurface,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: colorScheme.onSurface,
               ),
             ),
           ),
 
-          SizedBox(height: 3.h),
+          SizedBox(height: 2.5.h),
 
-          // Password Field
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.05),
-                  blurRadius: 10,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
+          _buildFieldContainer(
+            context: context,
             child: TextFormField(
               controller: _passwordController,
               obscureText: !_isPasswordVisible,
               textInputAction: TextInputAction.done,
               enabled: !widget.isLoading,
-              decoration: InputDecoration(
-                labelText: 'Password',
-                hintText: 'Enter your secure password',
-                prefixIcon: Container(
-                  padding: EdgeInsets.all(3.w),
-                  child: CustomIconWidget(
-                    iconName: 'lock',
-                    color: AppTheme.lightTheme.colorScheme.primary,
-                    size: 20,
-                  ),
-                ),
+              decoration: _inputDecoration(
+                context: context,
+                label: 'Password',
+                hint: 'Minimum 6 characters',
+                iconName: 'lock',
+                accentColor: colorScheme.primary,
+              ).copyWith(
                 suffixIcon: IconButton(
                   onPressed: widget.isLoading
                       ? null
@@ -209,218 +162,259 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                         },
                   icon: CustomIconWidget(
                     iconName: _isPasswordVisible ? 'visibility_off' : 'visibility',
-                    color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+                    color: colorScheme.onSurfaceVariant,
                     size: 20,
                   ),
-                ),
-                filled: true,
-                fillColor: AppTheme.lightTheme.colorScheme.surface,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(
-                    color: AppTheme.lightTheme.colorScheme.outline.withValues(alpha: 0.2),
-                  ),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(
-                    color: AppTheme.lightTheme.colorScheme.outline.withValues(alpha: 0.2),
-                  ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(
-                    color: AppTheme.lightTheme.colorScheme.primary,
-                    width: 2,
-                  ),
-                ),
-                errorBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(
-                    color: AppTheme.lightTheme.colorScheme.error,
-                    width: 2,
-                  ),
-                ),
-                focusedErrorBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(
-                    color: AppTheme.lightTheme.colorScheme.error,
-                    width: 2,
-                  ),
-                ),
-                contentPadding: EdgeInsets.symmetric(
-                  horizontal: 4.w,
-                  vertical: 3.h,
                 ),
               ),
               validator: _validatePassword,
               onFieldSubmitted: (_) => _handleLogin(),
-              style: AppTheme.lightTheme.textTheme.bodyMedium?.copyWith(
-                color: AppTheme.lightTheme.colorScheme.onSurface,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: colorScheme.onSurface,
               ),
             ),
           ),
 
-          SizedBox(height: 1.h),
+          SizedBox(height: 1.4.h),
 
-          // Forgot Password Link
           Align(
             alignment: Alignment.centerRight,
-            child: TextButton(
+            child: TextButton.icon(
               onPressed: widget.isLoading
                   ? null
                   : () {
-                      // Handle forgot password navigation
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text(
-                              'Password reset functionality will be available soon'),
+                          content: Text('Password reset will be available soon.'),
                           duration: Duration(seconds: 2),
                         ),
                       );
                     },
-              child: Text(
-                'Forgot Password?',
-                style: AppTheme.lightTheme.textTheme.bodyMedium?.copyWith(
-                  color: AppTheme.lightTheme.colorScheme.primary,
-                  fontWeight: FontWeight.w500,
-                ),
+              icon: const Icon(Icons.help_outline, size: 18),
+              label: const Text('Forgot password?'),
+              style: TextButton.styleFrom(
+                foregroundColor: colorScheme.primary,
               ),
             ),
           ),
 
-          SizedBox(height: 4.h),
+          SizedBox(height: 3.4.h),
 
-          // Login Button
-          Container(
-            height: 6.h,
-            decoration: BoxDecoration(
-              gradient: _isFormValid && !widget.isLoading
-                  ? LinearGradient(
-                      colors: [
-                        AppTheme.lightTheme.colorScheme.primary,
-                        AppTheme.lightTheme.colorScheme.primary.withValues(alpha: 0.8),
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    )
-                  : null,
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: _isFormValid && !widget.isLoading
-                  ? [
-                      BoxShadow(
-                        color: AppTheme.lightTheme.colorScheme.primary.withValues(alpha: 0.3),
-                        blurRadius: 15,
-                        offset: const Offset(0, 6),
-                      ),
-                    ]
-                  : null,
-            ),
-            child: ElevatedButton(
-              onPressed: (_isFormValid && !widget.isLoading) ? _handleLogin : null,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: _isFormValid && !widget.isLoading
-                    ? Colors.transparent
-                    : AppTheme.lightTheme.colorScheme.outline.withValues(alpha: 0.1),
-                shadowColor: Colors.transparent,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                padding: EdgeInsets.symmetric(vertical: 3.h),
-              ),
-              child: widget.isLoading
-                  ? SizedBox(
-                      height: 24,
-                      width: 24,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2.5,
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                          AppTheme.lightTheme.colorScheme.onPrimary,
-                        ),
-                      ),
-                    )
-                  : Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CustomIconWidget(
-                          iconName: 'login',
-                          color: _isFormValid
-                              ? AppTheme.lightTheme.colorScheme.onPrimary
-                              : AppTheme.lightTheme.colorScheme.onSurfaceVariant,
-                          size: 20,
-                        ),
-                        SizedBox(width: 3.w),
-                        Text(
-                          'Sign In',
-                          style: AppTheme.lightTheme.textTheme.titleMedium?.copyWith(
-                            color: _isFormValid
-                                ? AppTheme.lightTheme.colorScheme.onPrimary
-                                : AppTheme.lightTheme.colorScheme.onSurfaceVariant,
-                            fontWeight: FontWeight.w600,
+          Builder(
+            builder: (context) {
+              final bool canSubmit = _isFormValid && !widget.isLoading;
+              final Gradient activeGradient = LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  colorScheme.primary,
+                  colorScheme.primaryContainer,
+                ],
+              );
+
+              return AnimatedContainer(
+                duration: const Duration(milliseconds: 260),
+                height: 6.2.h,
+                decoration: BoxDecoration(
+                  gradient: canSubmit ? activeGradient : null,
+                  color: canSubmit
+                      ? null
+                      : colorScheme.surfaceVariant.withValues(alpha: 0.6),
+                  borderRadius: BorderRadius.circular(18),
+                  border: Border.all(
+                    color: canSubmit
+                        ? Colors.transparent
+                        : colorScheme.outline.withValues(alpha: 0.24),
+                  ),
+                  boxShadow: canSubmit
+                      ? [
+                          BoxShadow(
+                            color: colorScheme.primary.withValues(alpha: 0.3),
+                            blurRadius: 24,
+                            offset: const Offset(0, 12),
                           ),
-                        ),
-                      ],
+                        ]
+                      : [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.05),
+                            blurRadius: 12,
+                            offset: const Offset(0, 6),
+                          ),
+                        ],
+                ),
+                child: ElevatedButton(
+                  onPressed: canSubmit ? _handleLogin : null,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.transparent,
+                    disabledBackgroundColor: Colors.transparent,
+                    shadowColor: Colors.transparent,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18),
                     ),
-            ),
+                    padding: EdgeInsets.symmetric(horizontal: 4.w),
+                  ),
+                  child: widget.isLoading
+                      ? SizedBox(
+                          height: 24,
+                          width: 24,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2.6,
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              colorScheme.onPrimary,
+                            ),
+                          ),
+                        )
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Container(
+                                  width: 38,
+                                  height: 38,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: canSubmit
+                                        ? colorScheme.onPrimary.withValues(alpha: 0.2)
+                                        : colorScheme.onSurfaceVariant
+                                            .withValues(alpha: 0.1),
+                                  ),
+                                  child: Center(
+                                    child: CustomIconWidget(
+                                      iconName: 'login',
+                                      color: canSubmit
+                                          ? colorScheme.onPrimary
+                                          : colorScheme.onSurfaceVariant,
+                                      size: 18,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(width: 3.w),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      'Ready to log in?',
+                                      style: theme.textTheme.labelSmall?.copyWith(
+                                        color: canSubmit
+                                            ? colorScheme.onPrimary.withValues(alpha: 0.82)
+                                            : colorScheme.onSurfaceVariant,
+                                        letterSpacing: 0.3,
+                                      ),
+                                    ),
+                                    Text(
+                                      'Sign in',
+                                      style: theme.textTheme.titleMedium?.copyWith(
+                                        color: canSubmit
+                                            ? colorScheme.onPrimary
+                                            : colorScheme.onSurfaceVariant,
+                                        fontWeight: FontWeight.w700,
+                                        letterSpacing: 0.5,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            Icon(
+                              Icons.arrow_forward_rounded,
+                              color:
+                                  canSubmit ? colorScheme.onPrimary : colorScheme.onSurfaceVariant,
+                              size: 22,
+                            ),
+                          ],
+                        ),
+                ),
+              );
+            },
           ),
 
-          SizedBox(height: 3.h),
-
-          // Quick Login Section for Testing
+          SizedBox(height: 3.2.h),
           Container(
-            padding: EdgeInsets.all(4.w),
+            padding: EdgeInsets.all(4.2.w),
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surfaceContainerHighest.withOpacity(0.3),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: Theme.of(context).colorScheme.outline.withOpacity(0.2),
+              gradient: LinearGradient(
+                colors: [
+                  colorScheme.surfaceVariant.withValues(alpha: 0.42),
+                  colorScheme.surface,
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
               ),
+              borderRadius: BorderRadius.circular(18),
+              border: Border.all(
+                color: colorScheme.outlineVariant.withOpacity(0.18),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: colorScheme.primary.withOpacity(0.06),
+                  blurRadius: 22,
+                  offset: const Offset(0, 12),
+                ),
+              ],
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Quick Login (Testing)',
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-                ),
-                SizedBox(height: 2.h),
-                
                 Row(
                   children: [
-                    Expanded(
-                      child: _buildQuickLoginButton(
-                        'Therapist',
-                        'math@gmail.com',
-                        'math123',
-                        Icons.psychology,
-                        Theme.of(context).colorScheme.primary,
+                    Container(
+                      padding: EdgeInsets.all(1.8.w),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: colorScheme.primary.withValues(alpha: 0.12),
+                      ),
+                      child: Icon(
+                        Icons.flash_on_rounded,
+                        color: colorScheme.primary,
+                        size: 18,
                       ),
                     ),
-                    SizedBox(width: 2.w),
+                    SizedBox(width: 3.w),
                     Expanded(
-                      child: _buildQuickLoginButton(
-                        'Parent',
-                        'muni@gmail.com',
-                        'muni123',
-                        Icons.family_restroom,
-                        Theme.of(context).colorScheme.secondary,
+                      child: Text(
+                        'QA helpers for staging only',
+                        style: theme.textTheme.titleSmall?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ],
                 ),
-                SizedBox(height: 2.h),
-                
-                Center(
-                  child: _buildQuickLoginButton(
-                    'Student',
-                    'student@example.com',
-                    'student123',
-                    Icons.school,
-                    Theme.of(context).colorScheme.tertiary,
+                SizedBox(height: 1.4.h),
+                Text(
+                  'Populate the form instantly while you validate the therapist and parent dashboards. These shortcuts are hidden in production builds.',
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: colorScheme.onSurfaceVariant,
+                    height: 1.5,
                   ),
+                ),
+                SizedBox(height: 2.4.h),
+                Wrap(
+                  alignment: isCompact ? WrapAlignment.center : WrapAlignment.start,
+                  spacing: isCompact ? 2.4.w : 3.2.w,
+                  runSpacing: 1.8.h,
+                  children: [
+                    _buildQuickLoginButton(
+                      context,
+                      isCompact: isCompact,
+                      role: 'Therapist QA',
+                      email: 'math@gmail.com',
+                      password: 'math123',
+                      icon: Icons.psychology_alt_outlined,
+                      color: colorScheme.primary,
+                    ),
+                    _buildQuickLoginButton(
+                      context,
+                      isCompact: isCompact,
+                      role: 'Parent QA',
+                      email: 'muni@gmail.com',
+                      password: 'muni123',
+                      icon: Icons.family_restroom,
+                      color: colorScheme.secondary,
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -431,53 +425,175 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
   }
 
   Widget _buildQuickLoginButton(
-    String role,
-    String email,
-    String password,
-    IconData icon,
-    Color color,
-  ) {
-    return ElevatedButton(
-      onPressed: widget.isLoading
+    BuildContext context, {
+    required bool isCompact,
+    required String role,
+    required String email,
+    required String password,
+    required IconData icon,
+    required Color color,
+  }) {
+    final theme = Theme.of(context);
+
+    return GestureDetector(
+      onTap: widget.isLoading
           ? null
           : () {
               setState(() {
                 _emailController.text = email;
                 _passwordController.text = password;
               });
-              // Trigger form validation
               _validateForm();
-              // Auto-login after setting credentials
-              Future.delayed(const Duration(milliseconds: 500), () {
+              Future.delayed(const Duration(milliseconds: 350), () {
                 if (mounted) {
-                  print('DEBUG: Quick login for $role - Form valid: $_isFormValid');
                   _handleLogin();
                 }
               });
             },
-      style: ElevatedButton.styleFrom(
-        backgroundColor: color.withOpacity(0.1),
-        foregroundColor: color,
-        elevation: 0,
-        padding: EdgeInsets.symmetric(vertical: 1.5.h, horizontal: 3.w),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-          side: BorderSide(color: color.withOpacity(0.3)),
+      child: Container(
+        width: isCompact ? double.infinity : null,
+        constraints: BoxConstraints(
+          minWidth: isCompact ? 0 : 140,
+          maxWidth: isCompact ? double.infinity : 200,
+        ),
+        padding: EdgeInsets.symmetric(
+          horizontal: isCompact ? 4.w : 3.4.w,
+          vertical: 1.8.h,
+        ),
+        decoration: BoxDecoration(
+          color: color.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: color.withOpacity(0.28)),
+          boxShadow: [
+            BoxShadow(
+              color: color.withOpacity(0.14),
+              blurRadius: 14,
+              offset: const Offset(0, 8),
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: EdgeInsets.all(1.2.w),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: color.withOpacity(0.18),
+              ),
+              child: Icon(icon, color: color, size: 18),
+            ),
+            SizedBox(height: 1.2.h),
+            Text(
+              role,
+              style: theme.textTheme.labelLarge?.copyWith(
+                color: color,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            SizedBox(height: 0.6.h),
+            Text(
+              email,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+                letterSpacing: 0.2,
+              ),
+            ),
+          ],
         ),
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 20),
-          SizedBox(height: 0.5.h),
-          Text(
-            role,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              fontWeight: FontWeight.w600,
-            ),
+    );
+  }
+
+  InputDecoration _inputDecoration({
+    required BuildContext context,
+    required String label,
+    required String hint,
+    required String iconName,
+    required Color accentColor,
+  }) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return InputDecoration(
+      labelText: label,
+      hintText: hint,
+      prefixIcon: Container(
+        padding: EdgeInsets.all(3.w),
+        child: CustomIconWidget(
+          iconName: iconName,
+          color: accentColor,
+          size: 20,
+        ),
+      ),
+      filled: true,
+      fillColor: colorScheme.surface,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: BorderSide(
+          color: colorScheme.outlineVariant.withValues(alpha: 0.5),
+        ),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: BorderSide(
+          color: colorScheme.outlineVariant.withValues(alpha: 0.4),
+        ),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: BorderSide(
+          color: colorScheme.primary,
+          width: 2,
+        ),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: BorderSide(
+          color: colorScheme.error,
+          width: 2,
+        ),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: BorderSide(
+          color: colorScheme.error,
+          width: 2,
+        ),
+      ),
+      contentPadding: EdgeInsets.symmetric(
+        horizontal: 4.w,
+        vertical: 2.8.h,
+      ),
+    );
+  }
+
+  Widget _buildFieldContainer({
+    required BuildContext context,
+    required Widget child,
+  }) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(18),
+        boxShadow: [
+          BoxShadow(
+            color: colorScheme.primary.withValues(alpha: 0.06),
+            blurRadius: 18,
+            offset: const Offset(0, 12),
           ),
         ],
+        gradient: LinearGradient(
+          colors: [
+            colorScheme.surface,
+            colorScheme.surface.withValues(alpha: 0.94),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
       ),
+      child: child,
     );
   }
 }
