@@ -705,6 +705,8 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
                   selectedDate: _selectedDate,
                   selectedTime: _selectedTime,
                   sessionDuration: _sessionDuration,
+                  plannedActivities: _getCurrentStudentActivities().length,
+                  plannedMinutes: _totalPlannedDuration,
                   onDateTap: _selectDate,
                   onTimeTap: _selectTime,
                   onDurationChanged: _onDurationChanged,
@@ -1544,7 +1546,7 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
   }
 
   void _showCreateStudentSheet() {
-    showModalBottomSheet(
+    showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,

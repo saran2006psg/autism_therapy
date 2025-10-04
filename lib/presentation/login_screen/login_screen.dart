@@ -40,14 +40,17 @@ class _LoginScreenState extends State<LoginScreen> {
       );
 
       if (result.success && result.user != null) {
+        final resolvedRole = (result.userRole ?? _selectedRole).trim();
+
         setState(() {
-          _userRole = result.userRole ?? _selectedRole;
+          _userRole = resolvedRole;
           _showRoleIndicator = true;
           _isLoading = false;
+          _showRoleSelection = false;
         });
 
         if (mounted) {
-          Navigator.pushReplacementNamed(context, '/dashboard');
+          _navigateToDashboard(resolvedRole);
         }
       } else {
         setState(() {
@@ -827,14 +830,17 @@ class _LoginScreenState extends State<LoginScreen> {
       );
 
       if (result.success && result.user != null) {
+        final resolvedRole = (result.userRole ?? _selectedRole).trim();
+
         setState(() {
-          _userRole = result.userRole ?? _selectedRole;
+          _userRole = resolvedRole;
           _showRoleIndicator = true;
           _isLoading = false;
+          _showRoleSelection = false;
         });
 
         if (mounted) {
-          Navigator.pushReplacementNamed(context, '/dashboard');
+          _navigateToDashboard(resolvedRole);
         }
       } else {
         setState(() {
@@ -868,6 +874,31 @@ class _LoginScreenState extends State<LoginScreen> {
         );
       }
     }
+  }
+
+  void _navigateToDashboard(String role) {
+    final normalizedRole = role.toLowerCase();
+    String targetRoute;
+
+    switch (normalizedRole) {
+      case 'parent':
+        targetRoute = AppRoutes.parentDashboard;
+        break;
+      case 'therapist':
+        targetRoute = AppRoutes.therapistDashboard;
+        break;
+      case 'student':
+        targetRoute = AppRoutes.studentDashboard;
+        break;
+      case 'admin':
+        targetRoute = AppRoutes.admin;
+        break;
+      default:
+        targetRoute = AppRoutes.therapistDashboard;
+        break;
+    }
+
+    Navigator.pushNamedAndRemoveUntil(context, targetRoute, (route) => false);
   }
 
   void _toggleSignUpMode() {
