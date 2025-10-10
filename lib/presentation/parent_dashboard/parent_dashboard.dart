@@ -4,10 +4,60 @@ import 'package:image_picker/image_picker.dart';
 import 'package:sizer/sizer.dart';
 import 'dart:developer' as developer;
 
-import 'package:thriveers/core/app_export.dart';
-import 'package:thriveers/core/services/image_upload_service.dart';
+// Import only what we need - no database services
+import 'package:thriveers/widgets/custom_icon_widget.dart';
 import 'package:thriveers/widgets/theme_toggle_widget.dart';
 import 'package:thriveers/presentation/parent_dashboard/widgets/progress_chart_widget.dart';
+import 'package:thriveers/presentation/parent_dashboard/widgets/completed_activities_widget.dart';
+import 'package:thriveers/presentation/parent_dashboard/widgets/not_completed_activities_widget.dart';
+import 'package:thriveers/presentation/parent_dashboard/widgets/parent_empty_state_widget.dart';
+import 'package:thriveers/core/services/auth_service.dart';
+import 'package:thriveers/routes/app_routes.dart';
+
+// Mock data models
+class MockChild {
+  final String id;
+  final String firstName;
+  final String lastName;
+  final int age;
+  final String diagnosis;
+  
+  MockChild({
+    required this.id,
+    required this.firstName,
+    required this.lastName,
+    required this.age,
+    required this.diagnosis,
+  });
+}
+
+class MockSession {
+  final String id;
+  final String studentId;
+  final String title;
+  final DateTime scheduledDate;
+  final List<Map<String, dynamic>> activities;
+  
+  MockSession({
+    required this.id,
+    required this.studentId,
+    required this.title,
+    required this.scheduledDate,
+    required this.activities,
+  });
+}
+
+class MockGoal {
+  final String id;
+  final String studentId;
+  final String title;
+  
+  MockGoal({
+    required this.id,
+    required this.studentId,
+    required this.title,
+  });
+}
 
 class ParentDashboard extends StatefulWidget {
   const ParentDashboard({super.key});
@@ -19,131 +69,213 @@ class ParentDashboard extends StatefulWidget {
 class _ParentDashboardState extends State<ParentDashboard>
     with TickerProviderStateMixin {
   int _currentIndex = 0;
-  String _lastSyncTime = 'Just now';
   final int _unreadMessages = 3;
+  int _selectedChildIndex = 0; // Track which child is selected
   
-  // Real data from DataService
-  late DataService _dataService;
-  bool _isLoading = true;
+  // Mock data - no database connection
+  bool _isLoading = false;
   String? _errorMessage;
+  String? _currentUserAvatarUrl;
+  Map<String, dynamic>? _currentUserProfile = {
+    'displayName': 'Sarah Johnson',
+    'email': 'muni@gmail.com',
+    'role': 'Parent',
+  };
+  
+  // Mock children data
+  final List<MockChild> _mockChildren = [
+    MockChild(
+      id: '1',
+      firstName: 'Emma',
+      lastName: 'Johnson',
+      age: 8,
+      diagnosis: 'Autism Spectrum Disorder',
+    ),
+    MockChild(
+      id: '2',
+      firstName: 'Liam',
+      lastName: 'Johnson',
+      age: 6,
+      diagnosis: 'Speech Delay',
+    ),
+  ];
+  
+  // Mock sessions data
+  final List<MockSession> _mockSessions = [];
+  final List<MockGoal> _mockGoals = [];
 
   @override
   void initState() {
     super.initState();
-    _dataService = DataService();
-    _initializeData();
+    _initializeMockData();
   }
 
+  Future<void> _initializeMockData() async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
 
-  Future<void> _initializeData() async {
     try {
-      setState(() {
-        _isLoading = true;
-        _errorMessage = null;
-      });
+      await Future<void>.delayed(const Duration(milliseconds: 300));
 
-      if (!_dataService.isInitialized) {
-        await _dataService.initialize();
+      final now = DateTime.now();
+
+      final generatedSessions = <MockSession>[
+        MockSession(
+          id: 'session_1',
+          studentId: '1',
+          title: 'Social Skills Coaching',
+          scheduledDate: now.subtract(const Duration(days: 2)),
+          activities: [
+            {
+              'id': 'activity_1',
+              'title': 'Emotion Matching Game',
+              'description': 'Practice identifying emotions with flashcards and role play.',
+              'status': 'completed',
+              'completedAt': now.subtract(const Duration(days: 1)),
+              'studentNotes': 'Loved the interactive cards.',
+              'therapistNotes': 'Continue reinforcing emotion vocabulary at home.',
+            },
+            {
+              'id': 'activity_2',
+              'title': 'Conversation Turn Taking',
+              'description': 'Use a talking stick to practice conversational turns with peers.',
+              'status': 'in_progress',
+              'studentNotes': 'Needed prompts for eye contact.',
+            },
+          ],
+        ),
+        MockSession(
+          id: 'session_2',
+          studentId: '1',
+          title: 'Sensory Integration Play',
+          scheduledDate: now.add(const Duration(days: 1)),
+          activities: [
+            {
+              'id': 'activity_3',
+              'title': 'Balance Board Practice',
+              'description': 'Build core strength with guided balance board exercises.',
+              'status': 'not_started',
+              'studentNotes': '',
+            },
+            {
+              'id': 'activity_4',
+              'title': 'Deep Pressure Routine',
+              'description': 'Follow the nightly compression blanket routine together.',
+              'status': 'not_started',
+              'studentNotes': 'Parent to track comfort level before bedtime.',
+            },
+          ],
+        ),
+        MockSession(
+          id: 'session_3',
+          studentId: '2',
+          title: 'Speech Sound Practice',
+          scheduledDate: now.subtract(const Duration(days: 3)),
+          activities: [
+            {
+              'id': 'activity_5',
+              'title': 'Articulation Flashcards',
+              'description': 'Practice target sounds using picture cards for 10 minutes daily.',
+              'status': 'completed',
+              'completedAt': now.subtract(const Duration(days: 2)),
+              'studentNotes': 'Responded well with positive reinforcement.',
+            },
+            {
+              'id': 'activity_6',
+              'title': 'Story Retell',
+              'description': 'Read a short story and retell using target vocabulary.',
+              'status': 'in_progress',
+              'studentNotes': 'Needs reminders to slow down.',
+            },
+          ],
+        ),
+      ];
+
+      final generatedGoals = <MockGoal>[
+        MockGoal(id: 'goal_1', studentId: '1', title: 'Improve emotion identification'),
+        MockGoal(id: 'goal_2', studentId: '1', title: 'Increase independent play for 15 min'),
+        MockGoal(id: 'goal_3', studentId: '2', title: 'Produce L and R sounds accurately'),
+        MockGoal(id: 'goal_4', studentId: '2', title: 'Retell stories with clear sentences'),
+      ];
+
+      if (!mounted) {
+        return;
       }
-      
+
       setState(() {
-        _isLoading = false;
-        _lastSyncTime = 'Just now';
+        _mockSessions
+          ..clear()
+          ..addAll(generatedSessions);
+        _mockGoals
+          ..clear()
+          ..addAll(generatedGoals);
+  _isLoading = false;
+        if (_mockChildren.isNotEmpty && _selectedChildIndex >= _mockChildren.length) {
+          _selectedChildIndex = 0;
+        }
       });
-    } catch (e) {
+    } catch (e, stackTrace) {
+      developer.log(
+        'Failed to initialize mock data',
+        error: e,
+        stackTrace: stackTrace,
+        name: 'ParentDashboard',
+      );
+
+      if (!mounted) {
+        return;
+      }
+
       setState(() {
         _isLoading = false;
-        _errorMessage = 'Failed to load data: $e';
+        _errorMessage = 'Failed to load dashboard data.';
       });
     }
   }
 
   Future<void> _refreshData() async {
-    try {
-      setState(() {
-        _isLoading = true;
-      });
-
-      // Deep refresh strategy - force a complete reset of all data
-      
-      // Step 1: Reset the DataService cache
-      _dataService.clearData(); // This clears all cached data
-      
-      // Step 2: Re-initialize all data
-      await _dataService.initialize();
-      
-      // Step 3: Ensure all sessions are freshly loaded
-      final students = _dataService.getMyStudents();
-      for (final student in students) {
-        if (student.id != null) {
-          await _dataService.refreshSessionsForStudent(student.id!);
-        }
-      }
-      
-      // Step 4: Full data refresh
-      await _dataService.refreshData();
-      
-      // Force UI rebuild
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-          _lastSyncTime = 'Just now';
-        });
-      }
-
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text('Data refreshed successfully'),
-            backgroundColor: Theme.of(context).colorScheme.tertiary,
-            duration: const Duration(seconds: 2),
-          ),
-        );
-      }
-    } catch (e) {
-      setState(() {
-        _isLoading = false;
-        _errorMessage = 'Failed to refresh data: $e';
-      });
-
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Failed to refresh data: $e'),
-            backgroundColor: Theme.of(context).colorScheme.error,
-            duration: const Duration(seconds: 3),
-          ),
-        );
-      }
+    await _initializeMockData();
+    if (!mounted) {
+      return;
     }
+
+    Fluttertoast.showToast(
+      msg: 'Dashboard refreshed',
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      backgroundColor: Colors.black87,
+      textColor: Colors.white,
+    );
   }
 
   void _handleMessageTap() {
     Fluttertoast.showToast(
-      msg: 'Opening secure messaging...',
+      msg: 'Opening secure messaging…',
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
-      backgroundColor: Theme.of(context).colorScheme.primary,
+      backgroundColor: Colors.black87,
       textColor: Colors.white,
     );
   }
 
   void _handleCalendarIntegration() {
     Fluttertoast.showToast(
-      msg: 'Adding to calendar...',
+      msg: 'Adding session to calendar…',
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
-      backgroundColor: Theme.of(context).colorScheme.secondary,
+      backgroundColor: Colors.black87,
       textColor: Colors.white,
     );
   }
 
   void _handleSessionShare(String sessionId) {
     Fluttertoast.showToast(
-      msg: 'Sharing session summary...',
+      msg: 'Sharing session summary…',
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
-      backgroundColor: Theme.of(context).colorScheme.primary,
+      backgroundColor: Colors.black87,
       textColor: Colors.white,
     );
   }
@@ -153,12 +285,13 @@ class _ParentDashboardState extends State<ParentDashboard>
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(
           'ThrivePath',
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
-            fontWeight: FontWeight.w700,
-            color: Theme.of(context).colorScheme.primary,
-          ),
+                fontWeight: FontWeight.w700,
+                color: Theme.of(context).colorScheme.primary,
+              ),
         ),
         centerTitle: false,
         elevation: 0,
@@ -166,118 +299,11 @@ class _ParentDashboardState extends State<ParentDashboard>
         surfaceTintColor: Colors.transparent,
         actions: [
           const ThemeToggleWidget(),
-          GestureDetector(
-            onTap: _onEditProfile,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: CircleAvatar(
-                radius: 16,
-                backgroundImage: (_dataService.currentUserAvatarUrl != null && _dataService.currentUserAvatarUrl!.isNotEmpty)
-                    ? NetworkImage(_dataService.currentUserAvatarUrl!)
-                    : null,
-                child: (_dataService.currentUserAvatarUrl == null || _dataService.currentUserAvatarUrl!.isEmpty)
-                    ? const Icon(Icons.person, size: 18)
-                    : null,
-              ),
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(right: 2.w),
-            child: Stack(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Theme.of(context).colorScheme.primary.withOpacity(0.1),
-                        Theme.of(context).colorScheme.primary.withOpacity(0.05),
-                      ],
-                    ),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: IconButton(
-                    onPressed: _handleMessageTap,
-                    icon: CustomIconWidget(
-                      iconName: 'notifications',
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  ),
-                ),
-                if (_unreadMessages > 0)
-                  Positioned(
-                    right: 8,
-                    top: 8,
-                    child: Container(
-                      padding: EdgeInsets.all(1.w),
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            Theme.of(context).colorScheme.error,
-                            Theme.of(context).colorScheme.error.transparent80,
-                          ],
-                        ),
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Theme.of(context).colorScheme.error.transparent30,
-                            blurRadius: 6,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      constraints: BoxConstraints(
-                        minWidth: 5.w,
-                        minHeight: 5.w,
-                      ),
-                      child: Text(
-                        _unreadMessages.toString(),
-                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(right: 4.w),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Theme.of(context).colorScheme.onSurfaceVariant.withOpacity(0.1),
-                  Theme.of(context).colorScheme.onSurfaceVariant.withOpacity(0.05),
-                ],
-              ),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: IconButton(
-              onPressed: () {
-                AppResetUtility.resetAndNavigateToLogin(context);
-              },
-              icon: CustomIconWidget(
-                iconName: 'logout',
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
-            ),
-          ),
+          SizedBox(width: 4.w),
         ],
       ),
       body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Theme.of(context).scaffoldBackgroundColor,
-              Theme.of(context).colorScheme.surface.withOpacity(0.3),
-              Theme.of(context).scaffoldBackgroundColor,
-            ],
-            stops: const [0.0, 0.3, 1.0],
-          ),
-        ),
+        color: Theme.of(context).scaffoldBackgroundColor,
         child: _buildCurrentView(),
       ),
       bottomNavigationBar: Container(
@@ -303,11 +329,11 @@ class _ParentDashboardState extends State<ParentDashboard>
           selectedItemColor: Theme.of(context).colorScheme.primary,
           unselectedItemColor: Theme.of(context).colorScheme.onSurfaceVariant,
           selectedLabelStyle: Theme.of(context).textTheme.labelSmall?.copyWith(
-            fontWeight: FontWeight.w600,
-          ),
+                fontWeight: FontWeight.w600,
+              ),
           unselectedLabelStyle: Theme.of(context).textTheme.labelSmall?.copyWith(
-            fontWeight: FontWeight.w400,
-          ),
+                fontWeight: FontWeight.w400,
+              ),
           items: [
             BottomNavigationBarItem(
               icon: Container(
@@ -438,7 +464,7 @@ class _ParentDashboardState extends State<ParentDashboard>
             ),
             SizedBox(height: 2.h),
             ElevatedButton(
-              onPressed: _initializeData,
+              onPressed: _initializeMockData,
               child: const Text('Retry'),
             ),
           ],
@@ -446,15 +472,20 @@ class _ParentDashboardState extends State<ParentDashboard>
       );
     }
 
-    final students = _dataService.students;
-    final sessions = _dataService.sessions;
+    final students = _mockChildren;
+    final sessions = _mockSessions;
 
     if (students.isEmpty) {
       return _buildEmptyState();
     }
 
-    // For now, show the first child's data (in a real app, you might let parent select)
-    final currentChild = students.first;
+    // Ensure selected index is valid
+    if (_selectedChildIndex >= students.length) {
+      _selectedChildIndex = 0;
+    }
+
+    // Use the selected child's data
+    final currentChild = students[_selectedChildIndex];
     final childSessions = sessions.where((s) => s.studentId == currentChild.id).toList();
     
     // Collect all activities from child's sessions               
@@ -471,10 +502,12 @@ class _ParentDashboardState extends State<ParentDashboard>
           'sessionId': session.id,
           'sessionTitle': session.title,
           'sessionDate': session.scheduledDate,
+          'studentId': currentChild.id, // Add studentId to the activity
           // Mirror important fields with safe defaults
           'status': activity['status'] ?? 'not_started',
           'completedAt': activity['completedAt'],
           'studentNotes': activity['studentNotes'] ?? '',
+          'title': activity['title'] ?? 'Activity', // Ensure title is never null
           // Also include the rest of activity fields but WITHOUT overriding our keys
           ...Map<String, dynamic>.from(activity)
             ..remove('id'),
@@ -495,17 +528,30 @@ class _ParentDashboardState extends State<ParentDashboard>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildChildHeader(currentChild),
-            SizedBox(height: 3.h),
+            // Removed child selector and header per updated design
             _buildProgressChart(currentChild),
             SizedBox(height: 3.h),
-            _buildActivitiesOverview(childActivities),
+            CompletedActivitiesWidget(
+              activities: childActivities,
+              buildActivityCard: _buildActivityCard,
+              onViewAll: () {
+                final completedActivities = childActivities
+                    .where((a) => a['status'] == 'completed' && a['completedAt'] != null)
+                    .toList();
+                _showAllActivitiesDialog(completedActivities, 'Completed Activities');
+              },
+            ),
             SizedBox(height: 3.h),
-            _buildCompletedActivities(childActivities),
-            SizedBox(height: 3.h),
-            _buildNotCompletedActivities(childActivities),
-            SizedBox(height: 3.h),
-            _buildRecentActivities(childActivities),
+            NotCompletedActivitiesWidget(
+              activities: childActivities,
+              buildActivityCard: _buildActivityCard,
+              onViewAll: () {
+                final notCompleted = childActivities
+                    .where((a) => a['status'] != 'completed' || a['completedAt'] == null)
+                    .toList();
+                _showAllActivitiesDialog(notCompleted, 'To-Do Activities');
+              },
+            ),
             SizedBox(height: 10.h), // Space for bottom navigation
           ],
         ),
@@ -514,148 +560,88 @@ class _ParentDashboardState extends State<ParentDashboard>
   }
 
   Widget _buildEmptyState() {
-    return Center(
-      child: Padding(
-        padding: EdgeInsets.all(4.w),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+    return ParentEmptyStateWidget(onRefresh: _refreshData);
+  }
+
+
+  Widget _buildProgressChart(MockChild child) {
+    final goals = _mockGoals.where((g) => g.studentId == child.id).toList();
+    
+    if (goals.isEmpty) {
+      return Card(
+        elevation: 2,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+          side: BorderSide(
+            color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
+            width: 1,
+          ),
+        ),
+        margin: EdgeInsets.zero,
+        child: Padding(
+          padding: EdgeInsets.all(5.w),
+          child: Column(
           children: [
-            Icon(
-              Icons.child_care,
-              size: 80,
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primaryContainer.withOpacity(0.3),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                Icons.trending_up_rounded,
+                size: 32,
+                color: Theme.of(context).colorScheme.primary,
+              ),
             ),
             SizedBox(height: 2.h),
             Text(
-              'No Children Found',
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.w600,
+              'Progress Insights',
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.w700,
+                color: Theme.of(context).colorScheme.onSurface,
               ),
             ),
             SizedBox(height: 1.h),
             Text(
-              'It looks like no children are associated with your account yet. Please contact your therapist to set up the connection.',
+              'Detailed progress tracking will appear here as ${child.firstName} completes therapy activities and goals.',
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
+                height: 1.5,
               ),
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 3.h),
-            ElevatedButton.icon(
-              onPressed: _refreshData,
-              icon: const Icon(Icons.refresh),
-              label: const Text('Refresh'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildChildHeader(StudentModel child) {
-    return Container(
-      padding: EdgeInsets.all(4.w),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Theme.of(context).colorScheme.primaryContainer,
-            Theme.of(context).colorScheme.tertiaryContainer,
-          ],
-        ),
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Row(
-        children: [
-          CircleAvatar(
-            radius: 30,
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            child: Text(
-              child.firstName[0].toUpperCase(),
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                color: Theme.of(context).colorScheme.onPrimary,
-                fontWeight: FontWeight.bold,
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.5.h),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+                ),
               ),
-            ),
-          ),
-          SizedBox(width: 4.w),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  '${child.firstName} ${child.lastName}',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.w700,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.info_outline_rounded,
+                    size: 18,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
-                ),
-                SizedBox(height: 0.5.h),
-                Text(
-                  'Age ${child.age} • ${child.diagnosis}',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-                ),
-                SizedBox(height: 1.h),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.tertiary,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Text(
-                    'Last sync: $_lastSyncTime',
-                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                      color: Theme.of(context).colorScheme.onTertiary,
+                  SizedBox(width: 2.w),
+                  Text(
+                    'Charts will update after first session',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildProgressChart(StudentModel child) {
-    final goals = _dataService.goals.where((g) => g.studentId == child.id).toList();
-    
-    if (goals.isEmpty) {
-      return Container(
-        padding: EdgeInsets.all(4.w),
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: Theme.of(context).colorScheme.outline.withOpacity(0.2),
-          ),
-        ),
-        child: Column(
-          children: [
-            Icon(
-              Icons.trending_up,
-              size: 48,
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-            ),
-            SizedBox(height: 1.h),
-            Text(
-              'Progress Chart',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.w600,
+                ],
               ),
-            ),
-            SizedBox(height: 0.5.h),
-            Text(
-              'Progress data will appear here as your child completes therapy goals.',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
-              textAlign: TextAlign.center,
             ),
           ],
+          ),
         ),
       );
     }
@@ -671,234 +657,19 @@ class _ParentDashboardState extends State<ParentDashboard>
     );
   }
 
-  Widget _buildActivitiesOverview(List<Map<String, dynamic>> activities) {
-    final totalActivities = activities.length;
-    final completedActivities = activities.where((a) => a['status'] == 'completed').length;
-    final inProgressActivities = activities.where((a) => a['status'] == 'in_progress').length;
-    final notStartedActivities = activities.where((a) => a['status'] == 'not_started').length;
-
-    return Container(
-      padding: EdgeInsets.all(4.w),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Activity Overview',
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          SizedBox(height: 2.h),
-          
-          Row(
-            children: [
-              Expanded(
-                child: _buildActivityStatCard(
-                  'Total',
-                  totalActivities.toString(),
-                  Icons.assignment,
-                  Theme.of(context).colorScheme.primary,
-                ),
-              ),
-              SizedBox(width: 2.w),
-              Expanded(
-                child: _buildActivityStatCard(
-                  'Completed',
-                  completedActivities.toString(),
-                  Icons.check_circle,
-                  Colors.green,
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 2.h),
-          
-          Row(
-            children: [
-              Expanded(
-                child: _buildActivityStatCard(
-                  'In Progress',
-                  inProgressActivities.toString(),
-                  Icons.play_circle_filled,
-                  Colors.orange,
-                ),
-              ),
-              SizedBox(width: 2.w),
-              Expanded(
-                child: _buildActivityStatCard(
-                  'Not Started',
-                  notStartedActivities.toString(),
-                  Icons.radio_button_unchecked,
-                  Theme.of(context).colorScheme.outline,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildActivityStatCard(String title, String value, IconData icon, Color color) {
-    return Container(
-      padding: EdgeInsets.all(3.w),
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        children: [
-          Icon(icon, color: color, size: 24),
-          SizedBox(height: 1.h),
-          Text(
-            value,
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.w700,
-              color: color,
-            ),
-          ),
-          Text(
-            title,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildRecentActivities(List<Map<String, dynamic>> activities) {
-    // Create a deep copy of the activities to ensure we don't share references
-    final activitiesCopy = activities.map(Map<String, dynamic>.from).toList();
-    
-    // Sort by most recent based on completedAt or sessionDate
-    activitiesCopy.sort((a, b) {
-      final DateTime aDate = _asDateTime(a['completedAt'])
-              ?? _asDateTime(a['sessionDate'])
-              ?? DateTime.fromMillisecondsSinceEpoch(0);
-      final DateTime bDate = _asDateTime(b['completedAt'])
-              ?? _asDateTime(b['sessionDate'])
-              ?? DateTime.fromMillisecondsSinceEpoch(0);
-      return bDate.compareTo(aDate); // Most recent first
-    });
-    
-    final recentActivities = activitiesCopy.take(5).toList();
-
-    if (recentActivities.isEmpty) {
-      return Container(
-        padding: EdgeInsets.all(4.w),
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 10,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Column(
-          children: [
-            Icon(
-              Icons.assignment_outlined,
-              size: 48,
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-            ),
-            SizedBox(height: 2.h),
-            Text(
-              'No Activities Yet',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            Text(
-              'Activities will appear here once they are assigned.',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-      );
-    }
-
-    return Container(
-      padding: EdgeInsets.all(4.w),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Recent Activities',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              IconButton(
-                icon: const Icon(Icons.refresh),
-                tooltip: 'Refresh',
-                onPressed: _refreshData,
-              ),
-            ],
-          ),
-          SizedBox(height: 2.h),
-          
-          ...recentActivities.map(_buildActivityCard),
-          
-          if (activities.length > 5)
-            Padding(
-              padding: EdgeInsets.only(top: 2.h),
-              child: Center(
-                child: TextButton(
-                  onPressed: () {
-                    // Show all activities
-                    _showAllActivitiesDialog(activities, 'All Activities');
-                  },
-                  child: Text('View All ${activities.length} Activities'),
-                ),
-              ),
-            ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildActivityCard(Map<String, dynamic> activity) {
-    final status = activity['status'] as String;
+    final status = _activityStatus(activity);
     final isCompleted = status == 'completed';
-    
+
+    final activityName = _activityName(activity);
+    final sessionTitle = _activitySessionTitle(activity);
+    final description = _activityDescription(activity);
+    final studentNotes = _activityNotes(activity);
+
     Color statusColor;
     IconData statusIcon;
     String statusText;
-    
+
     switch (status) {
       case 'completed':
         statusColor = Colors.green;
@@ -916,26 +687,27 @@ class _ParentDashboardState extends State<ParentDashboard>
         statusText = 'Not Started';
     }
 
-    return Container(
+    return Card(
+      elevation: status == 'in_progress' ? 3 : 1,
       margin: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
-      padding: EdgeInsets.all(4.w),
-      decoration: BoxDecoration(
-        color: status == 'in_progress' 
-            ? statusColor.withOpacity(0.05) // Light orange background for in_progress
-            : Theme.of(context).colorScheme.surface,
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
-        border: status == 'in_progress' 
-            ? Border.all(color: statusColor.withOpacity(0.3), width: 1.5) 
-            : null,
+        side: BorderSide(
+          color: status == 'in_progress' 
+              ? statusColor.withOpacity(0.3)
+              : Theme.of(context).colorScheme.outline.withOpacity(0.1),
+          width: status == 'in_progress' ? 1.5 : 1,
+        ),
       ),
-      child: Column(
+      child: Container(
+        decoration: BoxDecoration(
+          color: status == 'in_progress' 
+              ? statusColor.withOpacity(0.05)
+              : Colors.transparent,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        padding: EdgeInsets.all(4.w),
+        child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
@@ -945,14 +717,14 @@ class _ParentDashboardState extends State<ParentDashboard>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      activity['name'] as String,
+                      activityName,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
                     ),
                     SizedBox(height: 0.5.h),
                     Text(
-                      activity['sessionTitle'] as String,
+                      sessionTitle,
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: Theme.of(context).colorScheme.primary,
                       ),
@@ -991,7 +763,7 @@ class _ParentDashboardState extends State<ParentDashboard>
           ),
           SizedBox(height: 1.h),
           Text(
-            activity['description'] as String? ?? 'No description available',
+            description,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
@@ -999,7 +771,7 @@ class _ParentDashboardState extends State<ParentDashboard>
             overflow: TextOverflow.ellipsis,
           ),
           
-          if (activity['studentNotes']?.isNotEmpty == true) ...[
+          if (_activityHasNotes(activity)) ...[
             SizedBox(height: 1.h),
             Container(
               padding: EdgeInsets.all(2.w),
@@ -1018,7 +790,7 @@ class _ParentDashboardState extends State<ParentDashboard>
                   SizedBox(width: 2.w),
                   Expanded(
                     child: Text(
-                      activity['studentNotes']?.toString() ?? '',
+                      studentNotes,
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                   ),
@@ -1049,7 +821,7 @@ class _ParentDashboardState extends State<ParentDashboard>
           
           // Activity Action Buttons (parents only)
           SizedBox(height: 2.h),
-          if ((_dataService.currentUserRole ?? '').toLowerCase() == 'parent')
+          if ((_currentUserProfile?['role'] ?? '').toLowerCase() == 'parent')
             Row(
               children: [
                 if (!isCompleted) ...[
@@ -1075,7 +847,7 @@ class _ParentDashboardState extends State<ParentDashboard>
                               arguments: {
                                 'sessionId': sessionId.toString(),
                                 'activityId': activityId.toString(),
-                                'activityTitle': activity['title']?.toString(),
+                                'activityTitle': activityName,
                               },
                             );
                           } else {
@@ -1145,6 +917,7 @@ class _ParentDashboardState extends State<ParentDashboard>
               ],
             ),
         ],
+        ),
       ),
     );
   }
@@ -1167,10 +940,57 @@ class _ParentDashboardState extends State<ParentDashboard>
     return '${dt.day}/${dt.month}/${dt.year}';
   }
 
+  String _activityStatus(Map<String, dynamic> activity) {
+    final dynamic rawStatus = activity['status'];
+    if (rawStatus is String && rawStatus.isNotEmpty) {
+      return rawStatus;
+    }
+    if (rawStatus != null) {
+      return rawStatus.toString();
+    }
+    return 'not_started';
+  }
+
+  String _activityName(Map<String, dynamic> activity) {
+    final dynamic rawTitle = activity['title'] ?? activity['name'];
+    if (rawTitle is String && rawTitle.trim().isNotEmpty) {
+      return rawTitle.trim();
+    }
+    return 'Activity';
+  }
+
+  String _activitySessionTitle(Map<String, dynamic> activity) {
+    final dynamic sessionTitle = activity['sessionTitle'] ?? activity['session']?['title'];
+    if (sessionTitle is String && sessionTitle.trim().isNotEmpty) {
+      return sessionTitle.trim();
+    }
+    return 'Therapy Session';
+  }
+
+  String _activityDescription(Map<String, dynamic> activity) {
+    final dynamic description = activity['description'] ?? activity['details'];
+    if (description is String && description.trim().isNotEmpty) {
+      return description.trim();
+    }
+    return 'Description coming soon.';
+  }
+
+  String _activityNotes(Map<String, dynamic> activity) {
+    final dynamic notes = activity['studentNotes'] ?? activity['notes'];
+    if (notes is String && notes.trim().isNotEmpty) {
+      return notes.trim();
+    }
+    return 'No notes yet.';
+  }
+
+  bool _activityHasNotes(Map<String, dynamic> activity) {
+    final dynamic notes = activity['studentNotes'] ?? activity['notes'];
+    return notes is String && notes.trim().isNotEmpty;
+  }
+
   Future<void> _updateActivityStatus(Map<String, dynamic> activity, String newStatus) async {
     try {
       final String? sessionId = activity['sessionId']?.toString();
-      final String? currentNotes = activity['studentNotes']?.toString();
       // Prefer explicit activityId, else derive from composite id, else fallback to id
       String? activityId = activity['activityId']?.toString();
       final String? compositeId = activity['compositeId']?.toString() ?? activity['id']?.toString();
@@ -1179,37 +999,30 @@ class _ParentDashboardState extends State<ParentDashboard>
       }
       
       if (sessionId != null && activityId != null) {
-        await _dataService.updateActivityStatus(
-          sessionId, 
-          activityId, 
-          newStatus, 
-          currentNotes
-        );
+        // Mock update - no actual database call
+        await Future<void>.delayed(const Duration(milliseconds: 300));
         
-        // Refresh session data to ensure parents have latest data
+        // Refresh mock data
         final studentId = activity['studentId']?.toString();
         if (studentId != null) {
-          await _dataService.refreshSessionsForStudent(studentId);
+          // Mock refresh - update local state (no-op for mock data)
         }
         
-        // Immediately clear completedAt for non-completed status
-        // This ensures we don't have activities with mixed signals
+        // Update completion date in mock data
         if (newStatus != 'completed') {
-          // For Firestore update, explicitly set completedAt to null
-          await FirestoreService.updateActivityCompletionDate(sessionId, activityId, null);
+          // For non-completed status, clear completedAt
           activity['completedAt'] = null;
         } else {
           // For completed status, set current timestamp
           final completionTime = DateTime.now();
-          await FirestoreService.updateActivityCompletionDate(sessionId, activityId, completionTime);
           activity['completedAt'] = completionTime;
         }
         
         // Update local activity status
-        activity['status'] = newStatus;
+  activity['status'] = newStatus;
         
-        // Force complete rebuild of activities to avoid duplication issues
-        await _resetActivitiesCache();
+  // Force complete rebuild of activities to avoid duplication issues
+  await _resetActivitiesCache();
 
         // Show success message
         if (mounted) {
@@ -1373,36 +1186,30 @@ class _ParentDashboardState extends State<ParentDashboard>
       }
       
       if (sessionId != null && activityId != null) {
-        await _dataService.updateActivityStatus(
-          sessionId, 
-          activityId, 
-          newStatus, 
-          notes
-        );
+        // Mock update - no actual database call
+        await Future<void>.delayed(const Duration(milliseconds: 300));
         
-        // Refresh session data to ensure parents have latest data
+        // Refresh mock data
         final studentId = activity['studentId']?.toString();
         if (studentId != null) {
-          await _dataService.refreshSessionsForStudent(studentId);
+          // Mock refresh - nothing additional required for local data
         }
         
         // Manually update the activity status in the UI to ensure consistency
         activity['status'] = newStatus;
         activity['studentNotes'] = notes;
         
-        // Update completion date in Firestore and local state
+        // Update completion date in mock data
         if (newStatus == 'completed') {
           final completionTime = DateTime.now();
-          await FirestoreService.updateActivityCompletionDate(sessionId, activityId, completionTime);
           activity['completedAt'] = completionTime;
         } else if (newStatus == 'not_started' || newStatus == 'in_progress') {
           // For non-completed status, clear the completion date
-          await FirestoreService.updateActivityCompletionDate(sessionId, activityId, null);
           activity['completedAt'] = null;
         }
         
-        // Force complete rebuild of activities to avoid duplication issues
-        await _resetActivitiesCache();
+  // Force complete rebuild of activities to avoid duplication issues
+  await _resetActivitiesCache();
 
         // Show success message
         if (mounted) {
@@ -1554,161 +1361,501 @@ class _ParentDashboardState extends State<ParentDashboard>
   }
 
   Widget _buildProfileTab() {
-    return RefreshIndicator(
-      onRefresh: _refreshData,
-      color: Theme.of(context).colorScheme.primary,
-      child: SingleChildScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        padding: EdgeInsets.all(4.w),
-        child: Column(
+    return Container(
+      color: Theme.of(context).scaffoldBackgroundColor,
+      child: RefreshIndicator(
+        onRefresh: _refreshData,
+        color: Theme.of(context).colorScheme.primary,
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: EdgeInsets.all(4.w),
+          child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              padding: EdgeInsets.all(4.w),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface,
+            Card(
+              elevation: 2,
+              shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withAlpha(13),
-                    blurRadius: 10,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
+                side: BorderSide(
+                  color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
+                  width: 1,
+                ),
               ),
+              margin: EdgeInsets.zero,
+              child: Padding(
+                padding: EdgeInsets.all(4.w),
               child: Builder(
                 builder: (context) {
-                  final students = _dataService.students;
-                  final currentChild = students.isNotEmpty ? students.first : null;
+                  final parentProfile = _currentUserProfile;
+                  final displayName = (parentProfile?['displayName'] as String?) ?? 'Parent';
+                  final email = (parentProfile?['email'] as String?) ?? '';
+                  final role = (parentProfile?['role'] as String?) ?? 'Parent';
                   
-                  if (currentChild != null) {
-                    return Column(
-                      children: [
-                        GestureDetector(
-                          onTap: _onChangeAvatarTapped,
-                          child: CircleAvatar(
-                            radius: 50,
-                            backgroundColor: Theme.of(context).colorScheme.primary,
-                            backgroundImage: (_dataService.currentUserAvatarUrl != null && _dataService.currentUserAvatarUrl!.isNotEmpty)
-                                ? NetworkImage(_dataService.currentUserAvatarUrl!)
-                                : null,
-                            child: (_dataService.currentUserAvatarUrl == null || _dataService.currentUserAvatarUrl!.isEmpty)
-                                ? Text(
-                                    currentChild.firstName[0].toUpperCase(),
-                                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                                      color: Theme.of(context).colorScheme.onPrimary,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  )
-                                : null,
-                          ),
-                        ),
-                        SizedBox(height: 2.h),
-                        Text(
-                          '${currentChild.firstName} ${currentChild.lastName}',
-                          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        SizedBox(height: 1.h),
-                        Text(
-                          'Age ${currentChild.age} • ${currentChild.diagnosis}',
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          ),
-                        ),
-                      ],
-                    );
-                  } else {
-                    return Column(
-                      children: [
-                        Icon(
-                          Icons.person_outline,
-                          size: 80,
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        ),
-                        SizedBox(height: 2.h),
-                        Text(
-                          'No Child Profile',
-                          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        SizedBox(height: 1.h),
-                        Text(
-                          'No children associated with this account',
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          ),
-                        ),
-                      ],
-                    );
+                  // Get parent's initial from display name or email
+                  String initial = 'P';
+                  if (displayName.isNotEmpty && displayName != 'Parent') {
+                    initial = displayName[0].toUpperCase();
+                  } else if (email.isNotEmpty) {
+                    initial = email[0].toUpperCase();
                   }
+                  
+                  return Column(
+                    children: [
+                      GestureDetector(
+                        onTap: _onChangeAvatarTapped,
+                        child: Stack(
+                          children: [
+                            CircleAvatar(
+                              radius: 50,
+                              backgroundColor: Theme.of(context).colorScheme.primary,
+                              backgroundImage: (_currentUserAvatarUrl != null && _currentUserAvatarUrl!.isNotEmpty)
+                                  ? NetworkImage(_currentUserAvatarUrl!)
+                                  : null,
+                              child: (_currentUserAvatarUrl == null || _currentUserAvatarUrl!.isEmpty)
+                                  ? Text(
+                                      initial,
+                                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                                        color: Theme.of(context).colorScheme.onPrimary,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    )
+                                  : null,
+                            ),
+                            Positioned(
+                              bottom: 0,
+                              right: 0,
+                              child: Container(
+                                padding: EdgeInsets.all(1.5.w),
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).colorScheme.secondary,
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: Theme.of(context).colorScheme.surface,
+                                    width: 2,
+                                  ),
+                                ),
+                                child: Icon(
+                                  Icons.camera_alt,
+                                  size: 16,
+                                  color: Theme.of(context).colorScheme.onSecondary,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 2.h),
+                      Text(
+                        displayName,
+                        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      SizedBox(height: 0.5.h),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.primaryContainer,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Text(
+                          role,
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Theme.of(context).colorScheme.onPrimaryContainer,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      if (email.isNotEmpty) ...[
+                        SizedBox(height: 1.h),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.email_outlined,
+                              size: 16,
+                              color: Theme.of(context).colorScheme.onSurfaceVariant,
+                            ),
+                            SizedBox(width: 1.w),
+                            Text(
+                              email,
+                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ],
+                  );
                 },
               ),
-            ),
-            SizedBox(height: 3.h),
-            Text(
-              'Account Settings',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.w600,
               ),
             ),
-            SizedBox(height: 2.h),
-            _buildSettingsItem('Edit Profile', 'settings', _onEditProfile),
-            _buildSettingsItem(
-                'Notification Preferences', 'notifications', () {}),
-            _buildSettingsItem('Privacy Settings', 'security', () {}),
-            _buildSettingsItem('Data Export', 'download', () {}),
-            SizedBox(height: 3.h),
-            Text(
-              'Support',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.w600,
+            SizedBox(height: 4.h),
+            
+            // Classical Menu Section
+            _buildClassicalMenu(),
+            SizedBox(height: 4.h),
+          ],
+        ),
+      ),
+      ),
+    );
+  }
+
+  // Quick Stats Section with modern cards
+  // Classical Menu Section - Clean and Traditional Design
+  Widget _buildClassicalMenu() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Main Menu
+        Card(
+          elevation: 1,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+            side: BorderSide(
+              color: Theme.of(context).colorScheme.outline.withOpacity(
+                Theme.of(context).brightness == Brightness.dark ? 0.3 : 0.2,
               ),
+              width: 1,
             ),
-            SizedBox(height: 2.h),
-            _buildSettingsItem('Help Center', 'help', () {}),
-            _buildSettingsItem('Contact Support', 'support', () {}),
-            _buildSettingsItem('App Feedback', 'feedback', () {}),
-            SizedBox(height: 3.h),
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.all(4.w),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+          ),
+          margin: EdgeInsets.zero,
+          child: Column(
+            children: [
+              _buildClassicalMenuItem(
+                Icons.calendar_today_outlined,
+                'Activities',
+                'View and manage activities',
+                () {
+                  setState(() {
+                    _currentIndex = 0; // Switch to Activities tab
+                  });
+                },
+              ),
+              _buildMenuDivider(),
+              _buildClassicalMenuItem(
+                Icons.message_outlined,
+                'Messages',
+                'Communication and updates',
+                () {
+                  setState(() {
+                    _currentIndex = 1; // Switch to Messages tab
+                  });
+                },
+              ),
+              _buildMenuDivider(),
+              _buildClassicalMenuItem(
+                Icons.analytics_outlined,
+                'Progress Reports',
+                'View detailed progress',
+                () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: const Text('Progress Reports coming soon'),
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                    ),
+                  );
+                },
+              ),
+              _buildMenuDivider(),
+              _buildClassicalMenuItem(
+                Icons.settings_outlined,
+                'Settings',
+                'Account and preferences',
+                () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: const Text('Settings coming soon'),
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+        
+        SizedBox(height: 3.h),
+        
+        // Account Summary - Clean and Simple
+        Card(
+          elevation: 1,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+            side: BorderSide(
+              color: Theme.of(context).colorScheme.outline.withOpacity(
+                Theme.of(context).brightness == Brightness.dark ? 0.3 : 0.2,
+              ),
+              width: 1,
+            ),
+          ),
+          margin: EdgeInsets.zero,
+          child: Padding(
+            padding: EdgeInsets.all(4.w),
+            child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Account Information',
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+              ),
+              SizedBox(height: 2.h),
+              _buildSimpleInfoRow('Member Since', 'January 2024'),
+              SizedBox(height: 1.h),
+              _buildSimpleInfoRow('Account Type', 'Premium'),
+              SizedBox(height: 1.h),
+              _buildSimpleInfoRow('Status', 'Active'),
+            ],
+            ),
+          ),
+        ),
+        
+        SizedBox(height: 3.h),
+        
+        // Help Section
+        Card(
+          elevation: 1,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+            side: BorderSide(
+              color: Theme.of(context).colorScheme.outline.withOpacity(
+                Theme.of(context).brightness == Brightness.dark ? 0.3 : 0.2,
+              ),
+              width: 1,
+            ),
+          ),
+          margin: EdgeInsets.zero,
+          child: Column(
+            children: [
+              _buildClassicalMenuItem(
+                Icons.help_outline,
+                'Help & Support',
+                'Get assistance and documentation',
+                () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: const Text('Help & Support coming soon'),
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                    ),
+                  );
+                },
+              ),
+              _buildMenuDivider(),
+              _buildClassicalMenuItem(
+                Icons.info_outline,
+                'About',
+                'App information and version',
+                () {
+                  _showAboutDialog();
+                },
+              ),
+            ],
+          ),
+        ),
+        
+        SizedBox(height: 3.h),
+        
+        // Logout Button
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton.icon(
+            onPressed: _handleLogout,
+            icon: const Icon(Icons.logout),
+            label: const Text('Logout'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.error,
+              foregroundColor: Colors.white,
+              padding: EdgeInsets.symmetric(vertical: 2.h),
+              shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
+              elevation: 2,
+            ),
+          ),
+        ),
+        
+        SizedBox(height: 3.h),
+      ],
+    );
+  }
+
+  // Classical Menu Item - Traditional List Style
+  Widget _buildClassicalMenuItem(IconData icon, String title, String subtitle, VoidCallback onTap) {
+    return InkWell(
+      onTap: onTap,
+      splashColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+      highlightColor: Theme.of(context).colorScheme.primary.withOpacity(0.05),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 3.h),
+        child: Row(
+          children: [
+            Icon(
+              icon,
+              size: 24,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            SizedBox(width: 4.w),
+            Expanded(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CustomIconWidget(
-                    iconName: 'security',
-                    color: Theme.of(context).colorScheme.primary,
-                    size: 32,
-                  ),
-                  SizedBox(height: 2.h),
                   Text(
-                    'HIPAA Compliant',
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w600,
-                      color: Theme.of(context).colorScheme.primary,
+                    title,
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      fontWeight: FontWeight.w500,
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
-                  SizedBox(height: 1.h),
+                  SizedBox(height: 0.5.h),
                   Text(
-                    "Your child's therapy data is protected with enterprise-grade security and healthcare compliance standards.",
+                    subtitle,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
-                    textAlign: TextAlign.center,
                   ),
                 ],
               ),
+            ),
+            Icon(
+              Icons.chevron_right,
+              size: 20,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
           ],
         ),
       ),
     );
+  }
+
+  // Simple Divider for Menu Items
+  Widget _buildMenuDivider() {
+    return Divider(
+      height: 1,
+      thickness: 1,
+      color: Theme.of(context).brightness == Brightness.dark
+          ? Theme.of(context).colorScheme.outline.withOpacity(0.2)
+          : Theme.of(context).colorScheme.outline.withOpacity(0.1),
+      indent: 16,
+      endIndent: 16,
+    );
+  }
+
+  // Simple Info Row for Account Information
+  Widget _buildSimpleInfoRow(String label, String value) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
+        ),
+        Text(
+          value,
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            fontWeight: FontWeight.w500,
+            color: Theme.of(context).colorScheme.onSurface,
+          ),
+        ),
+      ],
+    );
+  }
+
+  // About Dialog
+  void _showAboutDialog() {
+    showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('About ThrivePath'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('ThrivePath'),
+              const Text('Version 1.0.0'),
+              SizedBox(height: 2.h),
+              const Text(
+                'A comprehensive therapy management platform designed to support parents and therapists in tracking progress and managing activities.',
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Close'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // Handle Logout
+  Future<void> _handleLogout() async {
+    // Show confirmation dialog
+    final shouldLogout = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Logout'),
+          content: const Text('Are you sure you want to logout?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              style: TextButton.styleFrom(
+                foregroundColor: Theme.of(context).colorScheme.error,
+              ),
+              child: const Text('Logout'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (shouldLogout == true) {
+      try {
+        // Sign out using AuthService
+        await AuthService.signOut();
+        
+        // Navigate to login screen and remove all previous routes
+        if (mounted) {
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            AppRoutes.login,
+            (route) => false,
+          );
+        }
+        
+        // Show success message
+        Fluttertoast.showToast(
+          msg: 'Logged out successfully',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+        );
+      } catch (e) {
+        // Show error message
+        Fluttertoast.showToast(
+          msg: 'Error logging out: ${e.toString()}',
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+        );
+      }
+    }
   }
 
   Widget _buildFeatureCard(String title, String description, String iconName,
@@ -1773,50 +1920,6 @@ class _ParentDashboardState extends State<ParentDashboard>
     );
   }
 
-  Future<void> _onEditProfile() async {
-    final nameController = TextEditingController(
-      text: (_dataService.currentUserProfile?['displayName'] as String?) ?? '',
-    );
-    // ignore: inference_failure_on_function_invocation
-    await showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Edit Profile'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              controller: nameController,
-              decoration: const InputDecoration(labelText: 'Display Name'),
-            ),
-            const SizedBox(height: 12),
-            ElevatedButton.icon(
-              onPressed: _onChangeAvatarTapped,
-              icon: const Icon(Icons.photo_camera),
-              label: const Text('Change Photo'),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              final newName = nameController.text.trim();
-              if (newName.isNotEmpty) {
-                await _dataService.updateMyProfile({'displayName': newName});
-                if (mounted) setState(() {});
-              }
-              if (mounted) Navigator.of(context).pop();
-            },
-            child: const Text('Save'),
-          ),
-        ],
-      ),
-    );
-  }
 
   Future<void> _onChangeAvatarTapped() async {
     try {
@@ -1829,33 +1932,26 @@ class _ParentDashboardState extends State<ParentDashboard>
       );
       if (picked == null) return;
 
-      final uid = _dataService.currentUserId;
-      if (uid == null) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('User not logged in')),
-          );
-        }
-        return;
-      }
-
       // Show uploading message
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Uploading photo...'),
-            duration: Duration(seconds: 3),
+            duration: Duration(seconds: 2),
           ),
         );
       }
 
-      // Use the new web-compatible upload service
-      final downloadUrl = await ImageUploadService.uploadUserAvatar(
-        userId: uid,
-        imageFile: picked,
-      );
-
-      await _dataService.updateMyProfile({'avatarUrl': downloadUrl});
+      // Mock upload delay
+      await Future<void>.delayed(const Duration(seconds: 1));
+      
+      // Mock avatar URL - in real app, this would be uploaded to storage
+      const mockAvatarUrl = 'https://via.placeholder.com/150';
+      
+      // Update local state
+      setState(() {
+        _currentUserAvatarUrl = mockAvatarUrl;
+      });
       
       if (mounted) {
         setState(() {});
@@ -1879,245 +1975,6 @@ class _ParentDashboardState extends State<ParentDashboard>
     }
   }
 
-  Widget _buildSettingsItem(String title, String iconName, VoidCallback onTap) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        margin: EdgeInsets.only(bottom: 1.h),
-        padding: EdgeInsets.all(4.w),
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withAlpha(13),
-              blurRadius: 10,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Row(
-          children: [
-            CustomIconWidget(
-              iconName: iconName,
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-              size: 20,
-            ),
-            SizedBox(width: 4.w),
-            Expanded(
-              child: Text(
-                title,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-            CustomIconWidget(
-              iconName: 'chevron_right',
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-              size: 20,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildCompletedActivities(List<Map<String, dynamic>> activities) {
-    // Create deep copies of completed activities to avoid reference issues
-    final List<Map<String, dynamic>> completedActivities = [];
-    
-    // Process each activity
-    for (final activity in activities) {
-      final status = activity['status'] as String? ?? '';
-      final completedAt = activity['completedAt'];
-      
-      // Only include activities that are truly completed
-      if (status == 'completed' && completedAt != null) {
-        // Create a deep copy to avoid reference issues
-        completedActivities.add(Map<String, dynamic>.from(activity));
-      }
-    }
-
-    return Container(
-      padding: EdgeInsets.all(4.w),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Completed Activities',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              Text(
-                '${completedActivities.length} of ${activities.length}',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.primary,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 2.h),
-          
-          if (completedActivities.isEmpty)
-            Center(
-              child: Column(
-                children: [
-                  Icon(
-                    Icons.check_circle_outline,
-                    size: 48,
-                    color: Theme.of(context).colorScheme.outline,
-                  ),
-                  SizedBox(height: 1.h),
-                  Text(
-                    'No completed activities yet',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                ],
-              ),
-            )
-          else
-            ...completedActivities.take(3).map(_buildActivityCard),
-            
-          if (completedActivities.length > 3)
-            Padding(
-              padding: EdgeInsets.only(top: 2.h),
-              child: Center(
-                child: TextButton(
-                  onPressed: () {
-                    // Show all completed activities
-                    _showAllActivitiesDialog(completedActivities, 'Completed Activities');
-                  },
-                  child: Text('View All ${completedActivities.length} Completed Activities'),
-                ),
-              ),
-            ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildNotCompletedActivities(List<Map<String, dynamic>> activities) {
-    // Create deep copies of activities to avoid reference issues
-    final List<Map<String, dynamic>> notStartedActivities = [];
-    final List<Map<String, dynamic>> inProgressActivities = [];
-    
-    // Process each activity and ensure it appears in only one category
-    for (final activity in activities) {
-      final status = activity['status'] as String? ?? 'not_started';
-      final completedAt = activity['completedAt'];
-      
-      // If an activity is marked as completed and has a timestamp, don't include it here
-      if (status == 'completed' && completedAt != null) continue;
-      
-      // Create a deep copy to avoid reference issues
-      final activityCopy = Map<String, dynamic>.from(activity);
-      
-      // Sort into appropriate categories
-      if (status == 'in_progress') {
-        inProgressActivities.add(activityCopy);
-      } else if (status == 'not_started') {
-        notStartedActivities.add(activityCopy);
-      }
-    }
-    
-    // Combine the lists with in_progress activities first
-    final notCompletedActivities = [...inProgressActivities, ...notStartedActivities];
-
-    return Container(
-      padding: EdgeInsets.all(4.w),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'To-Do Activities',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              Text(
-                '${notCompletedActivities.length} of ${activities.length}',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.primary,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 2.h),
-          
-          if (notCompletedActivities.isEmpty)
-            Center(
-              child: Column(
-                children: [
-                  Icon(
-                    Icons.assignment_turned_in,
-                    size: 48,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  SizedBox(height: 1.h),
-                  Text(
-                    'All activities completed!',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                ],
-              ),
-            )
-          else
-            ...notCompletedActivities.take(3).map(_buildActivityCard),
-            
-          if (notCompletedActivities.length > 3)
-            Padding(
-              padding: EdgeInsets.only(top: 2.h),
-              child: Center(
-                child: TextButton(
-                  onPressed: () {
-                    // Show all not completed activities
-                    _showAllActivitiesDialog(notCompletedActivities, 'To-Do Activities');
-                  },
-                  child: Text('View All ${notCompletedActivities.length} To-Do Activities'),
-                ),
-              ),
-            ),
-        ],
-      ),
-    );
-  }
-
   void _showAllActivitiesDialog(List<Map<String, dynamic>> activities, String title) {
     showDialog<void>(
       context: context,
@@ -2132,9 +1989,9 @@ class _ParentDashboardState extends State<ParentDashboard>
               itemBuilder: (context, index) {
                 final activity = activities[index];
                 return ListTile(
-                  title: Text((activity['name'] as String?) ?? ''),
-                  subtitle: Text((activity['sessionTitle'] as String?) ?? ''),
-                  leading: _getActivityStatusIcon((activity['status'] as String?) ?? 'not_started'),
+                  title: Text(_activityName(activity)),
+                  subtitle: Text(_activitySessionTitle(activity)),
+                  leading: _getActivityStatusIcon(_activityStatus(activity)),
                   trailing: activity['completedAt'] != null 
                       ? Text(_formatDate(activity['completedAt'])) 
                       : null,
@@ -2169,32 +2026,33 @@ class _ParentDashboardState extends State<ParentDashboard>
   }
 
   void _showActivityDetailsDialog(Map<String, dynamic> activity) {
-    final bool isCompleted = activity['status'] == 'completed';
+    final String status = _activityStatus(activity);
+    final bool isCompleted = status == 'completed';
     
     showDialog<void>(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text((activity['name'] as String?) ?? ''),
+          title: Text(_activityName(activity)),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Session: ${activity['sessionTitle'] ?? ''}') ,
+              Text('Session: ${_activitySessionTitle(activity)}') ,
               SizedBox(height: 1.h),
-              Text('Status: ${_getStatusText((activity['status'] as String?) ?? 'not_started')}'),
+              Text('Status: ${_getStatusText(status)}'),
               if (isCompleted && activity['completedAt'] != null)
                 Padding(
                   padding: EdgeInsets.only(top: 0.5.h),
                   child: Text('Completed on: ${_formatDate(activity['completedAt'])}'),
                 ),
-              if (activity['studentNotes']?.isNotEmpty == true)
+              if (_activityHasNotes(activity))
                 Padding(
                   padding: EdgeInsets.only(top: 1.h),
-                  child: Text('Notes: ${activity['studentNotes']?.toString() ?? ''}'),
+                  child: Text('Notes: ${_activityNotes(activity)}'),
                 ),
               SizedBox(height: 1.h),
-              Text((activity['description'] as String?) ?? 'No description available'),
+              Text(_activityDescription(activity)),
             ],
           ),
           actions: [
@@ -2283,30 +2141,16 @@ class _ParentDashboardState extends State<ParentDashboard>
       // Log before refresh for debugging
       developer.log('Resetting activities cache...', name: 'ParentDashboard');
       
-      // Step 1: Clear all data
-      _dataService.clearData();
+      // Mock refresh - no actual database calls
+  await Future<void>.delayed(const Duration(milliseconds: 500));
       
-      // Step 2: Reinitialize data
-      await _dataService.initialize();
-      
-      // Step 3: Refresh sessions for all students
-      final students = _dataService.getMyStudents();
-      for (final student in students) {
-        if (student.id != null) {
-          await _dataService.refreshSessionsForStudent(student.id!);
-        }
-      }
-      
-      // Step 4: Force a complete rebuild of data from backend
-      await Future<void>.delayed(const Duration(milliseconds: 500)); // Longer delay to ensure backend sync is complete
-      await _dataService.refreshData();
+  // Reinitialize mock data
+  await _initializeMockData();
       
       // Force rebuild UI
       if (mounted) {
         setState(() {
           // Force rebuild to ensure updated data shows correctly
-          _lastSyncTime = 'Just now';
-          // Reset loading state
           _isLoading = false;
         });
         

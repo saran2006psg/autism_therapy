@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import 'package:thriveers/core/app_export.dart';
+// Import only what's needed - no database services
+import 'package:thriveers/widgets/custom_icon_widget.dart';
+import 'package:thriveers/widgets/custom_image_widget.dart';
+import 'package:thriveers/theme/app_theme.dart';
+import 'package:thriveers/core/utils/color_utils.dart';
 
 class ChildHeaderWidget extends StatelessWidget {
   final Map<String, dynamic> childData;

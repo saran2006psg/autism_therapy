@@ -9,6 +9,7 @@ import 'package:thriveers/presentation/session_planning_screen/widgets/activity_
 import 'package:thriveers/presentation/session_planning_screen/widgets/custom_activity_bottom_sheet.dart';
 import 'package:thriveers/presentation/session_planning_screen/widgets/session_header_widget.dart';
 import 'package:thriveers/presentation/session_planning_screen/widgets/session_timeline_widget.dart';
+import 'package:thriveers/widgets/navigation/therapist_bottom_navigation.dart';
 
 class SessionPlanningScreen extends StatefulWidget {
   const SessionPlanningScreen({super.key});
@@ -651,6 +652,7 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
         }
       },
       child: Scaffold(
+        extendBody: true,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBar(
           title: const Text('Session Planning'),
@@ -691,7 +693,7 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
             SizedBox(width: 2.w),
           ],
         ),
-        body: RefreshIndicator(
+  body: RefreshIndicator(
           onRefresh: () async {
             await Future.delayed(const Duration(seconds: 1));
             setState(_filterActivities);
@@ -820,6 +822,9 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
               ),
             ],
           ),
+        ),
+        bottomNavigationBar: const TherapistBottomNavigation(
+          currentItem: TherapistNavItem.sessions,
         ),
         floatingActionButton: ScaleTransition(
           scale: _fabAnimation,
@@ -1024,7 +1029,7 @@ class _SessionPlanningScreenState extends State<SessionPlanningScreen>
                   SizedBox(height: 2.h),
                   ElevatedButton.icon(
                     onPressed: () {
-                      Navigator.pushNamed(context, '/add-student');
+                      Navigator.pushNamed(context, '/add-student-form');
                     },
                     icon: const Icon(Icons.add),
                     label: const Text('Add Student'),

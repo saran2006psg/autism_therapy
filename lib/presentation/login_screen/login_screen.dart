@@ -888,7 +888,9 @@ class _LoginScreenState extends State<LoginScreen> {
         targetRoute = AppRoutes.therapistDashboard;
         break;
       case 'student':
-        targetRoute = AppRoutes.studentDashboard;
+        // TODO: Implement student dashboard
+        // Temporarily redirect to parent dashboard
+        targetRoute = AppRoutes.parentDashboard;
         break;
       case 'admin':
         targetRoute = AppRoutes.admin;

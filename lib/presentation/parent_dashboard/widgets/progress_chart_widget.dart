@@ -2,7 +2,8 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import 'package:thriveers/core/app_export.dart';
+// Import only what's needed - no database services
+import 'package:thriveers/widgets/custom_icon_widget.dart';
 
 class ProgressChartWidget extends StatefulWidget {
   final List<Map<String, dynamic>> progressData;
@@ -29,27 +30,26 @@ class _ProgressChartWidgetState extends State<ProgressChartWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(4.w),
-      decoration: BoxDecoration(
-        color: AppTheme.lightTheme.colorScheme.surface,
+    return Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        side: BorderSide(
+          color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
+          width: 1,
+        ),
       ),
-      child: Column(
+      margin: EdgeInsets.zero,
+      child: Padding(
+        padding: EdgeInsets.all(4.w),
+        child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
               Text(
                 'Progress Visualization',
-                style: AppTheme.lightTheme.textTheme.titleMedium?.copyWith(
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -57,8 +57,7 @@ class _ProgressChartWidgetState extends State<ProgressChartWidget> {
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 1.h),
                 decoration: BoxDecoration(
-                  color:
-                      AppTheme.lightTheme.primaryColor.transparent10,
+                  color: Theme.of(context).colorScheme.primaryContainer.withOpacity(0.5),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: DropdownButtonHideUnderline(
@@ -70,9 +69,8 @@ class _ProgressChartWidgetState extends State<ProgressChartWidget> {
                         value: 'weekly',
                         child: Text(
                           'Weekly',
-                          style:
-                              AppTheme.lightTheme.textTheme.bodySmall?.copyWith(
-                            color: AppTheme.lightTheme.primaryColor,
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: Theme.of(context).colorScheme.primary,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -81,9 +79,8 @@ class _ProgressChartWidgetState extends State<ProgressChartWidget> {
                         value: 'monthly',
                         child: Text(
                           'Monthly',
-                          style:
-                              AppTheme.lightTheme.textTheme.bodySmall?.copyWith(
-                            color: AppTheme.lightTheme.primaryColor,
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: Theme.of(context).colorScheme.primary,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -98,7 +95,7 @@ class _ProgressChartWidgetState extends State<ProgressChartWidget> {
                     },
                     icon: CustomIconWidget(
                       iconName: 'keyboard_arrow_down',
-                      color: AppTheme.lightTheme.primaryColor,
+                      color: Theme.of(context).colorScheme.primary,
                       size: 20,
                     ),
                   ),
@@ -116,8 +113,7 @@ class _ProgressChartWidgetState extends State<ProgressChartWidget> {
                   horizontalInterval: 20,
                   getDrawingHorizontalLine: (value) {
                     return FlLine(
-                      color: AppTheme.lightTheme.colorScheme.outline
-                          .withValues(alpha: 0.3),
+                      color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
                       strokeWidth: 1,
                     );
                   },
@@ -223,8 +219,8 @@ class _ProgressChartWidgetState extends State<ProgressChartWidget> {
                     isCurved: true,
                     gradient: LinearGradient(
                       colors: [
-                        AppTheme.lightTheme.primaryColor,
-                        AppTheme.lightTheme.colorScheme.secondary,
+                        Theme.of(context).colorScheme.primary,
+                        Theme.of(context).colorScheme.secondary,
                       ],
                     ),
                     barWidth: 3,
@@ -233,9 +229,9 @@ class _ProgressChartWidgetState extends State<ProgressChartWidget> {
                       getDotPainter: (spot, percent, barData, index) {
                         return FlDotCirclePainter(
                           radius: 4,
-                          color: AppTheme.lightTheme.primaryColor,
+                          color: Theme.of(context).colorScheme.primary,
                           strokeWidth: 2,
-                          strokeColor: AppTheme.lightTheme.colorScheme.surface,
+                          strokeColor: Theme.of(context).colorScheme.surface,
                         );
                       },
                     ),
@@ -243,10 +239,8 @@ class _ProgressChartWidgetState extends State<ProgressChartWidget> {
                       show: true,
                       gradient: LinearGradient(
                         colors: [
-                          AppTheme.lightTheme.primaryColor
-                              .withValues(alpha: 0.3),
-                          AppTheme.lightTheme.primaryColor
-                              .withValues(alpha: 0.1),
+                          Theme.of(context).colorScheme.primary.withOpacity(0.3),
+                          Theme.of(context).colorScheme.primary.withOpacity(0.1),
                         ],
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
@@ -261,7 +255,7 @@ class _ProgressChartWidgetState extends State<ProgressChartWidget> {
                         return LineTooltipItem(
                           '${barSpot.y.toInt()}%',
                           TextStyle(
-                            color: AppTheme.lightTheme.colorScheme.surface,
+                            color: Theme.of(context).colorScheme.onPrimary,
                             fontWeight: FontWeight.bold,
                           ),
                         );
@@ -276,15 +270,16 @@ class _ProgressChartWidgetState extends State<ProgressChartWidget> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _buildStatItem('Average', '${_calculateAverage().toInt()}%',
-                  AppTheme.lightTheme.primaryColor),
-              _buildStatItem('Best Day', '${_getBestScore().toInt()}%',
-                  AppTheme.lightTheme.colorScheme.tertiary),
-              _buildStatItem('Improvement', '+${_getImprovement().toInt()}%',
-                  AppTheme.lightTheme.colorScheme.secondary),
+              _buildStatItem(context, 'Average', '${_calculateAverage().toInt()}%',
+                  Theme.of(context).colorScheme.primary),
+              _buildStatItem(context, 'Best Day', '${_getBestScore().toInt()}%',
+                  Theme.of(context).colorScheme.tertiary),
+              _buildStatItem(context, 'Improvement', '+${_getImprovement().toInt()}%',
+                  Theme.of(context).colorScheme.secondary),
             ],
           ),
         ],
+        ),
       ),
     );
   }
@@ -326,12 +321,12 @@ class _ProgressChartWidgetState extends State<ProgressChartWidget> {
     return spots.last.y - spots.first.y;
   }
 
-  Widget _buildStatItem(String label, String value, Color color) {
+  Widget _buildStatItem(BuildContext context, String label, String value, Color color) {
     return Column(
       children: [
         Text(
           value,
-          style: AppTheme.lightTheme.textTheme.titleMedium?.copyWith(
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.w700,
             color: color,
           ),
@@ -339,8 +334,8 @@ class _ProgressChartWidgetState extends State<ProgressChartWidget> {
         SizedBox(height: 0.5.h),
         Text(
           label,
-          style: AppTheme.lightTheme.textTheme.bodySmall?.copyWith(
-            color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
           ),
         ),
       ],

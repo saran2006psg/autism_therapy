@@ -2,8 +2,6 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'dart:async';
-import 'dart:ui';
-
 import 'package:thriveers/core/app_export.dart';
 import 'package:thriveers/widgets/theme_toggle_widget.dart';
 import 'package:thriveers/presentation/session_planning_screen/session_planning_screen.dart';
@@ -12,6 +10,7 @@ import 'package:thriveers/presentation/therapist_dashboard/widgets/metric_card_w
 import 'package:thriveers/presentation/therapist_dashboard/widgets/quick_action_sheet_widget.dart';
 import 'package:thriveers/presentation/therapist_dashboard/widgets/session_overview_card_widget.dart';
 import 'package:thriveers/presentation/therapist_dashboard/widgets/student_progress_card_widget.dart';
+import 'package:thriveers/widgets/navigation/therapist_bottom_navigation.dart';
 
 class TherapistDashboard extends StatefulWidget {
   const TherapistDashboard({super.key});
@@ -21,8 +20,7 @@ class TherapistDashboard extends StatefulWidget {
 }
 
 class _TherapistDashboardState extends State<TherapistDashboard>
-  with TickerProviderStateMixin {
-  int _currentTabIndex = 0;
+    with TickerProviderStateMixin {
   final bool _isOnline = true;
   bool _isSyncing = false;
   DateTime? _lastSyncTime;
@@ -897,63 +895,8 @@ class _TherapistDashboardState extends State<TherapistDashboard>
           ),
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: EdgeInsets.fromLTRB(3.2.w, 0, 3.2.w, MediaQuery.of(context).padding.bottom + 1.2.h),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(24),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.82),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.08),
-                    blurRadius: 20,
-                    offset: const Offset(0, 10),
-                  ),
-                ],
-              ),
-              child: BottomNavigationBar(
-                elevation: 0,
-                backgroundColor: Colors.transparent,
-                currentIndex: _currentTabIndex,
-                onTap: _handleNavigation,
-                type: BottomNavigationBarType.fixed,
-                selectedItemColor: Theme.of(context).colorScheme.primary,
-                unselectedItemColor: Theme.of(context).colorScheme.onSurfaceVariant,
-                selectedLabelStyle: Theme.of(context).textTheme.labelSmall?.copyWith(
-                      fontWeight: FontWeight.w700,
-                    ),
-                unselectedLabelStyle: Theme.of(context).textTheme.labelSmall?.copyWith(
-                      fontWeight: FontWeight.w500,
-                    ),
-                items: [
-                  _buildNavigationItem(
-                    label: 'Dashboard',
-                    iconName: 'dashboard',
-                    index: 0,
-                  ),
-                  _buildNavigationItem(
-                    label: 'Sessions',
-                    iconName: 'calendar_month',
-                    index: 1,
-                  ),
-                  _buildNavigationItem(
-                    label: 'Students',
-                    iconName: 'groups',
-                    index: 2,
-                  ),
-                  _buildNavigationItem(
-                    label: 'Profile',
-                    iconName: 'account_circle',
-                    index: 3,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
+      bottomNavigationBar: const TherapistBottomNavigation(
+        currentItem: TherapistNavItem.dashboard,
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _showQuickActionSheet,
@@ -966,73 +909,6 @@ class _TherapistDashboardState extends State<TherapistDashboard>
     );
   }
   
-  BottomNavigationBarItem _buildNavigationItem({
-    required String label,
-    required String iconName,
-    required int index,
-  }) {
-    final bool isSelected = _currentTabIndex == index;
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return BottomNavigationBarItem(
-      icon: AnimatedContainer(
-        duration: const Duration(milliseconds: 220),
-        curve: Curves.easeOut,
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: isSelected
-              ? colorScheme.primary.withValues(alpha: 0.16)
-              : Colors.transparent,
-          borderRadius: BorderRadius.circular(14),
-        ),
-        child: CustomIconWidget(
-          iconName: iconName,
-          color: isSelected ? colorScheme.primary : colorScheme.onSurfaceVariant,
-        ),
-      ),
-      label: label,
-    );
-  }
-
-  Future<void> _handleNavigation(int index) async {
-    if (!mounted) return;
-
-    if (index == 0) {
-      setState(() {
-        _currentTabIndex = 0;
-      });
-      return;
-    }
-
-    setState(() {
-      _currentTabIndex = index;
-    });
-
-    String? routeName;
-    switch (index) {
-      case 1:
-        routeName = AppRoutes.sessionPlanning;
-        break;
-      case 2:
-        routeName = AppRoutes.studentsList;
-        break;
-      case 3:
-        routeName = AppRoutes.therapistProfile;
-        break;
-    }
-
-    if (routeName == null) {
-      return;
-    }
-
-    await Navigator.pushNamed(context, routeName);
-
-    if (!mounted) return;
-    setState(() {
-      _currentTabIndex = 0;
-    });
-  }
-
   Widget _buildActivityMonitoringSection() {
     // Get all activities from all students' sessions
     final allActivities = <Map<String, dynamic>>[];

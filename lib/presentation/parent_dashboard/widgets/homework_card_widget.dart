@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import 'package:thriveers/core/app_export.dart';
+// Import only what's needed - no database services
+import 'package:thriveers/widgets/custom_icon_widget.dart';
+import 'package:thriveers/theme/app_theme.dart';
 
 class HomeworkCardWidget extends StatefulWidget {
   final Map<String, dynamic> homeworkData;
@@ -201,14 +203,14 @@ class _HomeworkCardWidgetState extends State<HomeworkCardWidget> {
     );
   }
 
-  int _getCompletedCount(List activities) {
+  int _getCompletedCount(List<dynamic> activities) {
     return activities
         .where((activity) =>
             (activity as Map<String, dynamic>)['completed'] as bool)
         .length;
   }
 
-  double _getCompletionPercentage(List activities) {
+  double _getCompletionPercentage(List<dynamic> activities) {
     if (activities.isEmpty) return 0.0;
     return _getCompletedCount(activities) / activities.length;
   }

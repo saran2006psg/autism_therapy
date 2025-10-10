@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
 import 'package:thriveers/core/app_export.dart';
+import 'package:thriveers/widgets/navigation/therapist_bottom_navigation.dart';
 
 class StudentsListScreen extends StatefulWidget {
   const StudentsListScreen({super.key});
@@ -705,6 +706,9 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
                 ],
               ),
             ),
+      bottomNavigationBar: const TherapistBottomNavigation(
+        currentItem: TherapistNavItem.students,
+      ),
     );
   }
 }

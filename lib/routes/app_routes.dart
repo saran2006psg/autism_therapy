@@ -10,8 +10,8 @@ import 'package:thriveers/presentation/students_list_screen/students_list_screen
 import 'package:thriveers/presentation/therapist_profile_screen/therapist_profile_screen.dart';
 import 'package:thriveers/presentation/forms/add_student_form.dart';
 import 'package:thriveers/presentation/settings_screen/settings_screen.dart';
-import 'package:thriveers/presentation/student_login/student_login_screen.dart';
-import 'package:thriveers/presentation/student_dashboard/student_dashboard.dart';
+// import 'package:thriveers/presentation/student_login/student_login_screen.dart';
+// import 'package:thriveers/presentation/student_dashboard/student_dashboard.dart';
 import 'package:thriveers/presentation/admin_screen/admin_screen.dart';
 
 class AppRoutes {
@@ -29,8 +29,8 @@ class AppRoutes {
   static const String therapistProfile = '/therapist-profile';
   static const String addStudentForm = '/add-student-form';
   static const String settings = '/settings';
-  static const String studentLogin = '/student-login';
-  static const String studentDashboard = '/student-dashboard';
+  // static const String studentLogin = '/student-login';
+  // static const String studentDashboard = '/student-dashboard';
   static const String admin = '/admin';
 
   static Map<String, WidgetBuilder> routes = {
@@ -47,8 +47,8 @@ class AppRoutes {
     therapistProfile: (context) => const TherapistProfileScreen(),
     addStudentForm: (context) => const AddStudentForm(),
     settings: (context) => const SettingsScreen(),
-    studentLogin: (context) => const StudentLoginScreen(),
-    studentDashboard: (context) => const StudentDashboard(),
+    // studentLogin: (context) => const StudentLoginScreen(),
+    // studentDashboard: (context) => const StudentDashboard(),
     admin: (context) => const AdminScreen(),
     // Additional routes can be added here as the app expands
   };

@@ -3,13 +3,7 @@ import 'package:sizer/sizer.dart';
 
 import 'package:thriveers/core/app_export.dart';
 import 'package:thriveers/presentation/student_profile_management_screen/widgets/basic_info_section_widget.dart';
-import 'package:thriveers/presentation/student_profile_management_screen/widgets/emergency_contact_widget.dart';
-import 'package:thriveers/presentation/student_profile_management_screen/widgets/goals_section_widget.dart';
-import 'package:thriveers/presentation/student_profile_management_screen/widgets/notes_section_widget.dart';
-import 'package:thriveers/presentation/student_profile_management_screen/widgets/parent_collaboration_widget.dart';
-import 'package:thriveers/presentation/student_profile_management_screen/widgets/session_history_widget.dart';
 import 'package:thriveers/presentation/student_profile_management_screen/widgets/student_photo_widget.dart';
-import 'package:thriveers/presentation/student_profile_management_screen/widgets/therapy_details_section_widget.dart';
 
 class StudentProfileManagementScreen extends StatefulWidget {
   const StudentProfileManagementScreen({super.key});
@@ -34,39 +28,6 @@ class _StudentProfileManagementScreenState
   String? _selectedGender;
   String? _selectedImagePath;
 
-  // Therapy Details Controllers
-  final TextEditingController _diagnosisController = TextEditingController();
-  final TextEditingController _triggersController = TextEditingController();
-  final TextEditingController _communicationController =
-      TextEditingController();
-  final TextEditingController _sensoryController = TextEditingController();
-  String? _selectedSeverity;
-
-  // Emergency Contact Controllers
-  final TextEditingController _primaryNameController = TextEditingController();
-  final TextEditingController _primaryPhoneController = TextEditingController();
-  final TextEditingController _primaryRelationController =
-      TextEditingController();
-  final TextEditingController _secondaryNameController =
-      TextEditingController();
-  final TextEditingController _secondaryPhoneController =
-      TextEditingController();
-  final TextEditingController _secondaryRelationController =
-      TextEditingController();
-  final TextEditingController _medicalAlertsController =
-      TextEditingController();
-
-  // Dynamic Data Lists
-  final List<Map<String, dynamic>> _goals = [];
-  final List<Map<String, dynamic>> _sessionHistory = [];
-  final List<Map<String, dynamic>> _notes = [];
-  final List<Map<String, dynamic>> _parentAccess = [];
-  final Map<String, bool> _communicationPreferences = {
-    'emailNotifications': true,
-    'weeklyReports': true,
-    'sessionReminders': false,
-  };
-
   @override
   void initState() {
     super.initState();
@@ -84,17 +45,6 @@ class _StudentProfileManagementScreenState
     _lastNameController.dispose();
     _ageController.dispose();
     _dateOfBirthController.dispose();
-    _diagnosisController.dispose();
-    _triggersController.dispose();
-    _communicationController.dispose();
-    _sensoryController.dispose();
-    _primaryNameController.dispose();
-    _primaryPhoneController.dispose();
-    _primaryRelationController.dispose();
-    _secondaryNameController.dispose();
-    _secondaryPhoneController.dispose();
-    _secondaryRelationController.dispose();
-    _medicalAlertsController.dispose();
   }
 
   void _setupChangeListeners() {
@@ -103,17 +53,6 @@ class _StudentProfileManagementScreenState
       _lastNameController,
       _ageController,
       _dateOfBirthController,
-      _diagnosisController,
-      _triggersController,
-      _communicationController,
-      _sensoryController,
-      _primaryNameController,
-      _primaryPhoneController,
-      _primaryRelationController,
-      _secondaryNameController,
-      _secondaryPhoneController,
-      _secondaryRelationController,
-      _medicalAlertsController,
     ];
 
     for (final controller in controllers) {
@@ -160,76 +99,6 @@ class _StudentProfileManagementScreenState
   void _onGenderChanged(String? gender) {
     setState(() {
       _selectedGender = gender;
-      _hasUnsavedChanges = true;
-    });
-  }
-
-  void _onSeverityChanged(String? severity) {
-    setState(() {
-      _selectedSeverity = severity;
-      _hasUnsavedChanges = true;
-    });
-  }
-
-  void _onGoalAdded(Map<String, dynamic> goal) {
-    setState(() {
-      _goals.add(goal);
-      _hasUnsavedChanges = true;
-    });
-  }
-
-  void _onGoalUpdated(int index, Map<String, dynamic> goal) {
-    setState(() {
-      _goals[index] = goal;
-      _hasUnsavedChanges = true;
-    });
-  }
-
-  void _onGoalDeleted(int index) {
-    setState(() {
-      _goals.removeAt(index);
-      _hasUnsavedChanges = true;
-    });
-  }
-
-  void _onNoteAdded(Map<String, dynamic> note) {
-    setState(() {
-      _notes.insert(0, note);
-      _hasUnsavedChanges = true;
-    });
-  }
-
-  void _onNoteUpdated(int index, Map<String, dynamic> note) {
-    setState(() {
-      _notes[index] = note;
-      _hasUnsavedChanges = true;
-    });
-  }
-
-  void _onNoteDeleted(int index) {
-    setState(() {
-      _notes.removeAt(index);
-      _hasUnsavedChanges = true;
-    });
-  }
-
-  void _onParentAdded(Map<String, dynamic> parent) {
-    setState(() {
-      _parentAccess.add(parent);
-      _hasUnsavedChanges = true;
-    });
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Invitation sent to ${parent['name']}'),
-        backgroundColor: Theme.of(context).colorScheme.primary,
-      ),
-    );
-  }
-
-  void _onPreferenceChanged(String key, bool value) {
-    setState(() {
-      _communicationPreferences[key] = value;
       _hasUnsavedChanges = true;
     });
   }
@@ -289,7 +158,7 @@ class _StudentProfileManagementScreenState
 
     try {
       // Simulate saving to Hive local database
-      await Future.delayed(const Duration(seconds: 1));
+      await Future<void>.delayed(const Duration(seconds: 1));
 
       setState(() {
         _hasUnsavedChanges = false;
@@ -339,7 +208,7 @@ class _StudentProfileManagementScreenState
   }
 
   void _showContextMenu() {
-    showModalBottomSheet(
+    showModalBottomSheet<void>(
       context: context,
       backgroundColor: Theme.of(context).colorScheme.surface,
       shape: const RoundedRectangleBorder(
@@ -477,56 +346,6 @@ class _StudentProfileManagementScreenState
                   selectedGender: _selectedGender,
                   onGenderChanged: _onGenderChanged,
                   onDateOfBirthTap: _selectDateOfBirth,
-                ),
-
-                // Therapy-Specific Details
-                TherapyDetailsSectionWidget(
-                  diagnosisController: _diagnosisController,
-                  triggersController: _triggersController,
-                  communicationController: _communicationController,
-                  sensoryController: _sensoryController,
-                  selectedSeverity: _selectedSeverity,
-                  onSeverityChanged: _onSeverityChanged,
-                ),
-
-                // Goals Section
-                GoalsSectionWidget(
-                  goals: _goals,
-                  onGoalAdded: _onGoalAdded,
-                  onGoalUpdated: _onGoalUpdated,
-                  onGoalDeleted: _onGoalDeleted,
-                ),
-
-                // Emergency Contacts
-                EmergencyContactWidget(
-                  primaryNameController: _primaryNameController,
-                  primaryPhoneController: _primaryPhoneController,
-                  primaryRelationController: _primaryRelationController,
-                  secondaryNameController: _secondaryNameController,
-                  secondaryPhoneController: _secondaryPhoneController,
-                  secondaryRelationController: _secondaryRelationController,
-                  medicalAlertsController: _medicalAlertsController,
-                ),
-
-                // Session History
-                SessionHistoryWidget(
-                  sessions: _sessionHistory,
-                ),
-
-                // Notes Section
-                NotesSectionWidget(
-                  notes: _notes,
-                  onNoteAdded: _onNoteAdded,
-                  onNoteUpdated: _onNoteUpdated,
-                  onNoteDeleted: _onNoteDeleted,
-                ),
-
-                // Parent Collaboration
-                ParentCollaborationWidget(
-                  parentAccess: _parentAccess,
-                  communicationPreferences: _communicationPreferences,
-                  onParentAdded: _onParentAdded,
-                  onPreferenceChanged: _onPreferenceChanged,
                 ),
 
                 SizedBox(height: 4.h),
